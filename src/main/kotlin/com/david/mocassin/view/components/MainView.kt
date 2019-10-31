@@ -1,5 +1,6 @@
 package com.david.mocassin.view.components
 
+import com.david.mocassin.view.styles.MainStyle
 import tornadofx.*
 
 class MainView: View("Mocassin linked list generator for C programming") {
@@ -15,7 +16,9 @@ class MainView: View("Mocassin linked list generator for C programming") {
         }
         bottom {
             toolbar {
-                button("Generate")
+                button("Generate") {
+                    addClass("btn-primary", "btn-lg")
+                }
             }
         }
         center {
@@ -29,6 +32,8 @@ class MainView: View("Mocassin linked list generator for C programming") {
         with (root) {
             prefWidth = 1000.0
             prefHeight = 800.0
+
+            addClass(MainStyle.mainView)
         }
     }
 }
