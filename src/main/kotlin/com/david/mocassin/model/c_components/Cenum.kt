@@ -1,12 +1,23 @@
 package com.david.mocassin.model.c_components
 
-class Cenum(var name: String) : CuserType {
-    private val attributes: MutableMap<String, Int> = mutableMapOf()
-    private var counter = 0
+import tornadofx.*
 
-    fun add(name: String, value: Int = counter) {
+class Cenum(name: String) : CuserType {
+    // name property
+    var name by property(name)
+    fun nameProperty() = getProperty(Cenum::name)
+
+    // attributes property
+    //val attributes: MutableMap<String, Int> = mutableMapOf()
+    var attributes by property<MutableMap<String, Int>>()
+    fun attributesProperty() = getProperty(Cenum::attributes)
+
+    init {
+        attributes = mutableMapOf()
+    }
+
+    fun add(name: String, value: Int = attributes.count()) {
         attributes[name] = value
-        counter++
     }
 
     fun remove(name: String, value: Int) = attributes.remove(name, value)

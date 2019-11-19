@@ -1,5 +1,7 @@
 package com.david.mocassin.view.components
 
+import com.david.mocassin.view.components.wizards.EnumWizard
+import com.david.mocassin.view.components.wizards.EnumWizardStep1
 import tornadofx.*
 
 class MainMenuBar : View() {
@@ -22,8 +24,22 @@ class MainMenuBar : View() {
             separator()
             item("SANN (Simple Artificial Neural Network)")
         }
+        menu("New") {
+            item("Enum").action {
+                find<EnumWizard> {
+                    openModal()
+                }
+            }
+            item("union")
+            item("struct")
+        }
         menu("Preferences") {
 
+        }
+        menu("Help") {
+            item("Documentation")
+            separator()
+            item("About")
         }
     }
 }

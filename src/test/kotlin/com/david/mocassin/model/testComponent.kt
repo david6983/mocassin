@@ -3,6 +3,7 @@ package com.david.mocassin.model
 import com.david.mocassin.model.c_components.*
 import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
+import tornadofx.asObservable
 import java.io.File
 import java.io.IOException
 
@@ -46,6 +47,7 @@ fun main() {
     slist.addVariable(CtypeEnum.INT)
     slist.addVariable(CtypeEnum.FLOAT)
     slist.addVariable(CtypeEnum.STRING)
+
     /* ------------------------------------------------------------------------ */
     /* You should do this ONLY ONCE in the whole application life-cycle:        */
 
