@@ -1,14 +1,20 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.view.components.wizards.EnumWizard
-import com.david.mocassin.view.components.wizards.EnumWizardStep1
+import javafx.stage.FileChooser
 import tornadofx.*
 
 class MainMenuBar : View() {
+    val enumIcon = resources.imageview("/icons/enum32.png")
+
     override val root = menubar {
         menu("File") {
             item("New project")
-            item("open")
+            item("open").action {
+                val ef = arrayOf(FileChooser.ExtensionFilter("Mocassin file (*.moc)", "*.moc"))
+                val file = chooseFile("Select a .moc file to open", ef, FileChooserMode.Single)
+                println(file)
+            }
             item("Save")
             separator()
             item("export")
@@ -25,8 +31,14 @@ class MainMenuBar : View() {
             item("SANN (Simple Artificial Neural Network)")
         }
         menu("New") {
-            item("Enum").action {
+            item("Enum", keyCombination = "Shortcut+E", graphic = enumIcon).action {
                 find<EnumWizard> {
+                    onComplete {
+                        println(enumModel.item.toJSON())
+                        println(enumModel.item)
+                        println(enumModel.attributes)
+                        //println(enumModel.item.toJSON())
+                    }
                     openModal()
                 }
             }
