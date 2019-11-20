@@ -1,11 +1,25 @@
 package com.david.mocassin.view.components.wizards
 
 import com.david.mocassin.model.c_components.Cenum
+import com.david.mocassin.model.c_components.CenumAttribute
 import com.david.mocassin.model.c_components.CenumModel
+import javafx.beans.property.ReadOnlyStringWrapper
+
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.scene.control.TableColumn
+import javafx.scene.control.TableView
+import javafx.scene.control.TextField
+import javafx.util.converter.IntegerStringConverter
 import javafx.util.converter.NumberStringConverter
+
 import tornadofx.*
+
+//TODO verification champ
+//TODO affichage de la tableview et edition
+//TODO reset du model et du wizard
+
+typealias Row = Map<String, String>
 
 class EnumWizardStep1 : View("Enum name") {
     val enumModel: CenumModel by inject()
@@ -32,36 +46,70 @@ class EnumWizardStep1 : View("Enum name") {
 class EnumWizardStep2 : View("Enumeration values") {
     val enumModel: CenumModel by inject()
 
-    val key_input = SimpleStringProperty()
-    val value_input = SimpleIntegerProperty()
+    //val attributes = enumModel.attributes.value
 
-    //override val complete = enum.valid(enum.attributes)
+    var attributeNameField : TextField by singleAssign()
+    var attributeValueField : TextField by singleAssign()
+
+    //var prevSelection: CenumAttribute? = null
+    var attributesTable: TableView<CenumAttribute> by singleAssign()
+
+    init {
+        //attributeNameField.textProperty().bindBidirectional()
+    }
 
     override val root = hbox {
         form {
             fieldset("Add fields inside") {
                 field("name") {
-                    textfield().textProperty().bindBidirectional(key_input)
+                    textfield("") {
+                        attributeNameField = this
+                    }
                 }
                 field("value") {
-                    textfield().textProperty().bindBidirectional(value_input, NumberStringConverter())
+                    textfield("0") {
+                        attributeValueField = this
+                    }
                 }
                 button("Add") {
                     action {
-                        println(key_input.value)
-                        println(value_input.value)
+                        val attr = CenumAttribute(
+                            attributeNameField.textProperty().value,
+                            attributeValueField.textProperty().value.toInt()
+                        )
 
-                        enumModel.attributes.value[key_input.value] = value_input.value
+                        println(attr.name)
+                        println(attr.value)
 
-                        key_input.value = ""
-                        value_input.value = 0
+                        enumModel.attributes.value.add(attr)
+
+                        //form reset
+                        attributeNameField.textProperty().value = ""
+                        attributeValueField.textProperty().value = enumModel.attributes.value.count().toString()
+
+                        println(enumModel.attributes.toString())
                     }
                 }
             }
         }
+        tableview(enumModel.attributes) {
+            attributesTable = this
+            column("Name", CenumAttribute::name)
+            column("Value", CenumAttribute::value)
+        }
     }
-
-
+    /*
+    private fun editAttribute(attribute: CenumAttribute?) {
+        if (attribute != null) {
+            prevSelection?.apply {
+                nameProperty.unbindBidirectional(attributeNameField.textProperty())
+                valueProperty.unbindBidirectional(attributeNameField.textProperty() as Integer!)
+            }
+            attributeNameField.bind(attribute.nameProperty)
+            attributeNameField.bind(attribute.valueProperty)
+            prevSelection = attribute
+        }
+    }*/
 }
 
 class EnumWizard : Wizard("Create a Enum", "Provide Enum information") {

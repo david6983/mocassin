@@ -1,6 +1,7 @@
 package com.david.mocassin.model.c_components
 
-import javafx.beans.property.SimpleMapProperty
+import javafx.beans.property.SimpleIntegerProperty
+import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
@@ -17,21 +18,31 @@ class Cenum(name: String) : CuserType, JsonModel {
     /**
      * name of the enumeration by property
      */
-    val nameProperty = SimpleStringProperty()
+    val nameProperty = SimpleStringProperty(name)
     var name by nameProperty
 
-    val attributesProperty = SimpleMapProperty<String, Int>()
+    val attributesProperty = SimpleListProperty<CenumAttribute>(mutableListOf<CenumAttribute>().asObservable())
     var attributes by attributesProperty
 
     fun add(name: String, value: Int = attributes.count()) {
-        attributes[name] = value
+        attributes?.add(CenumAttribute(name, value))
     }
 
-    fun remove(name: String, value: Int) = attributes.remove(name, value)
+    fun remove(name: String, value: Int) = attributes.remove(CenumAttribute(name, value))
 
     fun removeAll() = attributes.clear()
 
-    fun replace(name: String, oldValue: Int, newValue: Int) = attributes.replace(name, oldValue, newValue)
+    fun replace(name: String, newValue: Int) {
+        val index = attributes.indexOfFirst { it.name == name }
+        println(index)
+        attributes[index] = CenumAttribute(name, newValue)
+    }
+
+    fun replace(value: Int, newName: String) {
+        val index = attributes.indexOfFirst { it.name == name }
+        println(index)
+        attributes[index] = CenumAttribute(newName, value)
+    }
 
     /**
      * This function should return the attributes that follow the C syntax of a enumeration
@@ -49,7 +60,7 @@ class Cenum(name: String) : CuserType, JsonModel {
     fun attributesToString(): String {
         val out = StringBuilder()
         for (attr in attributes) {
-            out.append("\t${attr.key} = ${attr.value},\n")
+            out.append("\t${attr.name} = ${attr.value},\n")
         }
         out.delete(out.length - 2, out.length)
         return out.toString()
@@ -64,7 +75,7 @@ class Cenum(name: String) : CuserType, JsonModel {
     fun toJson(): String {
         val stringBuilder = StringBuilder("{")
         for (attr in attributes) {
-            stringBuilder.append("\"${attr.key}\": \"${attr.value}\",")
+            stringBuilder.append("\"${attr.name}\": \"${attr.value}\",")
         }
         stringBuilder.deleteCharAt(stringBuilder.length - 1)
         stringBuilder.append("}")
@@ -75,7 +86,7 @@ class Cenum(name: String) : CuserType, JsonModel {
         val out: JsonBuilder = JsonBuilder()
 
         for(attr in attributes) {
-            out.add(attr.key, attr.value)
+            out.add(attr.name, attr.value)
         }
 
         return out
@@ -106,11 +117,19 @@ class Cenum(name: String) : CuserType, JsonModel {
     override fun toString(): String {
         val out = StringBuilder()
         for (attr in attributes) {
-            out.append(attr.key + "|")
+            out.append(attr.name + "|")
         }
         out.deleteCharAt(out.length - 1)
         return "$name;${out}"
     }
+}
+
+class CenumAttribute(name: String, value: Int) {
+    val nameProperty = SimpleStringProperty(name)
+    var name by nameProperty
+
+    val valueProperty = SimpleIntegerProperty(value)
+    var value by valueProperty
 }
 
 /**
