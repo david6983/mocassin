@@ -26,6 +26,13 @@ class SlistModel(var userModel: UserModel) {
 
     fun generate(config: Configuration, folderPath: String = userModel.packageName) {
         updateModel()
+
+        val directory = File(folderPath)
+        // the directory doesn't exist
+        if (! directory.exists()) {
+            // create one
+            directory.mkdir()
+        }
         toCheader(config, folderPath)
         toCimplementation(config, folderPath)
     }
@@ -116,5 +123,15 @@ class SlistModel(var userModel: UserModel) {
         return out.toString()
     }
 
-    fun save(pathDir: String) = File("${pathDir}/${userModel.packageName}_slistModel.moc").writeText(toJson())
+    fun save(pathDir: String) {
+        val directory = File("${pathDir}")
+
+        // the directory doesn't exist
+        if (! directory.exists()) {
+            // create one
+            directory.mkdir()
+        }
+        // create a new file
+        File("${pathDir}/${userModel.packageName}_slistModel.moc").writeText(toJson())
+    }
 }

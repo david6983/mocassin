@@ -14,6 +14,7 @@ import tornadofx.*
  * validation :
  * - An enumeration can have two attributes with the same value
  * - Two attributes can not have the same name
+ * - enum name and attributes name can not have spaces in the string
  *
  * @constructor create a C programming enumeration from a name
  * @param name Name of the enumeration in the Header file

@@ -131,6 +131,13 @@ class UserModel(var packageName: String) {
     fun generate(config: Configuration, folderPath: String = packageName) {
         addpackageNameToMap()
 
+        val directory = File(folderPath)
+        // the directory doesn't exist
+        if (! directory.exists()) {
+            // create one
+            directory.mkdir()
+        }
+
         var temp: Template? = null
         temp = config.getTemplate("structures.ftlh")
         val fileWriter = FileWriter(File("$folderPath/${packageName}_structures.h"))
@@ -161,7 +168,17 @@ class UserModel(var packageName: String) {
         return out.toString()
     }
 
-    fun save(pathDir: String) = File("${pathDir}/${packageName}_userModel.moc").writeText(toJson())
+    fun save(pathDir: String) {
+        val directory = File("${pathDir}")
+
+        // the directory doesn't exist
+        if (! directory.exists()) {
+            // create one
+            directory.mkdir()
+        }
+        // create a new file
+        File("${pathDir}/${packageName}_userModel.moc").writeText(toJson())
+    }
 
     private fun addpackageNameToMap() {
         //TODO extract this class to add more parameters

@@ -12,6 +12,7 @@ import tornadofx.*
 
 //TODO verification champ attributes
 //TODO verifier que le nom de l'enum n'existe pas dans l'userModel
+//TODO verif nom contient pas d'espace
 
 class EnumWizardStep1 : View("Enum name") {
     val enumModel: CenumModel by inject()

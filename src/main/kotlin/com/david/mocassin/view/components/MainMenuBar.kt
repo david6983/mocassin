@@ -30,8 +30,8 @@ class MainMenuBar : View() {
             item("BTree (Binary Tree)")
             item("BSTree (Binary Search Tree)")
             item("Tree (Multi-node Tree)")
-            separator()
-            item("SANN (Simple Artificial Neural Network)")
+            //separator()
+            //item("SANN (Simple Artificial Neural Network)")
         }
         menu("New") {
             item("Enum", keyCombination = "Shortcut+E", graphic = enumIcon).action {
