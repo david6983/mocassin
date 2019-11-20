@@ -11,6 +11,10 @@ import tornadofx.*
  * This class define a C programming enumeration :
  * We use the property system from javafx for better implementation with the GUI
  *
+ * validation :
+ * - An enumeration can have two attributes with the same value
+ * - Two attributes can not have the same name
+ *
  * @constructor create a C programming enumeration from a name
  * @param name Name of the enumeration in the Header file
  */
@@ -24,8 +28,13 @@ class Cenum(name: String) : CuserType, JsonModel {
     val attributesProperty = SimpleListProperty<CenumAttribute>(mutableListOf<CenumAttribute>().asObservable())
     var attributes by attributesProperty
 
-    fun add(name: String, value: Int = attributes.count()) {
-        attributes?.add(CenumAttribute(name, value))
+    fun add(name: String, value: Int = attributes.count()): Boolean {
+        return if (isAttributeAsUniqueName(name)) {
+            attributes?.add(CenumAttribute(name, value))
+            true
+        } else {
+            false
+        }
     }
 
     fun remove(name: String, value: Int) = attributes.remove(CenumAttribute(name, value))
@@ -43,6 +52,8 @@ class Cenum(name: String) : CuserType, JsonModel {
         println(index)
         attributes[index] = CenumAttribute(newName, value)
     }
+
+    fun isAttributeAsUniqueName(name: String) = attributes.indexOfFirst { it.name == name } == -1
 
     /**
      * This function should return the attributes that follow the C syntax of a enumeration
