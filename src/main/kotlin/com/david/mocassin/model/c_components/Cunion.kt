@@ -1,10 +1,21 @@
 package com.david.mocassin.model.c_components
 
-class Cunion(var name: String) : CuserType {
-    private val attributes: ArrayList<Cvariable> = ArrayList()
+import javafx.beans.property.SimpleListProperty
+import javafx.beans.property.SimpleStringProperty
+import javafx.collections.ObservableList
+import tornadofx.*
 
+//TODO JSON
+
+class Cunion(name: String) : CuserType {
+    val nameProperty = SimpleStringProperty(name)
+    var name by nameProperty
+
+    val attributesProperty = SimpleListProperty<Cvariable>(mutableListOf<Cvariable>().asObservable())
+    var attributes: ObservableList<Cvariable> by attributesProperty
+    //private val attributes: ArrayList<Cvariable> = ArrayList()
     init {
-        name = "union $name"
+        nameProperty.value = "union $name"
     }
 
     fun add(value: Cvariable) = when(value.type) {
@@ -37,4 +48,9 @@ class Cunion(var name: String) : CuserType {
         stringBuilder.append("}")
         return stringBuilder.toString()
     }
+}
+
+class CunionModel: ItemViewModel<Cunion>() {
+    val name = bind(Cunion::nameProperty)
+    val attributes = bind(Cunion::attributesProperty)
 }

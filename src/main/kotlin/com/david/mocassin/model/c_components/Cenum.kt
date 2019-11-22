@@ -5,7 +5,9 @@ import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
+//TODO separate classes
 //TODO finish documentation and write the Unit test
+//TODO JSON
 
 /**
  * This class define a C programming enumeration :
@@ -54,7 +56,7 @@ class Cenum(name: String) : CuserType, JsonModel {
         attributes[index] = CenumAttribute(newName, value)
     }
 
-    fun isAttributeAsUniqueName(name: String) = attributes.indexOfFirst { it.name == name } == -1
+    private fun isAttributeAsUniqueName(name: String) = attributes.indexOfFirst { it.name == name } == -1
 
     /**
      * This function should return the attributes that follow the C syntax of a enumeration

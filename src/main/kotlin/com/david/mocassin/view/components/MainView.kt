@@ -4,6 +4,7 @@ import com.david.mocassin.view.styles.MainStyle
 import javafx.geometry.Pos
 
 import tornadofx.*
+import java.awt.Color
 
 class MainView: View("Mocassin linked list generator for C programming") {
     override val root = borderpane {

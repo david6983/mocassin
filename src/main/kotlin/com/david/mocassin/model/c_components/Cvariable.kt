@@ -1,9 +1,23 @@
 package com.david.mocassin.model.c_components
 
-class Cvariable(var name: String,
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleStringProperty
+import tornadofx.*
+
+//TODO separate classes
+//TODO JSON
+
+class Cvariable(name: String,
                 type: CuserType,
                 isPointer: Boolean = false,
-                var isComparable: Boolean = false) : Ctype(type, isPointer) {
+                isComparable: Boolean = false) : Ctype(type, isPointer) {
+
+    val nameProperty = SimpleStringProperty(name)
+    var name: String by nameProperty
+
+    val isComparableProperty = SimpleBooleanProperty(isComparable)
+    var isComparable by isComparableProperty
+
     fun toJson(): String {
         val stringType = getTypeAsString()
         val content = getContent()
@@ -38,4 +52,11 @@ class Cvariable(var name: String,
     override fun toString(): String {
         return getTypeAsString() + " " + name
     }
+}
+
+class CvariableModel: ItemViewModel<Cvariable>() {
+    val name = bind(Cvariable::nameProperty)
+    val type = bind(Cvariable::typeProperty)
+    val isPointer = bind(Cvariable::isPointerProperty)
+    val isComparable = bind(Cvariable::isComparableProperty)
 }
