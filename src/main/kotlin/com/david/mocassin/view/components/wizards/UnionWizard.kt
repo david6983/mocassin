@@ -1,109 +1,103 @@
 package com.david.mocassin.view.components.wizards
 
-import com.david.mocassin.model.c_components.Cenum
-import com.david.mocassin.model.c_components.CenumAttribute
-import com.david.mocassin.model.c_components.CenumModel
-import javafx.scene.Parent
+import com.david.mocassin.model.c_components.CtypeEnum
+import com.david.mocassin.model.c_components.Cunion
+import com.david.mocassin.model.c_components.CunionModel
+import com.david.mocassin.model.c_components.Cvariable
+import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.ButtonBar
+import javafx.scene.control.ComboBox
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
 
 import tornadofx.*
 
-//TODO add a controller
 //TODO verification champ attributes
-//TODO verifier que le nom de l'enum n'existe pas dans l'userModel
+//TODO verifier que le nom de l'union n'existe pas dans l'userModel
 //TODO verif nom contient pas d'espace
 
-class EnumWizardStep1 : View("Enum name") {
-    val enumModel: CenumModel by inject()
+class UnionWizardStep1 : View("Union name") {
+    val unionModel: CunionModel by inject()
 
-    override val complete = enumModel.valid(enumModel.name)
+    override val complete = unionModel.valid(unionModel.name)
 
     override val root = form {
         fieldset(title) {
             field("Name") {
-                textfield(enumModel.name).required()
+                textfield(unionModel.name).required()
             }
         }
     }
-
-
 }
 
-class EnumWizardStep2 : View("Enumeration values") {
+class UnionWizardStep2 : View("Union attributes") {
     val context = ValidationContext()
 
-    val enumModel: CenumModel by inject()
+    val unionModel: CunionModel by inject()
 
-    var attributeNameField : TextField by singleAssign()
-    var attributeValueField : TextField by singleAssign()
+    var variableNameField : TextField by singleAssign()
+    var variableTypeField : ComboBox<String> by singleAssign()
 
-    var attributesTable: TableView<CenumAttribute> by singleAssign()
-    /*
-    val nameValidator = context.addValidator(attributeNameField, attributeNameField.textProperty()) {
-        if(enumModel.attributes.value.indexOfFirst { it.name == attributeNameField.textProperty().toString() } == -1) {
-            error("This attribute already exist !")
-        } else {
-            null
-        }
-    }*/
+    var attributesTable: TableView<Cvariable> by singleAssign()
+
+    var selectedType = SimpleStringProperty()
 
     override val root = hbox {
         form {
             fieldset("Add fields inside") {
                 field("name") {
                     textfield("") {
-                        attributeNameField = this
+                        variableNameField = this
                     }
                 }
-                field("value") {
-                    textfield("0") {
-                        attributeValueField = this
-                    }
+                field("type") {
+                    combobox<String>(selectedType){
+                        variableTypeField = this
+
+                        for(type in CtypeEnum.values()) {
+                            items.add(type.cType)
+                        }
+                        //TODO add types from userModel
+                    }.selectionModel.selectFirst()
                 }
                 button("Add") {
                     action {
-                        val attr = CenumAttribute(
-                            attributeNameField.textProperty().value,
-                            attributeValueField.textProperty().value.toInt()
+                        /*
+                        val attr = CunionAttribute(
+                            variableNameField.textProperty().value,
+                            variableTypeField.textProperty().value.toInt()
                         )
-                        enumModel.attributes.value.add(attr)
+                        unionModel.attributes.value.add(attr)
 
                         //form reset
-                        attributeNameField.textProperty().value = ""
-                        attributeValueField.textProperty().value = enumModel.attributes.value.count().toString()
-
+                        variableNameField.textProperty().value = ""
+                        variableTypeField.textProperty().value = unionModel.attributes.value.count().toString()
+                        */
                     }
                 }
             }
         }
-        tableview(enumModel.attributes) {
+        tableview(unionModel.attributes) {
             attributesTable = this
             isEditable = true
-            column("Name", CenumAttribute::name).makeEditable()
-            column("Value", CenumAttribute::value).makeEditable()
+            column("Name", Cvariable::name).makeEditable()
+            //column("Value", Cvariable::type).makeEditable()
 
             columnResizePolicy = SmartResize.POLICY
         }
     }
-
-    override fun onSave() {
-        attributeValueField.textProperty().value = "0"
-        super.onSave()
-    }
 }
 
-class EnumWizard : Wizard("Create a Enum", "Provide Enum information") {
-    val enumModel: CenumModel by inject()
+class UnionWizard : Wizard("Create a Union", "Provide Union information") {
+    val unionModel: CunionModel by inject()
 
     override val canGoNext = currentPageComplete
     override val canFinish = allPagesComplete
 
     init {
-        graphic = resources.imageview("/icons/enum32.png")
-        add(EnumWizardStep1::class)
-        add(EnumWizardStep2::class)
+        graphic = resources.imageview("/icons/union32.png")
+        add(UnionWizardStep1::class)
+        add(UnionWizardStep2::class)
 
         // custom style for wizard buttonbar
         super.root.bottom = buttonbar {
@@ -145,7 +139,7 @@ class EnumWizard : Wizard("Create a Enum", "Provide Enum information") {
             }
         }
 
-        enumModel.item = Cenum("")
+        unionModel.item = Cunion("")
     }
 
     override fun onCancel() {

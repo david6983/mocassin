@@ -96,6 +96,18 @@ class UserModel(packageName: String) {
         return out.toString()
     }
 
+    fun getAllNamesForComparison(): ArrayList<String> {
+        val out = ArrayList<String>()
+        for (name in userStructureList!!) {
+            out.add((name as CuserStructure).name)
+        }
+        for (name in userEnumList) {
+            out.add((name as Cenum).name)
+        }
+        // don't add union because we can't compare two unions
+        return out
+    }
+
     fun getAllNames(): ArrayList<String> {
         val out = ArrayList<String>()
         for (name in userStructureList!!) {
@@ -103,6 +115,9 @@ class UserModel(packageName: String) {
         }
         for (name in userEnumList) {
             out.add((name as Cenum).name)
+        }
+        for (name in userUnionList) {
+            out.add((name as Cunion).name)
         }
         return out
     }

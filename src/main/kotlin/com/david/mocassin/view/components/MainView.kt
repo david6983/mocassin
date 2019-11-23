@@ -40,6 +40,7 @@ class MainView: View("Mocassin linked list generator for C programming") {
                         for(type in CtypeEnum.values()) {
                             items.add(type.cType)
                         }
+                        //TODO add types from userModel
                     }.selectionModel.selectFirst()
                     button("click").action {
                         println(selectedType.value)

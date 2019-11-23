@@ -1,13 +1,15 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.model.c_components.Cenum
-import com.david.mocassin.model.c_components.CenumModel
 import com.david.mocassin.view.components.wizards.EnumWizard
+import com.david.mocassin.view.components.wizards.UnionWizard
 import javafx.stage.FileChooser
 import tornadofx.*
-
+//TODO add a controller
 class MainMenuBar : View() {
     val enumIcon = resources.imageview("/icons/enum32.png")
+    val unionIcon = resources.imageview("/icons/union32.png")
+
     val tmpEnumList = mutableListOf<Cenum>()
 
     override val root = menubar {
@@ -53,7 +55,13 @@ class MainMenuBar : View() {
 
                 }
             }
-            item("union")
+            item("union", keyCombination = "Shortcut+U", graphic = unionIcon).action {
+                val unionWizard = UnionWizard()
+                unionWizard.openModal()
+                unionWizard.onComplete {
+                    println(unionWizard.unionModel.item.toJson())
+                }
+            }
             item("struct")
         }
         menu("Preferences") {
