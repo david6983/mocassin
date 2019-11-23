@@ -3,13 +3,29 @@ package com.david.mocassin.model
 import com.david.mocassin.model.c_components.CtypeEnum
 import freemarker.template.Configuration
 import freemarker.template.Template
+import javafx.beans.property.SimpleListProperty
+import javafx.beans.property.SimpleObjectProperty
+import tornadofx.asObservable
 import java.io.File
 import java.io.FileWriter
-//TODO generaliser cette classe pck yaura les Dlist et les tree aussi
+
+import tornadofx.*
+
 //TODO utiliser l'objet json de tornadofx pour creer et recuperer du json
-class SlistModel(var userModel: UserModel) {
+
+/**
+ * DataStructure represent either a Slist, Dlist, Tree, BinaryTree and so on
+ *
+ * @property userModel 
+ */
+class DataStructureModel(userModel: UserModel) {
     private val map = mutableMapOf<String, String>()
-    private val userVariables = ArrayList<CtypeEnum>()
+
+    val userVariablesProperty = SimpleListProperty<CtypeEnum>(listOf<CtypeEnum>().asObservable())
+    var userVariables by userVariablesProperty
+
+    val userModelProperty = SimpleObjectProperty<UserModel>(userModel)
+    var userModel by userModelProperty
 
     fun addVariable(type: CtypeEnum): Boolean {
         return if (userVariables.find {type == it} == null) {
@@ -20,7 +36,7 @@ class SlistModel(var userModel: UserModel) {
         }
     }
 
-    fun removeVariable(type : CtypeEnum) {
+    fun  removeVariable(type : CtypeEnum) {
         userVariables.remove(type)
     }
 
@@ -93,21 +109,19 @@ class SlistModel(var userModel: UserModel) {
 
 
     private fun toCheader(config: Configuration, folderPath: String = userModel.packageName) {
-        var temp: Template? = null
-        temp = config.getTemplate("SList_header.ftlh")
+        val temp: Template? = config.getTemplate("SList_header.ftlh")
 
-        val fileWriter = FileWriter(File("$folderPath/${userModel.packageName}_Slist.h"));
-        temp!!.process(map, fileWriter);
-        fileWriter.close();
+        val fileWriter = FileWriter(File("$folderPath/${userModel.packageName}_Slist.h"))
+        temp!!.process(map, fileWriter)
+        fileWriter.close()
     }
 
     private fun toCimplementation(config: Configuration, folderPath: String = userModel.packageName) {
-        var temp: Template? = null
-        temp = config.getTemplate("SList_imp.ftlh")
+        val temp: Template? = config.getTemplate("SList_imp.ftlh")
 
-        val fileWriter = FileWriter(File("$folderPath/${userModel.packageName}_Slist.c"));
-        temp!!.process(map, fileWriter);
-        fileWriter.close();
+        val fileWriter = FileWriter(File("$folderPath/${userModel.packageName}_Slist.c"))
+        temp!!.process(map, fileWriter)
+        fileWriter.close()
     }
 
     fun toJson(): String {
@@ -124,7 +138,7 @@ class SlistModel(var userModel: UserModel) {
     }
 
     fun save(pathDir: String) {
-        val directory = File("${pathDir}")
+        val directory = File(pathDir)
 
         // the directory doesn't exist
         if (! directory.exists()) {

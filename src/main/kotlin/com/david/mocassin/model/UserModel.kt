@@ -12,6 +12,8 @@ import java.lang.StringBuilder
 
 import tornadofx.*
 
+//TODO JSON with tornadofx
+
 class UserModel(packageName: String) {
     val packageNameProperty = SimpleStringProperty(packageName)
     var packageName by packageNameProperty

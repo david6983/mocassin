@@ -3,9 +3,10 @@ package com.david.mocassin.model
 import com.david.mocassin.model.c_components.*
 import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
-import tornadofx.asObservable
 import java.io.File
 import java.io.IOException
+
+//TODO create a unit test file with Junit instead
 
 fun main() {
     // c'est variable seront stocké dans le model
@@ -42,7 +43,7 @@ fun main() {
     model.add(dtu)
     model.add(mltp)
     model.add(rcts)
-    val slist = SlistModel(model)
+    val slist = DataStructureModel(model)
     slist.addVariable(CtypeEnum.INT)
     slist.addVariable(CtypeEnum.INT)
     slist.addVariable(CtypeEnum.FLOAT)
