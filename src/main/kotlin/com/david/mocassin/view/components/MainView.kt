@@ -1,6 +1,9 @@
 package com.david.mocassin.view.components
 
+import com.david.mocassin.model.c_components.CtypeEnum
 import com.david.mocassin.view.styles.MainStyle
+import javafx.beans.property.SimpleStringProperty
+import javafx.event.EventHandler
 import javafx.geometry.Pos
 
 import tornadofx.*
@@ -30,7 +33,20 @@ class MainView: View("Mocassin linked list generator for C programming") {
         }
         center {
             val fileView = tabpane {}
-            fileView.tab("test")
+            fileView.tab("test") {
+                val selectedType = SimpleStringProperty()
+                hbox {
+                    combobox<String>(selectedType){
+                        for(type in CtypeEnum.values()) {
+                            items.add(type.cType)
+                        }
+                    }.selectionModel.selectFirst()
+                    button("click").action {
+                        println(selectedType.value)
+                    }
+                }
+                selectedType.onChange { println(CtypeEnum.find(selectedType.value)) }
+            }
             fileView.tab("test 2")
         }
     }

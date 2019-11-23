@@ -22,5 +22,11 @@ enum class CtypeEnum(val cType: String, val enumValue: String, val displaySymbol
     PTR_CHAR("char*", "character_ptr", "%p"),
     PTR_UNSIGNED_CHAR("unsigned char*", "unsigned_character_ptr", "%p"),
     PTR_VOID("void*", "void_value_ptr", "%p"),
-    PTR_STRING("char**", "string_ptr", "%p")
+    PTR_STRING("char**", "string_ptr", "%p");
+
+    companion object {
+        fun find(value: String): CtypeEnum? {
+            return CtypeEnum.values().find { it.cType == value }
+        }
+    }
 }
