@@ -97,7 +97,7 @@ class Cenum(name: String) : CuserType, JsonModel {
     }
 
     fun attributesToJSON(): JsonBuilder {
-        val out: JsonBuilder = JsonBuilder()
+        val out = JsonBuilder()
 
         for(attr in attributes) {
             out.add(attr.name, attr.value)

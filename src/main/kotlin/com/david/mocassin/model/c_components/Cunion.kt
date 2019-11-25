@@ -4,19 +4,16 @@ import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import tornadofx.*
+import javax.json.JsonObject
 
 //TODO JSON
 
-class Cunion(name: String) : CuserType {
+class Cunion(name: String) : CuserType, JsonModel  {
     val nameProperty = SimpleStringProperty(name)
     var name by nameProperty
 
     val attributesProperty = SimpleListProperty<Cvariable>(mutableListOf<Cvariable>().asObservable())
     var attributes: ObservableList<Cvariable> by attributesProperty
-    //private val attributes: ArrayList<Cvariable> = ArrayList()
-    init {
-        //nameProperty.value = "union $name" //TODO cette merde fait dla merde dans l'interface graphique
-    }
 
     fun add(value: Cvariable) = when(value.type) {
         is CuserStructure -> {
@@ -47,6 +44,23 @@ class Cunion(name: String) : CuserType {
         stringBuilder.deleteCharAt(stringBuilder.length - 3)
         stringBuilder.append("}")
         return stringBuilder.toString()
+    }
+
+    fun variablesToJSON(): JsonBuilder {
+        val out = JsonBuilder()
+
+        for(attr in attributes) {
+            out.add(attr.name, attr.toJSON())
+        }
+
+        return out
+    }
+
+    override fun toJSON(json: JsonBuilder) {
+        with(json) {
+            add("name", name)
+            add("variables", variablesToJSON())
+        }
     }
 }
 

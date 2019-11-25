@@ -1,9 +1,6 @@
 package com.david.mocassin.view.components.wizards
 
-import com.david.mocassin.model.c_components.CtypeEnum
-import com.david.mocassin.model.c_components.Cunion
-import com.david.mocassin.model.c_components.CunionModel
-import com.david.mocassin.model.c_components.Cvariable
+import com.david.mocassin.model.c_components.*
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.ButtonBar
 import javafx.scene.control.ComboBox
@@ -62,17 +59,14 @@ class UnionWizardStep2 : View("Union attributes") {
                 }
                 button("Add") {
                     action {
-                        /*
-                        val attr = CunionAttribute(
-                            variableNameField.textProperty().value,
-                            variableTypeField.textProperty().value.toInt()
-                        )
-                        unionModel.attributes.value.add(attr)
+                        //TODO gerer les autres types union, enum, struct depuis model
+                        val tmpVariable = Cvariable(variableNameField.textProperty().value, CtypeEnum.find(variableTypeField.value) as CuserType)
+                        //println(tmpVariable.toJson())
+                        unionModel.attributes.value.add(tmpVariable)
 
                         //form reset
                         variableNameField.textProperty().value = ""
-                        variableTypeField.textProperty().value = unionModel.attributes.value.count().toString()
-                        */
+                        variableTypeField.selectionModel.selectFirst()
                     }
                 }
             }
@@ -80,8 +74,9 @@ class UnionWizardStep2 : View("Union attributes") {
         tableview(unionModel.attributes) {
             attributesTable = this
             isEditable = true
+            //TODO gerer l'edition
             column("Name", Cvariable::name).makeEditable()
-            //column("Value", Cvariable::type).makeEditable()
+            column("Value", Cvariable::getTypeAsString)
 
             columnResizePolicy = SmartResize.POLICY
         }
@@ -99,7 +94,7 @@ class UnionWizard : Wizard("Create a Union", "Provide Union information") {
         add(UnionWizardStep1::class)
         add(UnionWizardStep2::class)
 
-        unionModel.item = Cunion("fuck")
+        unionModel.item = Cunion("")
 
         // custom style for wizard buttonbar
         super.root.bottom = buttonbar {

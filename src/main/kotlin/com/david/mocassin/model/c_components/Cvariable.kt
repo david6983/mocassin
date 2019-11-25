@@ -5,12 +5,11 @@ import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
 //TODO separate classes
-//TODO JSON
 
 class Cvariable(name: String,
                 type: CuserType,
                 isPointer: Boolean = false,
-                isComparable: Boolean = false) : Ctype(type, isPointer) {
+                isComparable: Boolean = false) : Ctype(type, isPointer), JsonModel {
 
     val nameProperty = SimpleStringProperty(name)
     var name: String by nameProperty
@@ -24,6 +23,12 @@ class Cvariable(name: String,
         return "{\n\"name\": \"$name\", \n\"type\": \"$stringType\", \n\"content\": $content,\n\"isPointer\": $isPointer, \n\"isComparable\": $isComparable \n}"
     }
 
+    override fun toJSON(json: JsonBuilder) {
+        with(json) {
+            add("name", name)
+            add("type", getTypeAsString())
+        }
+    }
     fun getTypeAsString(): String {
         val type = when(type) {
             is Cunion -> (type as Cunion).name

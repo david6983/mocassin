@@ -42,4 +42,5 @@ fun main(args: Array<String>) {
             }
         }
     } while (input != "quit")
+    println("Are you sure you want to quit without saving ?")
 }

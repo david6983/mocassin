@@ -1,6 +1,7 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.model.c_components.Cenum
+import com.david.mocassin.model.c_components.Cunion
 import com.david.mocassin.view.components.wizards.EnumWizard
 import com.david.mocassin.view.components.wizards.UnionWizard
 import javafx.stage.FileChooser
@@ -11,6 +12,7 @@ class MainMenuBar : View() {
     val unionIcon = resources.imageview("/icons/union32.png")
 
     val tmpEnumList = mutableListOf<Cenum>()
+    val tmpUnionList = mutableListOf<Cunion>()
 
     override val root = menubar {
         menu("File") {
@@ -59,7 +61,12 @@ class MainMenuBar : View() {
                 val unionWizard = UnionWizard()
                 unionWizard.openModal()
                 unionWizard.onComplete {
-                    println(unionWizard.unionModel.item.toJson())
+                    println(unionWizard.unionModel.item.toJSON())
+
+                    tmpUnionList.add(unionWizard.unionModel.item)
+                    unionWizard.unionModel.attributes.value.clear()
+
+                    information("Union successfully added !", tmpUnionList.asObservable().toJSON().toString())
                 }
             }
             item("struct")
