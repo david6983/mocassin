@@ -34,12 +34,21 @@ typedef enum ${enum.name} ${enum.name};
 
 <#if user_unions??>
     <#list user_unions as union>
+typedef union ${union.name} ${union.name};
+    </#list>
+<#else></#if>
+
+<#if user_unions??>
+    <#list user_unions as union>
         <@macros.union
             name="${union.name}"
             attrs="${union.attributesToString()}"
         />
     </#list>
 <#else></#if>
+
+/* ### USER SPECIFIC STRUCTURES ### */
+
 <#if user_structures??>
     <#list user_structures as struct>
         <@macros.userStructure

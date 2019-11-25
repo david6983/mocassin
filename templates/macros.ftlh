@@ -40,7 +40,7 @@ int compare${name?cap_first}On${attr?cap_first}(struct ${name} ${name?uncap_firs
 <#macro union name attrs>
 /* ### ${name} union ### */
 
-${name} {
+union ${name} {
 ${attrs}
 };
 

@@ -15,7 +15,7 @@ class Cunion(name: String) : CuserType {
     var attributes: ObservableList<Cvariable> by attributesProperty
     //private val attributes: ArrayList<Cvariable> = ArrayList()
     init {
-        nameProperty.value = "union $name"
+        //nameProperty.value = "union $name" //TODO cette merde fait dla merde dans l'interface graphique
     }
 
     fun add(value: Cvariable) = when(value.type) {

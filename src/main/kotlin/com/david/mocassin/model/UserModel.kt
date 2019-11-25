@@ -184,7 +184,7 @@ class UserModel(packageName: String) {
             out.append("\"enum ${(name as Cenum).name}\" : ${name.toJson()},\n")
         }
         for (name in userUnionList) {
-            out.append("\"${(name as Cunion).name}\" : ${name.toJson()},\n")
+            out.append("\"union ${(name as Cunion).name}\" : ${name.toJson()},\n")
         }
         out.delete(out.length - 2, out.length)
         out.append("}")

@@ -99,6 +99,8 @@ class UnionWizard : Wizard("Create a Union", "Provide Union information") {
         add(UnionWizardStep1::class)
         add(UnionWizardStep2::class)
 
+        unionModel.item = Cunion("fuck")
+
         // custom style for wizard buttonbar
         super.root.bottom = buttonbar {
             addClass(WizardStyles.buttons)
@@ -139,7 +141,7 @@ class UnionWizard : Wizard("Create a Union", "Provide Union information") {
             }
         }
 
-        unionModel.item = Cunion("")
+
     }
 
     override fun onCancel() {

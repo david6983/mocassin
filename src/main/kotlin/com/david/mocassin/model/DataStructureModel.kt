@@ -21,7 +21,7 @@ import tornadofx.*
 class DataStructureModel(userModel: UserModel) {
     private val map = mutableMapOf<String, String>()
 
-    val userVariablesProperty = SimpleListProperty<CtypeEnum>(listOf<CtypeEnum>().asObservable())
+    val userVariablesProperty = SimpleListProperty<CtypeEnum>(ArrayList<CtypeEnum>().asObservable())
     var userVariables by userVariablesProperty
 
     val userModelProperty = SimpleObjectProperty<UserModel>(userModel)

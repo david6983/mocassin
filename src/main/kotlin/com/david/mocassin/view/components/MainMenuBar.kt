@@ -55,7 +55,7 @@ class MainMenuBar : View() {
 
                 }
             }
-            item("union", keyCombination = "Shortcut+U", graphic = unionIcon).action {
+            item("Union", keyCombination = "Shortcut+U", graphic = unionIcon).action {
                 val unionWizard = UnionWizard()
                 unionWizard.openModal()
                 unionWizard.onComplete {

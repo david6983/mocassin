@@ -44,7 +44,7 @@ fun main() {
     model.add(mltp)
     model.add(rcts)
     val slist = DataStructureModel(model)
-    slist.addVariable(CtypeEnum.INT)
+//    slist.addVariable(CtypeEnum.INT)
     slist.addVariable(CtypeEnum.INT)
     slist.addVariable(CtypeEnum.FLOAT)
     slist.addVariable(CtypeEnum.STRING)
