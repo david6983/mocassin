@@ -1,5 +1,7 @@
-package com.david.mocassin.model
+package com.david.mocassin.model.deprecated
 
+import com.david.mocassin.model.DataStructureModel
+import com.david.mocassin.model.UserModel
 import com.david.mocassin.model.c_components.*
 import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler

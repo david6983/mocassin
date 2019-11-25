@@ -17,15 +17,19 @@ class MainMenuBar : View() {
     override val root = menubar {
         menu("File") {
             item("New project")
-            item("open").action {
+            separator()
+            item("Open").action {
                 val ef = arrayOf(FileChooser.ExtensionFilter("Mocassin file (*.moc)", "*.moc"))
                 val file = chooseFile("Select a .moc file to open", ef, FileChooserMode.Single)
                 println(file)
             }
-            item("Save")
+            item("Import from Web application")
             separator()
-            item("export")
-            item("generate")
+            item("Save to Web application")
+            item("Save project locally")
+            separator()
+            item("Export")
+            item("Generate")
         }
         menu("Add") {
             item("SList (Single-chained Linked List)")
@@ -69,7 +73,7 @@ class MainMenuBar : View() {
                     information("Union successfully added !", tmpUnionList.asObservable().toJSON().toString())
                 }
             }
-            item("struct")
+            item("Struct")
         }
         menu("Preferences") {
 

@@ -10,7 +10,7 @@ class CenumTest {
     }
 
     @Test
-    fun shouldNotCreateCenumThatNameAlreadyTaken() {
+    fun shouldNotCreateCenumThatNameAlreadyTakenInUserModel() {
 
     }
 
@@ -40,7 +40,7 @@ class CenumTest {
     }
 
     @Test
-    fun shouldNotAddAttributeWithWhiteSpace() {
+    fun shouldNotAddAttributeWithWhiteSpaces() {
 
     }
 
@@ -50,7 +50,52 @@ class CenumTest {
     }
 
     @Test
-    fun shouldNotAddAttributeWithAlreadyTakenNameInAllEnums() {
+    fun shouldNotAddAttributeWithAlreadyTakenNameInUserModel() {
+
+    }
+    
+    @Test
+    fun shouldRemoveGivenAttribute() {
+        
+    }
+
+    @Test
+    fun shouldRemoveAllAttributes() {
+
+    }
+
+    @Test
+    fun shouldReplaceAttributeValueFromName() {
+
+    }
+
+    @Test
+    fun shouldReplaceAttributeNamefromValue() {
+
+    }
+
+    @Test
+    fun shouldAttributeAsUniqueName() {
+
+    }
+
+    @Test
+    fun shouldReturnAttributesThatFollowCsyntax() {
+
+    }
+
+    @Test
+    fun shouldReturnAttributesAsJson() {
+
+    }
+
+    @Test
+    fun shouldReturnCenumAsJson() {
+
+    }
+
+    @Test
+    fun shouldReturnCenumAsString() {
 
     }
 }
