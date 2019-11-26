@@ -12,4 +12,9 @@ class CtypeEnumTest {
     fun shouldReturnNullFromUnknownStringValue() {
 
     }
+
+    @Test
+    fun shouldReturnObservableArrayList() {
+
+    }
 }

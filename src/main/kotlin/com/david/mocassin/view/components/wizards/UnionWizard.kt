@@ -50,10 +50,7 @@ class UnionWizardStep2 : View("Union attributes") {
                 field("type") {
                     combobox<String>(selectedType){
                         variableTypeField = this
-
-                        for(type in CtypeEnum.values()) {
-                            items.add(type.cType)
-                        }
+                        items = CtypeEnum.toObservableArrayList()
                         //TODO add types from userModel
                     }.selectionModel.selectFirst()
                 }
@@ -76,7 +73,7 @@ class UnionWizardStep2 : View("Union attributes") {
             isEditable = true
             //TODO gerer l'edition
             column("Name", Cvariable::name).makeEditable()
-            column("Value", Cvariable::getTypeAsString)
+            column("Value", Cvariable::getTypeAsString).useComboBox(variableTypeField.items)
 
             columnResizePolicy = SmartResize.POLICY
         }

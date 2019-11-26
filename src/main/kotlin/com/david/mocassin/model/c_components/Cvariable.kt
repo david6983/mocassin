@@ -29,7 +29,7 @@ class Cvariable(name: String,
             add("type", getTypeAsString())
         }
     }
-    fun getTypeAsString(): String {
+    fun getTypeAsString(): String? {
         val type = when(type) {
             is Cunion -> (type as Cunion).name
             is Cenum -> (type as Cenum).name

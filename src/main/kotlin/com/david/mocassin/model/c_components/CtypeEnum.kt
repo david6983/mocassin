@@ -1,5 +1,8 @@
 package com.david.mocassin.model.c_components
 
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
+
 enum class CtypeEnum(val cType: String, val enumValue: String, val displaySymbol: String) : CuserType {
     INT("int", "number", "%d"),
     UNSIGNED_INT("unsigned int", "unsigned_number", "%d"),
@@ -27,6 +30,14 @@ enum class CtypeEnum(val cType: String, val enumValue: String, val displaySymbol
     companion object {
         fun find(value: String): CtypeEnum? {
             return CtypeEnum.values().find { it.cType == value }
+        }
+
+        fun toObservableArrayList() : ObservableList<String> {
+            val items: ObservableList<String> = FXCollections.observableArrayList()
+            for(type in values()) {
+                items.add(type.cType)
+            }
+            return items
         }
     }
 }
