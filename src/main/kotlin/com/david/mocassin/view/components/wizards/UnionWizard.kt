@@ -6,6 +6,8 @@ import javafx.scene.control.ButtonBar
 import javafx.scene.control.ComboBox
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
+import javafx.scene.input.KeyCode
+import javafx.scene.input.KeyEvent
 
 import tornadofx.*
 
@@ -45,6 +47,18 @@ class UnionWizardStep2 : View("Union attributes") {
                 field("name") {
                     textfield("") {
                         variableNameField = this
+                        //TODO change this to a simple message in red
+
+                        addEventHandler(KeyEvent.KEY_PRESSED) {
+                            /*
+                            if (it.code == KeyCode.SPACE) {
+                                warning("Do not insert space")
+                            } */
+                            println("changing ${textProperty().value}")
+                            //TODO Fix this function
+                            textProperty().value.replace(regex = Regex("^[a-zA-Z0-9]+\$"), replacement = "B")
+                            println("to ${textProperty().value}")
+                        }
                     }
                 }
                 field("type") {

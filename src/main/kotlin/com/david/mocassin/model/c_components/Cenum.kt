@@ -1,9 +1,12 @@
 package com.david.mocassin.model.c_components
 
+import com.david.mocassin.controller.ProjectController
+import com.david.mocassin.utils.C_VARIABLE_SYNTAX_REGEX
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
+import javax.json.JsonObject
 
 //TODO separate classes
 //TODO finish documentation and write the Unit test
@@ -32,7 +35,7 @@ class Cenum(name: String) : CuserType, JsonModel {
     var attributes by attributesProperty
 
     fun add(name: String, value: Int = attributes.count()): Boolean {
-        return if (isAttributeAsUniqueName(name)) {
+        return if (isAttributeUniqueInEnum(name) && isAttributeSyntaxFollowCstandard(name)) {
             attributes?.add(CenumAttribute(name, value))
             true
         } else {
@@ -42,21 +45,29 @@ class Cenum(name: String) : CuserType, JsonModel {
 
     fun remove(name: String, value: Int) = attributes.remove(CenumAttribute(name, value))
 
-    fun removeAll() = attributes.clear()
+    fun remove(name: String) = attributes.remove(attributes.find { it.name == name })
 
-    fun replace(name: String, newValue: Int) {
+    fun clear() = attributes.clear()
+
+    fun replaceValue(name: String, newValue: Int) {
         val index = attributes.indexOfFirst { it.name == name }
-        println(index)
         attributes[index] = CenumAttribute(name, newValue)
     }
 
-    fun replace(value: Int, newName: String) {
-        val index = attributes.indexOfFirst { it.name == name }
-        println(index)
-        attributes[index] = CenumAttribute(newName, value)
+    fun replaceName(value: Int, newName: String) {
+        val index = attributes.indexOfFirst { it.value == value }
+        if (isAttributeSyntaxFollowCstandard(newName)) {
+            attributes[index] = CenumAttribute(newName, value)
+        }
     }
 
-    private fun isAttributeAsUniqueName(name: String) = attributes.indexOfFirst { it.name == name } == -1
+    fun isAttributeUniqueInEnum(name: String): Boolean {
+        return if (isAttributeSyntaxFollowCstandard(name)) {
+            attributes.indexOfFirst { it.name == name } == -1
+        } else {
+            false
+        }
+    }
 
     /**
      * This function should return the attributes that follow the C syntax of a enumeration
@@ -136,9 +147,28 @@ class Cenum(name: String) : CuserType, JsonModel {
         out.deleteCharAt(out.length - 1)
         return "$name;${out}"
     }
+
+    companion object {
+        fun isAttributeUniqueInProject(name: String, project: ProjectController): Boolean {
+            return true
+        }
+
+        fun isAttributeSyntaxFollowCstandard(name: String): Boolean {
+            return name.contains(regex = Regex(C_VARIABLE_SYNTAX_REGEX))
+        }
+
+        fun createFromJSON(json: JsonObject): Cenum {
+            val enum = Cenum("")
+            with(json) {
+                enum.name = string("name")
+                enum.attributes.addAll(getJsonArray("attributes").toModel())
+            }
+            return enum
+        }
+    }
 }
 
-class CenumAttribute(name: String, value: Int) {
+class CenumAttribute(name: String, value: Int): JsonModel {
     val nameProperty = SimpleStringProperty(name)
     var name by nameProperty
 
