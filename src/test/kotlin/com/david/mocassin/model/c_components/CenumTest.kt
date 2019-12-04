@@ -1,5 +1,6 @@
 package com.david.mocassin.model.c_components
 
+import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import tornadofx.JsonBuilder
 import kotlin.test.*
 
@@ -8,6 +9,11 @@ class CenumTest {
     @BeforeTest
     fun createEnum() {
         enum = Cenum("FOO")
+    }
+
+    @Test
+    fun shouldNotCreateCenumWithNoAlphanumericName() {
+
     }
 
     @Test
@@ -104,15 +110,16 @@ class CenumTest {
         assertFalse(enum.isAttributeUniqueInEnum("foo-ee3"))
     }
 
+    //TODO move to validatorTest
     @Test
     fun shouldReturnAttributesThatFollowCsyntax() {
-        assertTrue(Cenum.isAttributeSyntaxFollowCstandard("foo"))
-        assertTrue(Cenum.isAttributeSyntaxFollowCstandard("FOO"))
-        assertTrue(Cenum.isAttributeSyntaxFollowCstandard("bar93"))
-        assertTrue(Cenum.isAttributeSyntaxFollowCstandard("fo_ee99"))
-        assertFalse(Cenum.isAttributeSyntaxFollowCstandard("foo-ee"))
-        assertFalse(Cenum.isAttributeSyntaxFollowCstandard("ff ff"))
-        assertFalse(Cenum.isAttributeSyntaxFollowCstandard("@e ee-éè"))
+        assertTrue(isNameSyntaxFollowCstandard("foo"))
+        assertTrue(isNameSyntaxFollowCstandard("FOO"))
+        assertTrue(isNameSyntaxFollowCstandard("bar93"))
+        assertTrue(isNameSyntaxFollowCstandard("fo_ee99"))
+        assertFalse(isNameSyntaxFollowCstandard("foo-ee"))
+        assertFalse(isNameSyntaxFollowCstandard("ff ff"))
+        assertFalse(isNameSyntaxFollowCstandard("@e ee-éè"))
     }
 
     @Test
@@ -146,13 +153,5 @@ class CenumTest {
         enum.add("bar")
 
         assertEquals(expectedJson.build().toString(), enum.attributesToJSON().build().toString())
-    }
-
-    @Test
-    fun shouldReturnCenumAsString() {
-        //enum.add("foo")
-        //enum.add("bar")
-
-        //val e: JsonObject = JsonObject("")
     }
 }

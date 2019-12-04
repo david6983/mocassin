@@ -1,8 +1,10 @@
 package com.david.mocassin.model.c_components
 
+import com.david.mocassin.utils.C_VARIABLE_SYNTAX_REGEX
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
+import javax.json.JsonObject
 
 //TODO separate classes
 
@@ -56,6 +58,12 @@ class Cvariable(name: String,
 
     override fun toString(): String {
         return getTypeAsString() + " " + name
+    }
+
+    companion object {
+        fun isNameFollowCstandard(name: String): Boolean {
+            return name.contains(regex = Regex(C_VARIABLE_SYNTAX_REGEX))
+        }
     }
 }
 

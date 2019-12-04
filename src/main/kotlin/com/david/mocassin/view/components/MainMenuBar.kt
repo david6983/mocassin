@@ -1,22 +1,26 @@
 package com.david.mocassin.view.components
 
+import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.c_components.Cenum
 import com.david.mocassin.model.c_components.Cunion
+import com.david.mocassin.view.components.fragments.NewProjectModal
 import com.david.mocassin.view.components.wizards.EnumWizard
 import com.david.mocassin.view.components.wizards.UnionWizard
 import javafx.stage.FileChooser
+import javafx.stage.StageStyle
 import tornadofx.*
 //TODO add a controller
 class MainMenuBar : View() {
-    val enumIcon = resources.imageview("/icons/enum32.png")
-    val unionIcon = resources.imageview("/icons/union32.png")
+    private val projectController: ProjectController by inject()
 
-    val tmpEnumList = mutableListOf<Cenum>()
-    val tmpUnionList = mutableListOf<Cunion>()
+    private val enumIcon = resources.imageview("/icons/enum32.png")
+    private val unionIcon = resources.imageview("/icons/union32.png")
 
     override val root = menubar {
         menu("File") {
-            item("New project")
+            item("New project", keyCombination = "Shortcut+N").action {
+                find<NewProjectModal>().openModal(stageStyle = StageStyle.UTILITY)
+            }
             separator()
             item("Open").action {
                 val ef = arrayOf(FileChooser.ExtensionFilter("Mocassin file (*.moc)", "*.moc"))
@@ -38,8 +42,6 @@ class MainMenuBar : View() {
             item("BTree (Binary Tree)")
             item("BSTree (Binary Search Tree)")
             item("Tree (Multi-node Tree)")
-            //separator()
-            //item("SANN (Simple Artificial Neural Network)")
         }
         menu("New") {
             item("Enum", keyCombination = "Shortcut+E", graphic = enumIcon).action {
@@ -51,26 +53,24 @@ class MainMenuBar : View() {
                 enumWizard.onComplete {
                     println(enumWizard.enumModel.item.toJSON())
                     // save the enumeration
-                    tmpEnumList.add(enumWizard.enumModel.item)
+                    projectController.userModel.add(enumWizard.enumModel.item)
+
+                    information("Enumeration successfully added !", enumWizard.enumModel.item.toJSON().toString())
 
                     // wizard model reset for a next one
                     enumWizard.enumModel.item = Cenum("")
                     enumWizard.enumModel.attributes.value.clear()
-
-                    information("Enumeration successfully added !", tmpEnumList.asObservable().toJSON().toString())
-
                 }
             }
             item("Union", keyCombination = "Shortcut+U", graphic = unionIcon).action {
                 val unionWizard = UnionWizard()
                 unionWizard.openModal()
                 unionWizard.onComplete {
-                    println(unionWizard.unionModel.item.toJSON())
+                    //println(unionWizard.unionModel.item.toJSON())
+                    projectController.userModel.add(unionWizard.unionModel.item)
+                    information("Union successfully added !", unionWizard.unionModel.item.toJSON().toString())
 
-                    tmpUnionList.add(unionWizard.unionModel.item)
                     unionWizard.unionModel.attributes.value.clear()
-
-                    information("Union successfully added !", tmpUnionList.asObservable().toJSON().toString())
                 }
             }
             item("Struct")

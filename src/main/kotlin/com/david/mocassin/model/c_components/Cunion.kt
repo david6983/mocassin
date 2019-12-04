@@ -15,17 +15,29 @@ class Cunion(name: String) : CuserType, JsonModel  {
     val attributesProperty = SimpleListProperty<Cvariable>(mutableListOf<Cvariable>().asObservable())
     var attributes: ObservableList<Cvariable> by attributesProperty
 
-    fun add(value: Cvariable) = when(value.type) {
+    fun add(value: Cvariable): Boolean = when(value.type) {
         is CuserStructure -> {
             value.isPointer = true
             attributes.add(value)
+            true
         }
-        else -> attributes.add(value)
+        is Cunion -> {
+            if (value.name != name) {
+                attributes.add(value)
+                true
+            } else {
+                false
+            }
+        }
+        else -> {
+            attributes.add(value)
+            true
+        }
     }
 
-    fun remove(value: Cvariable) = attributes.remove(value)
+    fun remove(name: String): Boolean = attributes.remove(attributes.find { it.name == name })
 
-    fun removeAll() = attributes.clear()
+    fun clear() = attributes.clear()
 
     fun attributesToString(): String {
         val out = StringBuilder()
@@ -65,6 +77,6 @@ class Cunion(name: String) : CuserType, JsonModel  {
 }
 
 class CunionModel: ItemViewModel<Cunion>() {
-    val name = bind(Cunion::nameProperty)
-    val attributes = bind(Cunion::attributesProperty)
+    val name = bind(Cunion::nameProperty, autocommit = true)
+    val attributes = bind(Cunion::attributesProperty, autocommit = true)
 }

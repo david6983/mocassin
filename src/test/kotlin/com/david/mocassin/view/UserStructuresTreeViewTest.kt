@@ -6,7 +6,7 @@ import javafx.scene.control.TreeItem
 import tornadofx.*
 
 class UserStructuresTreeViewTestController : Controller() {
-    val model = UserModel("project name")
+    val model = UserModel("GEOMETRY [PROJECT]")
     val e1 = Cenum("MyEnum1")
     val e2 = Cenum("enum 2")
 
@@ -36,15 +36,18 @@ class UserStructuresTreeViewTestView : View() {
 
             cellFormat { text = it }
 
-            root.children.add(TreeItem("Enumerations"))
-            root.children.add(TreeItem("Unions"))
-            root.children.add(TreeItem("Structures"))
+            root.children.add(TreeItem("Enumerations [enum]"))
+            root.children.add(TreeItem("Unions [union]"))
+            root.children.add(TreeItem("Structures [struct]"))
 
-            val enumsRoot = root.children.find { it.value == "Enumerations" }
+            val enumsRoot = root.children.find { it.value == "Enumerations [enum]" }
 
             for (enum:Cenum in controller.enums) {
                 println(enum.name)
-                enumsRoot?.children?.add(TreeItem(enum.name))
+                val child = TreeItem(enum.name)
+                child.children.add(TreeItem("\"TOP\""))
+                child.children.add(TreeItem("\"Bottom\""))
+                enumsRoot?.children?.add(child)
             }
 
             //populate { parent -> controller.enums.map { it.name }

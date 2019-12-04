@@ -1,29 +1,41 @@
 package com.david.mocassin.view.components.wizards
 
+import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.c_components.Cenum
 import com.david.mocassin.model.c_components.CenumAttribute
+import com.david.mocassin.model.c_components.CenumAttributeModel
 import com.david.mocassin.model.c_components.CenumModel
-import javafx.scene.Parent
+import com.david.mocassin.utils.isNameSyntaxFollowCstandard
+import com.david.mocassin.view.components.wizards.editors.CenumAttributeNameEditor
+import com.david.mocassin.view.components.wizards.editors.CenumAttributeValueEditor
 import javafx.scene.control.ButtonBar
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
 
 import tornadofx.*
 
-//TODO add a controller
-//TODO verification champ attributes
-//TODO verifier que le nom de l'enum n'existe pas dans l'userModel
-//TODO verif nom contient pas d'espace
+//TODO add a controller to separate functions
 
 class EnumWizardStep1 : View("Enum name") {
-    val enumModel: CenumModel by inject()
+    private val projectController: ProjectController by inject()
+
+    private val enumModel: CenumModel by inject()
 
     override val complete = enumModel.valid(enumModel.name)
 
     override val root = form {
         fieldset(title) {
             field("Name") {
-                textfield(enumModel.name).required()
+                textfield(enumModel.name){
+                    validator {
+                        if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(it))
+                            error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
+                        else if(!it.isNullOrBlank() && !projectController.isNameUnique(it)) {
+                            error("The name already exist")
+                        }
+                        else null
+                    }
+                }.required()
             }
         }
     }
@@ -32,48 +44,65 @@ class EnumWizardStep1 : View("Enum name") {
 }
 
 class EnumWizardStep2 : View("Enumeration values") {
-    val context = ValidationContext()
+    private val projectController: ProjectController by inject()
 
-    val enumModel: CenumModel by inject()
+    private val enumModel: CenumModel by inject()
+
+    private val attributeModel = CenumAttributeModel()
 
     var attributeNameField : TextField by singleAssign()
-    var attributeValueField : TextField by singleAssign()
 
     var attributesTable: TableView<CenumAttribute> by singleAssign()
-    /*
-    val nameValidator = context.addValidator(attributeNameField, attributeNameField.textProperty()) {
-        if(enumModel.attributes.value.indexOfFirst { it.name == attributeNameField.textProperty().toString() } == -1) {
-            error("This attribute already exist !")
-        } else {
-            null
-        }
-    }*/
+
+    init {
+        attributeModel.value.value = 0
+    }
 
     override val root = hbox {
         form {
             fieldset("Add fields inside") {
                 field("name") {
-                    textfield("") {
+                    textfield(attributeModel.name) {
                         attributeNameField = this
+                        validator {
+                            if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(it))
+                                error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
+                            else if (it.isNullOrBlank())
+                                error("This field should not be blank")
+                            else if(!it.isNullOrBlank() && !projectController.isNameUniqueExcept(it, listOf(enumModel.name.value))) {
+                                error("The name already exist in another structure in the project")
+                            }
+                            else if(!it.isNullOrBlank() && !enumModel.item.isAttributeUniqueInEnum(it)) {
+                                error("The name already exist in this enum")
+                            }
+                            else
+                                null
+                        }
                     }
                 }
                 field("value") {
-                    textfield("0") {
-                        attributeValueField = this
+                    hbox(spacing= 10) {
+                        button("-").action {
+                            attributeModel.value.value = attributeModel.value.value.toInt() - 1
+                        }
+                        label(attributeModel.value)
+                        button("+").action {
+                            attributeModel.value.value = attributeModel.value.value.toInt() + 1
+                        }
                     }
                 }
                 button("Add") {
+                    enableWhen(attributeModel.valid)
                     action {
                         val attr = CenumAttribute(
-                            attributeNameField.textProperty().value,
-                            attributeValueField.textProperty().value.toInt()
+                            attributeModel.name.value,
+                            attributeModel.value.value.toInt()
                         )
                         enumModel.attributes.value.add(attr)
 
                         //form reset
                         attributeNameField.textProperty().value = ""
-                        attributeValueField.textProperty().value = enumModel.attributes.value.count().toString()
-
+                        attributeModel.value.value = enumModel.attributes.value.count()
                     }
                 }
             }
@@ -81,16 +110,12 @@ class EnumWizardStep2 : View("Enumeration values") {
         tableview(enumModel.attributes) {
             attributesTable = this
             isEditable = true
-            column("Name", CenumAttribute::name).makeEditable()
-            column("Value", CenumAttribute::value).makeEditable()
+            //TODO change editing method
+            column("Name", CenumAttribute::name).cellFragment(CenumAttributeNameEditor::class)
+            column("Value", CenumAttribute::value).cellFragment(CenumAttributeValueEditor::class)
 
             columnResizePolicy = SmartResize.POLICY
         }
-    }
-
-    override fun onSave() {
-        attributeValueField.textProperty().value = "0"
-        super.onSave()
     }
 }
 
@@ -150,12 +175,14 @@ class EnumWizard : Wizard("Create a Enum", "Provide Enum information") {
 
     override fun onCancel() {
         confirm("Confirm cancel", "Do you really want to loose your progress?") {
+            //this.root.
             cancel()
         }
     }
 
     override fun onSave() {
-        back()
+        if (canGoBack.value)
+            back()
         super.onSave()
     }
 }
