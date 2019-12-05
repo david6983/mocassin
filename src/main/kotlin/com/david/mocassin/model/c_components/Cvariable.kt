@@ -1,10 +1,10 @@
 package com.david.mocassin.model.c_components
 
+import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.utils.C_VARIABLE_SYNTAX_REGEX
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
-import javax.json.JsonObject
 
 //TODO separate classes
 

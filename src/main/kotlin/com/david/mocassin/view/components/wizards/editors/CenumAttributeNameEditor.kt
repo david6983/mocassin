@@ -1,9 +1,9 @@
 package com.david.mocassin.view.components.wizards.editors
 
 import com.david.mocassin.controller.ProjectController
-import com.david.mocassin.model.c_components.CenumAttribute
-import com.david.mocassin.model.c_components.CenumAttributeModel
-import com.david.mocassin.model.c_components.CenumModel
+import com.david.mocassin.model.c_components.c_enum.CenumAttribute
+import com.david.mocassin.model.c_components.c_enum.CenumAttributeModel
+import com.david.mocassin.model.c_components.c_enum.CenumModel
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import tornadofx.*
 

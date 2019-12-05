@@ -1,16 +1,12 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.controller.ProjectController
-import com.david.mocassin.model.c_components.Cenum
 import com.david.mocassin.model.c_components.CtypeEnum
-import com.david.mocassin.model.c_components.Cunion
 import com.david.mocassin.view.styles.MainStyle
 import javafx.beans.property.SimpleStringProperty
-import javafx.event.EventHandler
 import javafx.geometry.Pos
 
 import tornadofx.*
-import java.awt.Color
 
 class MainView: View("Mocassin linked list generator for C programming") {
     //TODO add a controller for MainView that inject projectController inside

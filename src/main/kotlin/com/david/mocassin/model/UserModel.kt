@@ -1,6 +1,7 @@
 package com.david.mocassin.model
 
 import com.david.mocassin.model.c_components.*
+import com.david.mocassin.model.c_components.c_enum.Cenum
 import freemarker.template.Configuration
 import freemarker.template.Template
 import javafx.beans.property.SimpleListProperty

@@ -1,6 +1,7 @@
 package com.david.mocassin.model.c_components
 
 import com.david.mocassin.controller.ProjectController
+import com.david.mocassin.model.c_components.c_enum.Cenum
 import tornadofx.JsonBuilder
 import kotlin.test.*
 

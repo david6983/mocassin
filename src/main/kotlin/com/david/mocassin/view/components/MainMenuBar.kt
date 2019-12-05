@@ -1,8 +1,7 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.controller.ProjectController
-import com.david.mocassin.model.c_components.Cenum
-import com.david.mocassin.model.c_components.Cunion
+import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.view.components.fragments.NewProjectModal
 import com.david.mocassin.view.components.wizards.EnumWizard
 import com.david.mocassin.view.components.wizards.UnionWizard
@@ -58,7 +57,8 @@ class MainMenuBar : View() {
                     information("Enumeration successfully added !", enumWizard.enumModel.item.toJSON().toString())
 
                     // wizard model reset for a next one
-                    enumWizard.enumModel.item = Cenum("")
+                    enumWizard.enumModel.item =
+                        Cenum("")
                     enumWizard.enumModel.attributes.value.clear()
                 }
             }

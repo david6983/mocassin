@@ -1,15 +1,13 @@
-package com.david.mocassin.model.c_components
+package com.david.mocassin.model.c_components.c_enum
 
 import com.david.mocassin.controller.ProjectController
+import com.david.mocassin.model.c_components.CuserType
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
-import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import tornadofx.*
 import javax.json.JsonObject
-
-//TODO separate classes
 
 /**
  * This class define a C programming enumeration :
@@ -47,17 +45,20 @@ class Cenum(name: String) : CuserType, JsonModel {
      * Add a new attribute to the enumeration and verify before the addition if the name is unique in the enumeration
      * and in the project. This attribute should also follow the C syntax for enumeration.
      *
+     * note : verification for existence in model is done on the vue (cli or GUI)
      *
      * @param name name of the attribute to verify and add on success
      * @param value enumeration value, incremental by default (start at 0)
      * @return 'true' if the addition success, 'false' if the attribute is not valid
      */
     fun add(name: String, value: Int = attributes.count()): Boolean {
-        //TODO change the '&&' syntax and throw custom exceptions instead
-        //TODO add projectController verification --> need to change all files that use this function
-        return if (isAttributeUniqueInEnum(name) && isNameSyntaxFollowCstandard(name)) {
-            attributes?.add(CenumAttribute(name, value))
-            true
+        return if (isAttributeUniqueInEnum(name)) {
+            if (isNameSyntaxFollowCstandard(name)) {
+                attributes.add(CenumAttribute(name, value))
+                true
+            } else {
+                false
+            }
         } else {
             false
         }
@@ -77,14 +78,15 @@ class Cenum(name: String) : CuserType, JsonModel {
     fun clear() = attributes.clear()
 
     /**
-     * TODO
+     * replace an attribute value from name
      *
-     * @param name
-     * @param newValue
+     * @param name name of the attribute
+     * @param newValue new value of the attribute
      */
     fun replaceValue(name: String, newValue: Int) {
         val index = attributes.indexOfFirst { it.name == name }
-        attributes[index] = CenumAttribute(name, newValue)
+        attributes[index] =
+            CenumAttribute(name, newValue)
     }
 
     /**
@@ -105,7 +107,8 @@ class Cenum(name: String) : CuserType, JsonModel {
             && isAttributeUniqueInEnum(newName)
             && projectController.isNameUniqueExcept(newName, listOf(name))
         ) {
-            attributes[index] = CenumAttribute(newName, value)
+            attributes[index] =
+                CenumAttribute(newName, value)
             true
         } else {
             false
@@ -227,57 +230,3 @@ class Cenum(name: String) : CuserType, JsonModel {
     }
 }
 
-/**
- * Represents an attribute in an enumeration which is simply a name and a value
- * We didn't used a Map<String, Int> directly in the Cenum object for two reasons :
- * - We can use inheritance with JsonModel to take advantage of json parsing from tornadofx
- * - There is a better integration with the View and TableView in tornadofx
- *
- * This class is singleton / bean with properties
- *
- * @constructor
- * create a CenumAttribute object from a name and a value
- *
- *
- * @param name name of the attribute
- * @param value integer value of the attribute
- */
-class CenumAttribute(name: String, value: Int): JsonModel {
-    val nameProperty = SimpleStringProperty(name)
-    var name by nameProperty
-
-    val valueProperty = SimpleIntegerProperty(value)
-    var value by valueProperty
-
-    override fun updateModel(json: JsonObject) {
-        with(json) {
-            name = string("name")
-            value = int("value")!!
-        }
-    }
-
-    override fun toJSON(json: JsonBuilder) {
-        with(json) {
-            add("name", name)
-            add("value", value)
-        }
-    }
-}
-
-/**
- * This class is the model of an attribute. This class is used for validation
- */
-class CenumAttributeModel: ItemViewModel<CenumAttribute>() {
-    val name = bind(CenumAttribute::nameProperty, autocommit = true)
-    val value = bind(CenumAttribute::valueProperty, autocommit = true)
-}
-
-/**
- * Item view model of Cenum with properties bindings
- *
- * Better integration with TableView and TreeView
- */
-class CenumModel: ItemViewModel<Cenum>() {
-    val name = bind(Cenum::nameProperty, autocommit = true)
-    val attributes = bind(Cenum::attributesProperty, autocommit = true)
-}

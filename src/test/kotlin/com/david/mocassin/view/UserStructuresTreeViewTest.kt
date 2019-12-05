@@ -1,7 +1,7 @@
 package com.david.mocassin.view
 
 import com.david.mocassin.model.UserModel
-import com.david.mocassin.model.c_components.*
+import com.david.mocassin.model.c_components.c_enum.Cenum
 import javafx.scene.control.TreeItem
 import tornadofx.*
 
@@ -42,7 +42,7 @@ class UserStructuresTreeViewTestView : View() {
 
             val enumsRoot = root.children.find { it.value == "Enumerations [enum]" }
 
-            for (enum:Cenum in controller.enums) {
+            for (enum: Cenum in controller.enums) {
                 println(enum.name)
                 val child = TreeItem(enum.name)
                 child.children.add(TreeItem("\"TOP\""))

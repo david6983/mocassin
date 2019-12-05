@@ -1,7 +1,7 @@
 package com.david.mocassin.view.components.wizards.editors
 
-import com.david.mocassin.model.c_components.CenumAttribute
-import com.david.mocassin.model.c_components.CenumAttributeModel
+import com.david.mocassin.model.c_components.c_enum.CenumAttribute
+import com.david.mocassin.model.c_components.c_enum.CenumAttributeModel
 import tornadofx.*
 
 class CenumAttributeValueEditor: TableCellFragment<CenumAttribute, Int>() {
