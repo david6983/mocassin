@@ -1,19 +1,14 @@
 package com.david.mocassin.model.c_components
 
-import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import tornadofx.JsonBuilder
 import kotlin.test.*
 
 class CenumTest {
     private var enum = Cenum("")
+
     @BeforeTest
     fun createEnum() {
         enum = Cenum("FOO")
-    }
-
-    @Test
-    fun shouldNotCreateCenumWithNoAlphanumericName() {
-
     }
 
     @Test
@@ -71,13 +66,6 @@ class CenumTest {
     }
 
     @Test
-    fun shouldRemoveGivenAttributeFromNameAndValue() {
-        enum.add("foo4", 4)
-        assertTrue(enum.remove("foo4"))
-        assertNull(enum.attributes.find { it.name == "foo4" && it.value == 4 })
-    }
-
-    @Test
     fun shouldRemoveAllAttributes() {
         enum.add("a")
         enum.add("b")
@@ -110,35 +98,26 @@ class CenumTest {
         assertFalse(enum.isAttributeUniqueInEnum("foo-ee3"))
     }
 
-    //TODO move to validatorTest
-    @Test
-    fun shouldReturnAttributesThatFollowCsyntax() {
-        assertTrue(isNameSyntaxFollowCstandard("foo"))
-        assertTrue(isNameSyntaxFollowCstandard("FOO"))
-        assertTrue(isNameSyntaxFollowCstandard("bar93"))
-        assertTrue(isNameSyntaxFollowCstandard("fo_ee99"))
-        assertFalse(isNameSyntaxFollowCstandard("foo-ee"))
-        assertFalse(isNameSyntaxFollowCstandard("ff ff"))
-        assertFalse(isNameSyntaxFollowCstandard("@e ee-éè"))
-    }
-
     @Test
     fun shouldReturnAttributesAsJson() {
-        val attributes = JsonBuilder()
-        with(attributes) {
-            add("foo", 0)
-            add("bar", 1)
-        }
-        val expectedJson = JsonBuilder()
-        with(expectedJson) {
-            add("name", "FOO")
-            add("attributes", attributes.build())
-        }
+        val expectedString = "{\"name\":\"FOO\",\"attributes\":[{\"name\":\"foo\",\"value\":0},{\"name\":\"bar\",\"value\":1}]}"
 
         enum.add("foo")
         enum.add("bar")
 
-        assertEquals(expectedJson.build().toString(), enum.toJSON().toString())
+        assertEquals(expectedString, enum.toJSON().toString())
+    }
+
+    @Test
+    fun shouldDisplayAttributesAsCformat() {
+        val expected = "\tfoo = 0,\n" +
+                       "\tbar = 1,\n" +
+                       "\tbar2 = 2"
+        enum.add("foo")
+        enum.add("bar")
+        enum.add("bar2")
+
+        assertEquals(expected, enum.attributesToCformatString())
     }
 
     @Test
@@ -153,5 +132,15 @@ class CenumTest {
         enum.add("bar")
 
         assertEquals(expectedJson.build().toString(), enum.attributesToJSON().build().toString())
+    }
+
+    @Test
+    fun shouldCreateCenumFromJson() {
+        enum.add("foo")
+        enum.add("bar", 2)
+
+        val e2 = Cenum("")
+        e2.updateModel(enum.toJSON())
+        assertEquals(e2.toJSON(), enum.toJSON())
     }
 }

@@ -1,7 +1,5 @@
 package com.david.mocassin.utils
 
-import com.david.mocassin.controller.ProjectController
-
 /**
  * match only alphanumeric string
  *

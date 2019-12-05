@@ -1,11 +1,10 @@
 package com.david.mocassin.model.c_components
 
-import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
-import javafx.beans.property.Property
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.collections.ObservableList
 import tornadofx.*
 import javax.json.JsonObject
 
@@ -32,7 +31,7 @@ class Cenum(name: String) : CuserType, JsonModel {
     /**
      * name of the enumeration
      */
-    var name by nameProperty
+    var name: String by nameProperty
 
     /**
      * mutable list of attributes contains in the enumeration by property
@@ -41,7 +40,7 @@ class Cenum(name: String) : CuserType, JsonModel {
     /**
      * attributes contains in the enumeration
      */
-    var attributes by attributesProperty
+    var attributes: ObservableList<CenumAttribute> by attributesProperty
 
     /**
      * Add a new attribute to the enumeration and verify before the addition if the name is unique in the enumeration
@@ -60,15 +59,6 @@ class Cenum(name: String) : CuserType, JsonModel {
             false
         }
     }
-
-    /**
-     * remove an attribute from the name and the value
-     *
-     * @param name exact name of the attribute to delete
-     * @param value exact value of attribute
-     * @return 'true' if the attribute has been removed succesfully
-     */
-    fun remove(name: String, value: Int): Boolean = attributes.remove(CenumAttribute(name, value))
 
     /**
      * remove an attribute from the name only
@@ -116,7 +106,7 @@ class Cenum(name: String) : CuserType, JsonModel {
      *
      * @return the attributes of the enumeration as C format in Header file
      */
-    fun attributesToString(): String {
+    fun attributesToCformatString(): String {
         val out = StringBuilder()
         for (attr in attributes) {
             out.append("\t${attr.name} = ${attr.value},\n")
@@ -148,7 +138,6 @@ class Cenum(name: String) : CuserType, JsonModel {
      */
     fun attributesToJSON(): JsonBuilder {
         val out = JsonBuilder()
-
         for(attr in attributes) {
             out.add(attr.name, attr.value)
         }
@@ -164,7 +153,7 @@ class Cenum(name: String) : CuserType, JsonModel {
     override fun toJSON(json: JsonBuilder) {
         with(json) {
             add("name", name)
-            add("attributes", attributesToJSON())
+            add("attributes", attributes.toJSON())
         }
     }
 
@@ -184,32 +173,16 @@ class Cenum(name: String) : CuserType, JsonModel {
         return "$name;${out}"
     }
 
-    companion object {
-        /**
-         * search if the given name doesn't already in the project (list of names used)
-         *
-         * @param name name of the attribute
-         * @param project project to search into
-         * @return 'true' if the attribute is not contains in the list of names used in project, 'false' otherwise
-         */
-        fun isAttributeUniqueInProject(name: String, project: ProjectController): Boolean {
-            //TODO to code
-            return true
-        }
-
-        /**
-         * from a json object, create a Cenum object
-         *
-         * @param json json object
-         * @return 'Cenum' initialized object
-         */
-        fun createFromJSON(json: JsonObject): Cenum {
-            val enum = Cenum("")
-            with(json) {
-                enum.name = string("name")
-                enum.attributes.addAll(getJsonArray("attributes").toModel())
+    override fun updateModel(json: JsonObject) {
+        with(json) {
+            name = string("name").toString()
+            // we need to add manually attributes because CenumAttribute has a default constructor with name and value
+            // to use attributes.setAll(getJsonArray("attributes").toModel()), the constructor should be empty !
+            for(obj in getJsonArray("attributes")) {
+                val attr = CenumAttribute("", 0)
+                attr.updateModel(obj.asJsonObject())
+                attributes.add(attr)
             }
-            return enum
         }
     }
 }
@@ -235,8 +208,25 @@ class CenumAttribute(name: String, value: Int): JsonModel {
 
     val valueProperty = SimpleIntegerProperty(value)
     var value by valueProperty
+
+    override fun updateModel(json: JsonObject) {
+        with(json) {
+            name = string("name")
+            value = int("value")!!
+        }
+    }
+
+    override fun toJSON(json: JsonBuilder) {
+        with(json) {
+            add("name", name)
+            add("value", value)
+        }
+    }
 }
 
+/**
+ * This class is the model of an attribute. This class is used for validation
+ */
 class CenumAttributeModel: ItemViewModel<CenumAttribute>() {
     val name = bind(CenumAttribute::nameProperty, autocommit = true)
     val value = bind(CenumAttribute::valueProperty, autocommit = true)
