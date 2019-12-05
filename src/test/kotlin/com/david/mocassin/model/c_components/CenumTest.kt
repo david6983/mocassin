@@ -1,10 +1,12 @@
 package com.david.mocassin.model.c_components
 
+import com.david.mocassin.controller.ProjectController
 import tornadofx.JsonBuilder
 import kotlin.test.*
 
 class CenumTest {
     private var enum = Cenum("")
+    private val project = ProjectController()
 
     @BeforeTest
     fun createEnum() {
@@ -84,9 +86,17 @@ class CenumTest {
 
     @Test
     fun shouldReplaceAttributeNamefromValue() {
+        project.userModel.add(enum)
+        project.userModel.add(Cunion("onion"))
+
+        enum.add("bar", 0)
         enum.add("foo32", 4)
-        enum.replaceName(4, "foo34")
+
+        assertTrue(enum.replaceName(4, "foo34", project))
         assertEquals("foo34", enum.attributes.find { it.value == 4}?.name)
+        assertFalse(enum.replaceName(4, "éé--\\", project))
+        assertFalse(enum.replaceName(4, "bar", project))
+        assertFalse(enum.replaceName(4, "onion", project))
     }
 
     @Test

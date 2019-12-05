@@ -1,5 +1,6 @@
 package com.david.mocassin.model.c_components
 
+import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleListProperty
@@ -46,12 +47,14 @@ class Cenum(name: String) : CuserType, JsonModel {
      * Add a new attribute to the enumeration and verify before the addition if the name is unique in the enumeration
      * and in the project. This attribute should also follow the C syntax for enumeration.
      *
+     *
      * @param name name of the attribute to verify and add on success
      * @param value enumeration value, incremental by default (start at 0)
      * @return 'true' if the addition success, 'false' if the attribute is not valid
      */
     fun add(name: String, value: Int = attributes.count()): Boolean {
         //TODO change the '&&' syntax and throw custom exceptions instead
+        //TODO add projectController verification --> need to change all files that use this function
         return if (isAttributeUniqueInEnum(name) && isNameSyntaxFollowCstandard(name)) {
             attributes?.add(CenumAttribute(name, value))
             true
@@ -69,22 +72,54 @@ class Cenum(name: String) : CuserType, JsonModel {
     fun remove(name: String): Boolean = attributes.remove(attributes.find { it.name == name })
 
     /**
-     * remove all attributess in the enumeration
+     * remove all attributes in the enumeration
      */
     fun clear() = attributes.clear()
 
+    /**
+     * TODO
+     *
+     * @param name
+     * @param newValue
+     */
     fun replaceValue(name: String, newValue: Int) {
         val index = attributes.indexOfFirst { it.name == name }
         attributes[index] = CenumAttribute(name, newValue)
     }
 
-    fun replaceName(value: Int, newName: String) {
+    /**
+     * replace the name of an attribute from value
+     *
+     * The name should :
+     * - follow C syntaxe
+     * - be unique in the enumeration
+     * - not be already taken in the project scope except the current enumeration name
+     *
+     * @param value value of the attribute
+     * @param newName new name of the attribute
+     * @param projectController project controller where all variables are added
+     */
+    fun replaceName(value: Int, newName: String, projectController: ProjectController): Boolean {
         val index = attributes.indexOfFirst { it.value == value }
-        if (isNameSyntaxFollowCstandard(newName)) {
+        return if (isNameSyntaxFollowCstandard(newName)
+            && isAttributeUniqueInEnum(newName)
+            && projectController.isNameUniqueExcept(newName, listOf(name))
+        ) {
             attributes[index] = CenumAttribute(newName, value)
+            true
+        } else {
+            false
         }
     }
 
+    /**
+     * check if an attribute is unique in the enumeration
+     *
+     * to attributes can't have the same name
+     *
+     * @param name name of the attribute
+     * @return 'true' if unique, 'false' if already exist
+     */
     fun isAttributeUniqueInEnum(name: String): Boolean {
         return if (isNameSyntaxFollowCstandard(name)) {
             attributes.indexOfFirst { it.name == name } == -1
@@ -173,6 +208,11 @@ class Cenum(name: String) : CuserType, JsonModel {
         return "$name;${out}"
     }
 
+    /**
+     * update a Cenum from a json object
+     *
+     * @param json json input object
+     */
     override fun updateModel(json: JsonObject) {
         with(json) {
             name = string("name").toString()
