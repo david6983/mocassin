@@ -1,5 +1,6 @@
 package com.david.mocassin.model.c_components
 
+import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
@@ -66,6 +67,22 @@ class Cunion(name: String) : CuserType, JsonModel  {
         }
 
         return out
+    }
+
+    /**
+     * check if an attribute is unique in the union
+     *
+     * to attributes can't have the same name
+     *
+     * @param name name of the attribute
+     * @return 'true' if unique, 'false' if already exist
+     */
+    fun isAttributeUniqueInUnion(name: String): Boolean {
+        return if (isNameSyntaxFollowCstandard(name)) {
+            attributes.indexOfFirst { it.name == name } == -1
+        } else {
+            false
+        }
     }
 
     override fun toJSON(json: JsonBuilder) {

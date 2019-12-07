@@ -1,7 +1,10 @@
 package com.david.mocassin.controller
 
 import com.david.mocassin.model.UserModel
+import com.david.mocassin.model.c_components.CtypeEnum
 import javafx.beans.property.SimpleObjectProperty
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import tornadofx.*
 
 /**
@@ -34,11 +37,25 @@ class ProjectController: Controller() {
         userModel = UserModel(name)
     }
 
-    //TODO to finish
     fun getListOfAllNamesUsed(): ArrayList<String> {
         val names = ArrayList<String>()
         names.addAll(userModel.getAllNames())
-        // add names in slist also
+        return names
+    }
+
+    fun getListOfAllNamesUsed(type: String): ArrayList<String> {
+        val names = ArrayList<String>()
+        when(type) {
+            ENUM -> names.addAll(userModel.getAllEnumNames())
+            UNION -> names.addAll(userModel.getAllUnionNames())
+            STRUCT -> names.addAll(userModel.getAllUserStructureNames())
+        }
+        return names
+    }
+
+    fun getListOfAllNamesUsedWithTypes(): ArrayList<String> {
+        val names = ArrayList<String>()
+        names.addAll(userModel.getAllNamesAndTypes())
         return names
     }
 
@@ -52,6 +69,13 @@ class ProjectController: Controller() {
 
     // launch Cunit Test (why not using a server image ?)
     fun verifyGeneratedCfiles() {}
+
+    fun getObservableListOfTypes(): ObservableList<String> {
+        val items: ObservableList<String> = FXCollections.observableArrayList()
+        items.addAll(getListOfAllNamesUsedWithTypes())
+        items.addAll(CtypeEnum.toObservableArrayList())
+        return items
+    }
 
     /*
     fun saveToWebApp() {}
@@ -76,5 +100,11 @@ class ProjectController: Controller() {
         val tmpNames = userModel.getAllNames()
         tmpNames.removeAll(except)
         return !tmpNames.contains(name)
+    }
+
+    companion object {
+        const val ENUM = "enum"
+        const val UNION = "union"
+        const val STRUCT = "struct"
     }
 }

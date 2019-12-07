@@ -5,10 +5,12 @@ import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_enum.CenumAttribute
 import com.david.mocassin.model.c_components.c_enum.CenumAttributeModel
 import com.david.mocassin.model.c_components.c_enum.CenumModel
+import com.david.mocassin.utils.isNameReservedWords
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import com.david.mocassin.view.components.wizards.editors.CenumAttributeNameEditor
 import com.david.mocassin.view.components.wizards.editors.CenumAttributeValueEditor
 import javafx.scene.control.ButtonBar
+import javafx.scene.control.ContextMenu
 import javafx.scene.control.TableView
 import javafx.scene.control.TextField
 
@@ -32,6 +34,9 @@ class EnumWizardStep1 : View("Enum name") {
                             error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
                         else if(!it.isNullOrBlank() && !projectController.isNameUnique(it)) {
                             error("The name already exist")
+                        }
+                        else if(!it.isNullOrBlank() && isNameReservedWords(it)) {
+                            error("The name is reserved for the C language")
                         }
                         else null
                     }
@@ -72,6 +77,9 @@ class EnumWizardStep2 : View("Enumeration values") {
                             else if(!it.isNullOrBlank() && !projectController.isNameUniqueExcept(it, listOf(enumModel.name.value))) {
                                 error("The name already exist in another structure in the project")
                             }
+                            else if(!it.isNullOrBlank() && isNameReservedWords(it)) {
+                                error("The name is reserved for the C language")
+                            }
                             else if(!it.isNullOrBlank() && !enumModel.item.isAttributeUniqueInEnum(it)) {
                                 error("The name already exist in this enum")
                             }
@@ -110,12 +118,26 @@ class EnumWizardStep2 : View("Enumeration values") {
         tableview(enumModel.attributes) {
             attributesTable = this
             isEditable = true
-            //TODO change editing method
+
             column("Name", CenumAttribute::name).cellFragment(CenumAttributeNameEditor::class)
             column("Value", CenumAttribute::value).cellFragment(CenumAttributeValueEditor::class)
 
-            columnResizePolicy = SmartResize.POLICY
+            // remove attribute from model
+            contextMenu = ContextMenu().apply{
+                item("Delete").action {
+                    selectedItem?.apply{
+                        enumModel.attributes.value.removeIf { it.name == this.name }
+                    }
+                }
+            }
+
+                columnResizePolicy = SmartResize.POLICY
         }
+    }
+
+    override fun onSave() {
+        attributeModel.name.value = ""
+        super.onSave()
     }
 }
 

@@ -29,6 +29,8 @@ class Cvariable(name: String,
         with(json) {
             add("name", name)
             add("type", getTypeAsString())
+            add("isPointer", isPointer)
+            add("isComparable", isComparable)
         }
     }
     fun getTypeAsString(): String? {

@@ -31,6 +31,42 @@ class CenumTest {
     }
 
     @Test
+    fun shouldNotAddAttributeWithReservedName() {
+        assertFalse(enum.add("auto"))
+        assertFalse(enum.add("break"))
+        assertFalse(enum.add("case"))
+        assertFalse(enum.add("char"))
+        assertFalse(enum.add("const"))
+        assertFalse(enum.add("continue"))
+        assertFalse(enum.add("default"))
+        assertFalse(enum.add("do"))
+        assertFalse(enum.add("int"))
+        assertFalse(enum.add("long"))
+        assertFalse(enum.add("register"))
+        assertFalse(enum.add("return"))
+        assertFalse(enum.add("short"))
+        assertFalse(enum.add("signed"))
+        assertFalse(enum.add("sizeof"))
+        assertFalse(enum.add("static"))
+        assertFalse(enum.add("struct"))
+        assertFalse(enum.add("switch"))
+        assertFalse(enum.add("typedef"))
+        assertFalse(enum.add("union"))
+        assertFalse(enum.add("unsigned"))
+        assertFalse(enum.add("void"))
+        assertFalse(enum.add("volatile"))
+        assertFalse(enum.add("while"))
+        assertFalse(enum.add("double"))
+        assertFalse(enum.add("else"))
+        assertFalse(enum.add("enum"))
+        assertFalse(enum.add("extern"))
+        assertFalse(enum.add("float"))
+        assertFalse(enum.add("for"))
+        assertFalse(enum.add("goto"))
+        assertFalse(enum.add("if"))
+    }
+
+    @Test
     fun shouldAddAttributeInUpperCase() {
         assertTrue(enum.add("ATTRIBUTE"))
     }

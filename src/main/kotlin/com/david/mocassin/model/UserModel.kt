@@ -56,6 +56,18 @@ class UserModel(packageName: String) {
         else -> false
     }
 
+    fun findEnumByName(name: String): Cenum {
+        return (userEnumList.find { (it as Cenum).name == name } as Cenum)
+    }
+
+    fun findUnionByName(name: String): Cunion {
+        return (userUnionList.find { (it as Cunion).name == name } as Cunion)
+    }
+
+    fun findStructByName(name: String): CuserStructure {
+        return (userStructureList.find { (it as CuserStructure).name == name } as CuserStructure )
+    }
+
     fun remove(element: CuserType) = when(element) {
         is CuserStructure -> userStructureList?.remove(element)
         is Cunion -> userUnionList?.remove(element)
@@ -123,6 +135,20 @@ class UserModel(packageName: String) {
         return out
     }
 
+    fun getAllNamesAndTypes(): ArrayList<String> {
+        val out = ArrayList<String>()
+        for (name in userStructureList!!) {
+            out.add((name as CuserStructure).name + " [struct]")
+        }
+        for (name in userEnumList) {
+            out.add((name as Cenum).name + " [enum]")
+        }
+        for (name in userUnionList) {
+            out.add((name as Cunion).name + " [union]")
+        }
+        return out
+    }
+
     fun getAllUserStructureNames(): ArrayList<String> {
         val out = ArrayList<String>()
         for (name in userStructureList!!) {
@@ -135,6 +161,14 @@ class UserModel(packageName: String) {
         val out = ArrayList<String>()
         for (name in userEnumList) {
             out.add((name as Cenum).name)
+        }
+        return out
+    }
+
+    fun getAllUnionNames(): ArrayList<String> {
+        val out = ArrayList<String>()
+        for (name in userUnionList) {
+            out.add((name as Cunion).name)
         }
         return out
     }

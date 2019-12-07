@@ -2,6 +2,7 @@ package com.david.mocassin.model.c_components.c_enum
 
 import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.c_components.CuserType
+import com.david.mocassin.utils.isNameReservedWords
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
@@ -54,8 +55,12 @@ class Cenum(name: String) : CuserType, JsonModel {
     fun add(name: String, value: Int = attributes.count()): Boolean {
         return if (isAttributeUniqueInEnum(name)) {
             if (isNameSyntaxFollowCstandard(name)) {
-                attributes.add(CenumAttribute(name, value))
-                true
+                if (!isNameReservedWords(name)) {
+                    attributes.add(CenumAttribute(name, value))
+                    true
+                } else {
+                    false
+                }
             } else {
                 false
             }
