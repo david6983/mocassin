@@ -21,7 +21,7 @@ class UnionWizard : Wizard("Create a Union", "Provide Union information") {
         super.root.bottom = buttonbar {
             addClass(WizardStyles.buttons)
             button(type = ButtonBar.ButtonData.BACK_PREVIOUS) {
-                addClass("btn-primary","btn")
+                addClass("btn-primary", "btn")
                 textProperty().bind(backButtonTextProperty)
                 runLater {
                     enableWhen(canGoBack)
@@ -29,7 +29,7 @@ class UnionWizard : Wizard("Create a Union", "Provide Union information") {
                 action { back() }
             }
             button(type = ButtonBar.ButtonData.NEXT_FORWARD) {
-                addClass("btn-primary","btn")
+                addClass("btn-primary", "btn")
                 textProperty().bind(nextButtonTextProperty)
                 runLater {
                     enableWhen(canGoNext.and(hasNext).and(currentPageComplete))
@@ -37,12 +37,12 @@ class UnionWizard : Wizard("Create a Union", "Provide Union information") {
                 action { next() }
             }
             button(type = ButtonBar.ButtonData.CANCEL_CLOSE) {
-                addClass("btn-primary","btn")
+                addClass("btn-primary", "btn")
                 textProperty().bind(cancelButtonTextProperty)
                 action { onCancel() }
             }
             button(type = ButtonBar.ButtonData.FINISH) {
-                addClass("btn-primary","btn")
+                addClass("btn-primary", "btn")
                 textProperty().bind(finishButtonTextProperty)
                 runLater {
                     enableWhen(canFinish)

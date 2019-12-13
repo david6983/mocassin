@@ -2,10 +2,14 @@ package com.david.mocassin.controller
 
 import com.david.mocassin.model.user_model.UserModel
 import com.david.mocassin.model.c_components.CtypeEnum
+import freemarker.template.Configuration
+import freemarker.template.TemplateExceptionHandler
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import tornadofx.*
+import java.io.File
+import java.io.IOException
 
 /**
  * A project can be considerate in two ways :
@@ -28,6 +32,8 @@ class ProjectController: Controller() {
 
     var name = "untitled"
 
+    val cfg = Configuration(Configuration.VERSION_2_3_29)
+
     // not sure about having only one dataStructureModel or one
     // each time the user wants to create a data structure
     //val dataStructuresModelProperty = SimpleObjectProperty<DataStructureModel>()
@@ -35,6 +41,25 @@ class ProjectController: Controller() {
 
     init {
         userModel = UserModel(name)
+
+        initTemplateConfiguration()
+    }
+
+    private fun initTemplateConfiguration() {
+        /* Create and adjust the configuration singleton */
+        try {
+            cfg.setDirectoryForTemplateLoading(File("templates/"))
+        } catch (e: IOException) {
+            //TODO replace by a logger
+            e.printStackTrace()
+        }
+
+        // Recommended settings for new projects:
+        cfg.defaultEncoding = "UTF-8"
+        cfg.templateExceptionHandler = TemplateExceptionHandler.RETHROW_HANDLER
+        cfg.logTemplateExceptions = false
+        cfg.wrapUncheckedExceptions = true
+        cfg.fallbackOnNullLoopVariable = false
     }
 
     fun getListOfAllNamesUsed(): ArrayList<String> {
@@ -59,12 +84,14 @@ class ProjectController: Controller() {
         return names
     }
 
-    fun saveMocFiles(pathDir: String) {
-        userModel.save(pathDir)
+    fun saveMocFiles(pathDir: String?) {
+        if (pathDir != null) {
+            userModel.save(pathDir)
+        }
     }
 
     fun generate(pathDir: String) {
-        //TODO where the configuration goes to ?
+        userModel.generate(cfg, pathDir)
     }
 
     // launch Cunit Test (why not using a server image ?)
@@ -83,7 +110,9 @@ class ProjectController: Controller() {
     fun importFromWebApp() {}
     */
 
-    fun openFromFile() {}
+    fun openFromFile() {
+
+    }
 
     /**
      * Verify if a given name is nalready taken in a project scope

@@ -8,6 +8,7 @@ class MocassinApp: App(MainView::class, MainStyle::class) {
         addStageIcon(Image(resources[""]))
         reloadStylesheetsOnFocus()
         importStylesheet(resources["css/bootstrapfx.css"])
+        importStylesheet(resources["css/main.css"])
     }
 }
 

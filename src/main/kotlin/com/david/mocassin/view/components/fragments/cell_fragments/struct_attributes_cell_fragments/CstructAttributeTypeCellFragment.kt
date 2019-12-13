@@ -1,16 +1,17 @@
-package com.david.mocassin.view.components.fragments.cell_fragments.union_attributes_cell_fragments
+package com.david.mocassin.view.components.fragments.cell_fragments.struct_attributes_cell_fragments
+
 
 import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.c_components.CtypeEnum
 import com.david.mocassin.model.c_components.CuserType
-import com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard.UnionWizardStep2
+import com.david.mocassin.view.components.wizards.user_structures_wizards.struct_wizard.StructWizardStep2
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.ComboBox
 import tornadofx.*
 
-class CunionAttributeTypeCellFragment : View("Edit selected type") {
-    private val unionWizardStep2: UnionWizardStep2 by inject()
+class CstructAttributeTypeCellFragment : View("Edit selected type") {
+    private val structWizardStep2: StructWizardStep2 by inject()
 
     private val editorTypeCategory = SimpleBooleanProperty(true)
     private val editorSelectedSimpleType = SimpleStringProperty()
@@ -25,7 +26,7 @@ class CunionAttributeTypeCellFragment : View("Edit selected type") {
                     togglegroup {
                         radiobutton("simple", this, value = true)
                         radiobutton("from project", this, value = false) {
-                            removeWhen(unionWizardStep2.isProjectEmpty)
+                            removeWhen(structWizardStep2.isProjectEmpty)
                         }
                         bind(editorTypeCategory)
                     }
@@ -43,28 +44,28 @@ class CunionAttributeTypeCellFragment : View("Edit selected type") {
                     removeWhen(editorTypeCategory)
                     togglegroup {
                         radiobutton("enum", this, value = "enum") {
-                            removeWhen(unionWizardStep2.hasNotEnumInProject)
+                            removeWhen(structWizardStep2.hasNotEnumInProject)
                         }.action {
                             editorVariableFromProjectField.items =
-                                unionWizardStep2.projectController.getListOfAllNamesUsed(
+                                structWizardStep2.projectController.getListOfAllNamesUsed(
                                     ProjectController.ENUM
                                 ).asObservable()
                             editorVariableFromProjectField.selectionModel.selectFirst()
                         }
                         radiobutton("union", this, value = "union") {
-                            removeWhen(unionWizardStep2.hasNotUnionInProject)
+                            removeWhen(structWizardStep2.hasNotUnionInProject)
                         }.action {
                             editorVariableFromProjectField.items =
-                                unionWizardStep2.projectController.getListOfAllNamesUsed(
+                                structWizardStep2.projectController.getListOfAllNamesUsed(
                                     ProjectController.UNION
                                 ).asObservable()
                             editorVariableFromProjectField.selectionModel.selectFirst()
                         }
                         radiobutton("struct", this, value = "struct") {
-                            removeWhen(unionWizardStep2.hasNotStructInProject)
+                            removeWhen(structWizardStep2.hasNotStructInProject)
                         }.action {
                             editorVariableFromProjectField.items =
-                                unionWizardStep2.projectController.getListOfAllNamesUsed(
+                                structWizardStep2.projectController.getListOfAllNamesUsed(
                                     ProjectController.STRUCT
                                 ).asObservable()
                             editorVariableFromProjectField.selectionModel.selectFirst()
@@ -78,35 +79,35 @@ class CunionAttributeTypeCellFragment : View("Edit selected type") {
                 vbox {
                     combobox<String>() {
                         editorVariableFromProjectField = this
-                        items = unionWizardStep2.projectController.getListOfAllNamesUsed().asObservable()
+                        items = structWizardStep2.projectController.getListOfAllNamesUsed().asObservable()
                     }.selectionModel.selectFirst()
                 }
             }
         }
         button("Validate Changes").action {
             if (editorTypeCategory.value) {
-                unionWizardStep2.selectedType?.type = CtypeEnum.find(editorVariableSimpleField.value) as CuserType
+                structWizardStep2.selectedType?.type = CtypeEnum.find(editorVariableSimpleField.value) as CuserType
             }
             else {
                 when(editorSelectedProjectType.value) {
                     "enum" -> {
-                        unionWizardStep2.selectedType?.type = unionWizardStep2.projectController.userModel.findEnumByName(editorVariableFromProjectField.value)
+                        structWizardStep2.selectedType?.type = structWizardStep2.projectController.userModel.findEnumByName(editorVariableFromProjectField.value)
                     }
                     "union" -> {
-                        unionWizardStep2.selectedType?.type = unionWizardStep2.projectController.userModel.findUnionByName(editorVariableFromProjectField.value)
+                        structWizardStep2.selectedType?.type = structWizardStep2.projectController.userModel.findUnionByName(editorVariableFromProjectField.value)
                     }
                     "struct" -> {
-                        unionWizardStep2.selectedType?.type = unionWizardStep2.projectController.userModel.findStructByName(editorVariableFromProjectField.value)
+                        structWizardStep2.selectedType?.type = structWizardStep2.projectController.userModel.findStructByName(editorVariableFromProjectField.value)
                     }
                 }
             }
-            unionWizardStep2.attributesTable.refresh()
+            structWizardStep2.attributesTable.refresh()
             close()
         }
     }
 
     init {
-        //println(unionWizardStep2.selectedType?.getTypeAsString())
+        //println(structWizardStep2.selectedType?.getTypeAsString())
         with(root) {
             prefHeight = 200.0
         }

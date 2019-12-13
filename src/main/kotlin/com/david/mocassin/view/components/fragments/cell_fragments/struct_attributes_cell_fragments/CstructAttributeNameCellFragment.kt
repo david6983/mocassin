@@ -1,16 +1,17 @@
-package com.david.mocassin.view.components.fragments.cell_fragments.union_attributes_cell_fragments
+package com.david.mocassin.view.components.fragments.cell_fragments.struct_attributes_cell_fragments
 
 import com.david.mocassin.controller.ProjectController
-import com.david.mocassin.model.c_components.c_union.CunionModel
+import com.david.mocassin.model.c_components.c_struct.CuserStructureModel
 import com.david.mocassin.model.c_components.c_variable.Cvariable
 import com.david.mocassin.model.c_components.c_variable.CvariableModel
 import com.david.mocassin.utils.isNameReservedWords
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
+
 import tornadofx.*
 
-class CunionAttributeNameCellFragment : TableCellFragment<Cvariable, String>() {
+class CstructAttributeNameCellFragment : TableCellFragment<Cvariable, String>() {
     private val projectController: ProjectController by inject()
-    private val unionModel: CunionModel by inject()
+    private val structModel: CuserStructureModel by inject()
     // Bind our ItemModel to the rowItemProperty, which points to the current Item
     val model = CvariableModel().bindToRowItem(this)
 
@@ -22,14 +23,14 @@ class CunionAttributeNameCellFragment : TableCellFragment<Cvariable, String>() {
                     error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
                 else if (it.isNullOrBlank())
                     error("This field should not be blank")
-                else if(!it.isNullOrBlank() && !projectController.isNameUniqueExcept(it, listOf(unionModel.name.value))) {
+                else if(!it.isNullOrBlank() && !projectController.isNameUniqueExcept(it, listOf(structModel.name.value))) {
                     error("The name already exist in another structure in the project")
                 }
                 else if(!it.isNullOrBlank() && isNameReservedWords(it)) {
                     error("The name is reserved for the C language")
                 }
-                else if(!it.isNullOrBlank() && !unionModel.item.isAttributeUniqueInUnion(it)) {
-                    error("The name already exist in this union")
+                else if(!it.isNullOrBlank() && !structModel.item.isAttributeUniqueInStructure(it)) {
+                    error("The name already exist in this structure")
                 }
                 else
                     null

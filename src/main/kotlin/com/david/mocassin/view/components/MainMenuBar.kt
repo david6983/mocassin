@@ -1,90 +1,63 @@
 package com.david.mocassin.view.components
 
-import com.david.mocassin.controller.ProjectController
-import com.david.mocassin.model.c_components.c_union.Cunion
-import com.david.mocassin.model.c_components.c_enum.Cenum
-import com.david.mocassin.view.components.fragments.NewProjectModal
-import com.david.mocassin.view.components.wizards.user_structures_wizards.enum_wizard.EnumWizard
-import com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard.UnionWizard
-import javafx.stage.FileChooser
-import javafx.stage.StageStyle
+import com.david.mocassin.controller.MainMenuBarController
+import javafx.scene.paint.Color
 import tornadofx.*
-//TODO add a controller
-class MainMenuBar : View() {
-    private val projectController: ProjectController by inject()
 
-    private val enumIcon = resources.imageview("/icons/enum32.png")
-    private val unionIcon = resources.imageview("/icons/union32.png")
+class MainMenuBar : View() {
+    private val controller: MainMenuBarController by inject()
 
     override val root = menubar {
         menu("File") {
-            item("New project", keyCombination = "Shortcut+N").action {
-                find<NewProjectModal>().openModal(stageStyle = StageStyle.UTILITY)
-            }
+            item("New project", keyCombination = "Shortcut+N").action { controller.newProject() }
             separator()
-            item("Open from computer").action {
-                val ef = arrayOf(FileChooser.ExtensionFilter("Mocassin file (*.moc)", "*.moc"))
-                val file = chooseFile("Select a .moc file to open", ef, FileChooserMode.Single)
-                println(file)
-            }
-            item("Save project locally")
+            item("Open from computer", keyCombination = "Shortcut+O").action { controller.openFromComputer() }
+            item("Save project locally", keyCombination = "Shortcut+S") {
+                graphic = hbox {
+                    rectangle {
+                        fill = Color.BLUE
+                        width = 8.0
+                        height = 32.0
+                    }
+                    imageview(resources["/icons/enum32.png"])
+                }
+            }.action { controller.saveProjectLocally() }
             separator()
-            item("Save to Web application").isDisable = true
-            item("Import from Web application").isDisable = true
+            item("Save to Web application", keyCombination = "Shortcut+W").isDisable = true
+            item("Import from Web application", keyCombination = "Shortcut+I").isDisable = true
             separator()
-            item("Export")
-            item("Generate")
+            item("Export", keyCombination = "Shortcut+X")
+            item("Generate", keyCombination = "Shortcut+G")
         }
         menu("Add") {
-            item("SList (Single-chained Linked List)")
-            item("DList (Double-chained Linked List)").isDisable = true
+            item("SList (Single-chained Linked List)", keyCombination = "Shortcut+L", graphic = controller.slistIcon)
+            item(
+                "DList (Double-chained Linked List)",
+                keyCombination = "Shortcut+D",
+                graphic = controller.dlistIcon
+            ).isDisable = true
             separator()
-            item("BTree (Binary Tree)").isDisable = true
-            item("BSTree (Binary Search Tree)").isDisable = true
-            item("Tree (Multi-node Tree)").isDisable = true
+            item("BTree (Binary Tree)", keyCombination = "Shortcut+B", graphic = controller.btreeIcon).isDisable = true
+            item("BSTree (Binary Search Tree)", keyCombination = "Shortcut+Y").isDisable = true
+            item("Tree (Multi-node Tree)", keyCombination = "Shortcut+T", graphic = controller.treeIcon).isDisable =
+                true
             separator()
-            item("Graph").isDisable = true
+            item("Graph", keyCombination = "Shortcut+P").isDisable = true
             separator()
-            item("Hash table").isDisable = true
+            item("Hash table", keyCombination = "Shortcut+H").isDisable = true
         }
         menu("New") {
-            item("Enum", keyCombination = "Shortcut+E", graphic = enumIcon).action {
-                // we need to create a new wizard each time we add a new enumeration
-                val enumWizard = EnumWizard()
-                // open the wizard as a modal window
-                enumWizard.openModal()
-                // when the user click on "finish"
-                enumWizard.onComplete {
-                    println(enumWizard.enumModel.item.toJSON())
-                    // save the enumeration
-                    projectController.userModel.add(enumWizard.enumModel.item)
-
-                    information("Enumeration successfully added !", enumWizard.enumModel.item.toJSON().toString())
-
-                    // wizard model reset for a next one
-                    enumWizard.enumModel.item = Cenum("")
-                    enumWizard.enumModel.attributes.value.clear()
-                }
+            item("Enum", keyCombination = "Shortcut+E", graphic = controller.enumIcon).action {
+                controller.newEnum()
             }
-            item("Union", keyCombination = "Shortcut+U", graphic = unionIcon).action {
-                val unionWizard =
-                    UnionWizard()
-                unionWizard.openModal()
-                unionWizard.onComplete {
-                    //println(unionWizard.unionModel.item.toJSON())
-                    projectController.userModel.add(unionWizard.unionModel.item)
-
-                    information("Union successfully added !", unionWizard.unionModel.item.toJSON().toString())
-
-                    unionWizard.unionModel.item =
-                        Cunion("")
-                    unionWizard.unionModel.attributes.value.clear()
-                    unionWizard.close()
-                }
+            item("Union", keyCombination = "Shortcut+U", graphic = controller.unionIcon).action {
+                controller.newUnion()
             }
-            item("Struct")
+            item("Struct", keyCombination = "Shortcut+R", graphic = controller.structIcon).action {
+                controller.newStruct()
+            }
             separator()
-            item("Pseudo-object")
+            item("Pseudo-object").isDisable = true
         }
         menu("Preferences") {
 

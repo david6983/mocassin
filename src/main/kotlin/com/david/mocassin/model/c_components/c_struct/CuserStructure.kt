@@ -2,6 +2,7 @@ package com.david.mocassin.model.c_components.c_struct
 
 import com.david.mocassin.model.c_components.CuserType
 import com.david.mocassin.model.c_components.c_variable.Cvariable
+import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import freemarker.template.Configuration
 import freemarker.template.Template
 import javafx.beans.property.SimpleBooleanProperty
@@ -91,6 +92,14 @@ class CuserStructure(name: String) : CuserType, JsonModel {
         )
         temp!!.process(model, fileWriter);
         fileWriter.close();
+    }
+
+    fun isAttributeUniqueInStructure(name: String): Boolean {
+        return if (isNameSyntaxFollowCstandard(name)) {
+            attributes.indexOfFirst { it.name == name } == -1
+        } else {
+            false
+        }
     }
 
     fun variablesToJSON(): JsonBuilder {

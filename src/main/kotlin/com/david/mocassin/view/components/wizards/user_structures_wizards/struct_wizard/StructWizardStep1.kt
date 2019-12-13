@@ -1,22 +1,22 @@
-package com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard
+package com.david.mocassin.view.components.wizards.user_structures_wizards.struct_wizard
 
 import com.david.mocassin.controller.ProjectController
-import com.david.mocassin.model.c_components.c_union.CunionModel
+import com.david.mocassin.model.c_components.c_struct.CuserStructureModel
 import com.david.mocassin.utils.isNameReservedWords
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import tornadofx.*
 
-class UnionWizardStep1 : View("Union name") {
+class StructWizardStep1 : View("Struct basic information") {
     private val projectController: ProjectController by inject()
 
-    private val unionModel: CunionModel by inject()
+    private val structModel: CuserStructureModel by inject()
 
-    override val complete = unionModel.valid(unionModel.name)
+    override val complete = structModel.valid(structModel.name)
 
     override val root = form {
         fieldset(title) {
             field("Name") {
-                textfield(unionModel.name) {
+                textfield(structModel.name) {
                     validator {
                         if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(it))
                             error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
@@ -27,6 +27,9 @@ class UnionWizardStep1 : View("Union name") {
                         } else null
                     }
                 }.required()
+            }
+            field("Display function") {
+                checkbox("is generated")
             }
         }
     }
