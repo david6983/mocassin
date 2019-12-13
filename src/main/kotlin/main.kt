@@ -1,4 +1,4 @@
-import com.david.mocassin.view.components.MainView
+import com.david.mocassin.view.MainView
 import com.david.mocassin.view.styles.MainStyle
 import javafx.scene.image.Image
 import tornadofx.*

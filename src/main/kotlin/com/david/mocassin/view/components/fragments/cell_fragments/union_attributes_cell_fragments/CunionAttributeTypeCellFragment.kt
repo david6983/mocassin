@@ -1,15 +1,15 @@
-package com.david.mocassin.view.components.wizards.editors
+package com.david.mocassin.view.components.fragments.cell_fragments.union_attributes_cell_fragments
 
 import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.c_components.CtypeEnum
 import com.david.mocassin.model.c_components.CuserType
-import com.david.mocassin.view.components.wizards.UnionWizardStep2
+import com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard.UnionWizardStep2
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.ComboBox
 import tornadofx.*
 
-class CunionAttributeTypeEditor : View("Edit selected type") {
+class CunionAttributeTypeCellFragment : View("Edit selected type") {
     private val unionWizardStep2: UnionWizardStep2 by inject()
 
     private val editorTypeCategory = SimpleBooleanProperty(true)

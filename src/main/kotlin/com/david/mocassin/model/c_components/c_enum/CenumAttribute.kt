@@ -27,6 +27,11 @@ class CenumAttribute(name: String, value: Int): JsonModel {
     val valueProperty = SimpleIntegerProperty(value)
     var value by valueProperty
 
+    /**
+     * update CenumAttribute attributes from json
+     *
+     * @param json
+     */
     override fun updateModel(json: JsonObject) {
         with(json) {
             name = string("name")
@@ -34,6 +39,11 @@ class CenumAttribute(name: String, value: Int): JsonModel {
         }
     }
 
+    /**
+     * export as JSON format the CenumAttribute object
+     *
+     * @param json
+     */
     override fun toJSON(json: JsonBuilder) {
         with(json) {
             add("name", name)

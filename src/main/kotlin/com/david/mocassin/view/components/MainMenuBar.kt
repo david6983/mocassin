@@ -1,11 +1,11 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.controller.ProjectController
-import com.david.mocassin.model.c_components.Cunion
+import com.david.mocassin.model.c_components.c_union.Cunion
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.view.components.fragments.NewProjectModal
-import com.david.mocassin.view.components.wizards.EnumWizard
-import com.david.mocassin.view.components.wizards.UnionWizard
+import com.david.mocassin.view.components.wizards.user_structures_wizards.enum_wizard.EnumWizard
+import com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard.UnionWizard
 import javafx.stage.FileChooser
 import javafx.stage.StageStyle
 import tornadofx.*
@@ -67,7 +67,8 @@ class MainMenuBar : View() {
                 }
             }
             item("Union", keyCombination = "Shortcut+U", graphic = unionIcon).action {
-                val unionWizard = UnionWizard()
+                val unionWizard =
+                    UnionWizard()
                 unionWizard.openModal()
                 unionWizard.onComplete {
                     //println(unionWizard.unionModel.item.toJSON())
@@ -75,7 +76,8 @@ class MainMenuBar : View() {
 
                     information("Union successfully added !", unionWizard.unionModel.item.toJSON().toString())
 
-                    unionWizard.unionModel.item = Cunion("")
+                    unionWizard.unionModel.item =
+                        Cunion("")
                     unionWizard.unionModel.attributes.value.clear()
                     unionWizard.close()
                 }

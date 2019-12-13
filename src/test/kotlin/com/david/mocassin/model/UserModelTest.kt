@@ -1,8 +1,9 @@
 package com.david.mocassin.model
 
-import com.david.mocassin.model.c_components.Cunion
-import com.david.mocassin.model.c_components.CuserStructure
+import com.david.mocassin.model.c_components.c_union.Cunion
+import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_enum.Cenum
+import com.david.mocassin.model.user_model.UserModel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

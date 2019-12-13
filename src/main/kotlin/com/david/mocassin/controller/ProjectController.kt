@@ -1,6 +1,6 @@
 package com.david.mocassin.controller
 
-import com.david.mocassin.model.UserModel
+import com.david.mocassin.model.user_model.UserModel
 import com.david.mocassin.model.c_components.CtypeEnum
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections

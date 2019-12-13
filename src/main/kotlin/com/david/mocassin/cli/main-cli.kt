@@ -1,6 +1,6 @@
 package com.david.mocassin.cli
 
-import com.david.mocassin.model.UserModel
+import com.david.mocassin.model.user_model.UserModel
 
 fun main(args: Array<String>) {
     val version = 0.1

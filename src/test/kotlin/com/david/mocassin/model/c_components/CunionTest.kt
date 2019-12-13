@@ -1,6 +1,8 @@
 package com.david.mocassin.model.c_components
 
 import com.david.mocassin.model.c_components.c_enum.Cenum
+import com.david.mocassin.model.c_components.c_union.Cunion
+import com.david.mocassin.model.c_components.c_variable.Cvariable
 import tornadofx.JsonBuilder
 import kotlin.test.*
 
@@ -64,7 +66,12 @@ class CunionTest {
 
     @Test
     fun shouldNotHaveVariableOfTheCunionType() {
-        assertFalse(union.add(Cvariable(union.name, union)))
+        assertFalse(union.add(
+            Cvariable(
+                union.name,
+                union
+            )
+        ))
     }
 
     @Test

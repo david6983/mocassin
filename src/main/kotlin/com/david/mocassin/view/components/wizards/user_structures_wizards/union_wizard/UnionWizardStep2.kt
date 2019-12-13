@@ -1,47 +1,20 @@
-package com.david.mocassin.view.components.wizards
+package com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard
 
 import com.david.mocassin.controller.ProjectController
-import com.david.mocassin.model.c_components.*
-import com.david.mocassin.model.c_components.c_enum.Cenum
+import com.david.mocassin.model.c_components.CtypeEnum
+import com.david.mocassin.model.c_components.CuserType
+import com.david.mocassin.model.c_components.c_union.CunionModel
+import com.david.mocassin.model.c_components.c_variable.Cvariable
+import com.david.mocassin.model.c_components.c_variable.CvariableModel
 import com.david.mocassin.utils.isNameReservedWords
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
-import com.david.mocassin.view.components.wizards.editors.CunionAttributeNameEditor
-import com.david.mocassin.view.components.wizards.editors.CunionAttributeTypeEditor
+import com.david.mocassin.view.components.fragments.cell_fragments.union_attributes_cell_fragments.CunionAttributeNameCellFragment
+import com.david.mocassin.view.components.fragments.cell_fragments.union_attributes_cell_fragments.CunionAttributeTypeCellFragment
 import javafx.beans.property.SimpleBooleanProperty
-import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
-import javafx.scene.Parent
 import javafx.scene.control.*
-
 import tornadofx.*
-
-class UnionWizardStep1 : View("Union name") {
-    private val projectController: ProjectController by inject()
-
-    private val unionModel: CunionModel by inject()
-
-    override val complete = unionModel.valid(unionModel.name)
-
-    override val root = form {
-        fieldset(title) {
-            field("Name") {
-                textfield(unionModel.name) {
-                    validator {
-                        if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(it))
-                            error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
-                        else if(!it.isNullOrBlank() && !projectController.isNameUnique(it)) {
-                            error("The name already exist")
-                        }
-                        else if(!it.isNullOrBlank() && isNameReservedWords(it)) {
-                            error("The name is reserved for the C language")
-                        }
-                        else null
-                    }
-                }.required()
-            }
-        }
-    }
-}
+import kotlin.error
 
 class UnionWizardStep2 : View("Union attributes") {
     val projectController: ProjectController by inject()
@@ -83,14 +56,20 @@ class UnionWizardStep2 : View("Union attributes") {
                     textfield(attributeModel.name) {
                         variableNameField = this
                         validator {
-                            if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(it))
+                            if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(
+                                    it
+                                )
+                            )
                                 error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
                             else if (it.isNullOrBlank())
                                 error("This field should not be blank")
                             else if(!it.isNullOrBlank() && !projectController.isNameUniqueExcept(it, listOf(unionModel.name.value))) {
                                 error("The name already exist in another structure in the project")
                             }
-                            else if(!it.isNullOrBlank() && isNameReservedWords(it)) {
+                            else if(!it.isNullOrBlank() && isNameReservedWords(
+                                    it
+                                )
+                            ) {
                                 error("The name is reserved for the C language")
                             }
                             else if(!it.isNullOrBlank() && !unionModel.item.isAttributeUniqueInUnion(it)) {
@@ -117,7 +96,8 @@ class UnionWizardStep2 : View("Union attributes") {
                         removeWhen(typeCategory.not())
                         combobox<String>(selectedSimpleType) {
                             variableSimpleField = this
-                            items = CtypeEnum.toObservableArrayList()
+                            items =
+                                CtypeEnum.toObservableArrayList()
                         }.selectionModel.selectFirst()
                     }
                     vbox {
@@ -126,19 +106,25 @@ class UnionWizardStep2 : View("Union attributes") {
                             radiobutton("enum", this, value = "enum"){
                                 removeWhen(hasNotEnumInProject)
                             }.action {
-                                variableFromProjectField.items = projectController.getListOfAllNamesUsed(ProjectController.ENUM).asObservable()
+                                variableFromProjectField.items = projectController.getListOfAllNamesUsed(
+                                    ProjectController.ENUM
+                                ).asObservable()
                                 variableFromProjectField.selectionModel.selectFirst()
                             }
                             radiobutton("union", this, value = "union"){
                                 removeWhen(hasNotUnionInProject)
                             }.action {
-                                variableFromProjectField.items = projectController.getListOfAllNamesUsed(ProjectController.UNION).asObservable()
+                                variableFromProjectField.items = projectController.getListOfAllNamesUsed(
+                                    ProjectController.UNION
+                                ).asObservable()
                                 variableFromProjectField.selectionModel.selectFirst()
                             }
                             radiobutton("struct", this, value = "struct"){
                                 removeWhen(hasNotStructInProject)
                             }.action {
-                                variableFromProjectField.items = projectController.getListOfAllNamesUsed(ProjectController.STRUCT).asObservable()
+                                variableFromProjectField.items = projectController.getListOfAllNamesUsed(
+                                    ProjectController.STRUCT
+                                ).asObservable()
                                 variableFromProjectField.selectionModel.selectFirst()
                             }
                             bind(selectedProjectType)
@@ -167,10 +153,11 @@ class UnionWizardStep2 : View("Union attributes") {
                 button("Add") {
                     enableWhen(attributeModel.valid)
                     action {
-                        //TODO gerer les autres types union, enum, struct depuis model
                         val tmpVariable = Cvariable(
                             attributeModel.name.value,
-                            CtypeEnum.find(variableSimpleField.value) as CuserType,
+                            CtypeEnum.find(
+                                variableSimpleField.value
+                            ) as CuserType,
                             attributeModel.isPointer.value,
                             attributeModel.isComparable.value
                         )
@@ -205,7 +192,8 @@ class UnionWizardStep2 : View("Union attributes") {
             attributesTable = this
             isEditable = true
 
-            column("Name", Cvariable::name).cellFragment(CunionAttributeNameEditor::class)
+            column("Name", Cvariable::name).cellFragment(
+                CunionAttributeNameCellFragment::class)
             column("Type", Cvariable::getTypeAsString)
             column("Pointer", Cvariable::isPointer).cellFormat {
                 text = this.rowItem.isPointer.toString()
@@ -235,7 +223,7 @@ class UnionWizardStep2 : View("Union attributes") {
             onDoubleClick {
                 if (selectedCell?.column == 1) {
                     selectedType = selectedCell?.row?.let { it -> selectedCell?.tableView?.items?.get(it) }
-                    find<CunionAttributeTypeEditor>().openModal()
+                    find<CunionAttributeTypeCellFragment>().openModal()
                 }
             }
 
@@ -259,72 +247,5 @@ class UnionWizardStep2 : View("Union attributes") {
         hasNotStructInProject.value = projectController.userModel.userStructureList.isEmpty()
 
         super.onDock()
-    }
-}
-
-class UnionWizard : Wizard("Create a Union", "Provide Union information") {
-    val unionModel: CunionModel by inject()
-
-    override val canGoNext = currentPageComplete
-    override val canFinish = allPagesComplete
-
-    init {
-        graphic = resources.imageview("/icons/union32.png")
-        add(UnionWizardStep1::class)
-        add(UnionWizardStep2::class)
-
-        // custom style for wizard buttonbar
-        super.root.bottom = buttonbar {
-            addClass(WizardStyles.buttons)
-            button(type = ButtonBar.ButtonData.BACK_PREVIOUS) {
-                addClass("btn-primary","btn")
-                textProperty().bind(backButtonTextProperty)
-                runLater {
-                    enableWhen(canGoBack)
-                }
-                action { back() }
-            }
-            button(type = ButtonBar.ButtonData.NEXT_FORWARD) {
-                addClass("btn-primary","btn")
-                textProperty().bind(nextButtonTextProperty)
-                runLater {
-                    enableWhen(canGoNext.and(hasNext).and(currentPageComplete))
-                }
-                action { next() }
-            }
-            button(type = ButtonBar.ButtonData.CANCEL_CLOSE) {
-                addClass("btn-primary","btn")
-                textProperty().bind(cancelButtonTextProperty)
-                action { onCancel() }
-            }
-            button(type = ButtonBar.ButtonData.FINISH) {
-                addClass("btn-primary","btn")
-                textProperty().bind(finishButtonTextProperty)
-                runLater {
-                    enableWhen(canFinish)
-                }
-                action {
-                    currentPage.onSave()
-                    if (currentPage.isComplete) {
-                        onSave()
-                        if (isComplete) close()
-                    }
-                }
-            }
-        }
-
-        unionModel.item = Cunion("")
-    }
-
-    override fun onCancel() {
-        confirm("Confirm cancel", "Do you really want to loose your progress?") {
-            cancel()
-        }
-    }
-
-    override fun onSave() {
-        if (canGoBack.value)
-            back()
-        super.onSave()
     }
 }

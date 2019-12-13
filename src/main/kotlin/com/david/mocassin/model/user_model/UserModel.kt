@@ -1,7 +1,9 @@
-package com.david.mocassin.model
+package com.david.mocassin.model.user_model
 
 import com.david.mocassin.model.c_components.*
 import com.david.mocassin.model.c_components.c_enum.Cenum
+import com.david.mocassin.model.c_components.c_struct.CuserStructure
+import com.david.mocassin.model.c_components.c_union.Cunion
 import freemarker.template.Configuration
 import freemarker.template.Template
 import javafx.beans.property.SimpleListProperty
@@ -65,7 +67,7 @@ class UserModel(packageName: String) {
     }
 
     fun findStructByName(name: String): CuserStructure {
-        return (userStructureList.find { (it as CuserStructure).name == name } as CuserStructure )
+        return (userStructureList.find { (it as CuserStructure).name == name } as CuserStructure)
     }
 
     fun remove(element: CuserType) = when(element) {
@@ -254,9 +256,3 @@ class UserModel(packageName: String) {
     }
 }
 
-class UserModelViewModel: ItemViewModel<UserModel>() {
-    val packageName = bind(UserModel::packageNameProperty)
-    val userStructureList = bind(UserModel::userStructureListProperty)
-    val userEnumList = bind(UserModel::userEnumListProperty)
-    val userUnionList = bind(UserModel::userUnionListProperty)
-}

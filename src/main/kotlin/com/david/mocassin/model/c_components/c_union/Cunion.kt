@@ -1,11 +1,13 @@
-package com.david.mocassin.model.c_components
+package com.david.mocassin.model.c_components.c_union
 
+import com.david.mocassin.model.c_components.CuserType
+import com.david.mocassin.model.c_components.c_struct.CuserStructure
+import com.david.mocassin.model.c_components.c_variable.Cvariable
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import tornadofx.*
-import javax.json.JsonObject
 
 //TODO JSON
 
@@ -93,7 +95,3 @@ class Cunion(name: String) : CuserType, JsonModel  {
     }
 }
 
-class CunionModel: ItemViewModel<Cunion>() {
-    val name = bind(Cunion::nameProperty, autocommit = true)
-    val attributes = bind(Cunion::attributesProperty, autocommit = true)
-}

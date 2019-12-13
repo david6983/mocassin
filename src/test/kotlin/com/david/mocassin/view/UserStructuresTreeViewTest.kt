@@ -1,6 +1,6 @@
 package com.david.mocassin.view
 
-import com.david.mocassin.model.UserModel
+import com.david.mocassin.model.user_model.UserModel
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import javafx.scene.control.TreeItem
 import tornadofx.*

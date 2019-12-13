@@ -1,17 +1,19 @@
-package com.david.mocassin.model.c_components
+package com.david.mocassin.model.c_components.c_variable
 
+import com.david.mocassin.model.c_components.*
 import com.david.mocassin.model.c_components.c_enum.Cenum
+import com.david.mocassin.model.c_components.c_struct.CuserStructure
+import com.david.mocassin.model.c_components.c_union.Cunion
 import com.david.mocassin.utils.C_VARIABLE_SYNTAX_REGEX
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import tornadofx.*
 
-//TODO separate classes
-
 class Cvariable(name: String,
                 type: CuserType,
                 isPointer: Boolean = false,
-                isComparable: Boolean = false) : Ctype(type, isPointer), JsonModel {
+                isComparable: Boolean = false
+                ) : Ctype(type, isPointer), JsonModel {
 
     val nameProperty = SimpleStringProperty(name)
     var name: String by nameProperty
@@ -69,9 +71,3 @@ class Cvariable(name: String,
     }
 }
 
-class CvariableModel: ItemViewModel<Cvariable>() {
-    val name = bind(Cvariable::nameProperty)
-    val type = bind(Cvariable::typeProperty)
-    val isPointer = bind(Cvariable::isPointerProperty)
-    val isComparable = bind(Cvariable::isComparableProperty)
-}

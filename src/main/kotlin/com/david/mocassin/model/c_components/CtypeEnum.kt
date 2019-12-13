@@ -3,6 +3,13 @@ package com.david.mocassin.model.c_components
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 
+/**
+ * Represent a simple type in C programming (already exist in the language)
+ *
+ * @property cType name with official C programming syntax
+ * @property enumValue name equivalent in enum format
+ * @property displaySymbol symbol representation for printf and scanf
+ */
 enum class CtypeEnum(val cType: String, val enumValue: String, val displaySymbol: String) : CuserType {
     INT("int", "number", "%d"),
     UNSIGNED_INT("unsigned int", "unsigned_number", "%d"),
@@ -28,10 +35,23 @@ enum class CtypeEnum(val cType: String, val enumValue: String, val displaySymbol
     PTR_STRING("char**", "string_ptr", "%p");
 
     companion object {
+        /**
+         * From string value (C syntax of the type), retrieve the object
+         *
+         * @param value
+         * @return
+         */
         fun find(value: String): CtypeEnum? {
-            return CtypeEnum.values().find { it.cType == value }
+            return values().find { it.cType == value }
         }
 
+        /**
+         * export the enumeration to an observable list of string
+         *
+         * used by combobox in the view
+         *
+         * @return list of types in enum
+         */
         fun toObservableArrayList() : ObservableList<String> {
             val items: ObservableList<String> = FXCollections.observableArrayList()
             for(type in values()) {

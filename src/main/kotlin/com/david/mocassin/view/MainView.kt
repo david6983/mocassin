@@ -1,11 +1,12 @@
-package com.david.mocassin.view.components
+package com.david.mocassin.view
 
 import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.c_components.CtypeEnum
+import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
+import com.david.mocassin.view.components.MainMenuBar
 import com.david.mocassin.view.styles.MainStyle
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
-import org.apache.logging.log4j.kotlin.Logging
 
 import tornadofx.*
 

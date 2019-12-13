@@ -1,10 +1,10 @@
-package com.david.mocassin.view.components.wizards.editors
+package com.david.mocassin.view.components.fragments.cell_fragments.enum_attributes_cell_fragments
 
 import com.david.mocassin.model.c_components.c_enum.CenumAttribute
 import com.david.mocassin.model.c_components.c_enum.CenumAttributeModel
 import tornadofx.*
 
-class CenumAttributeValueEditor: TableCellFragment<CenumAttribute, Int>() {
+class CenumAttributeValueCellFragment: TableCellFragment<CenumAttribute, Int>() {
     // Bind our ItemModel to the rowItemProperty, which points to the current Item
     val model = CenumAttributeModel().bindToRowItem(this)
 

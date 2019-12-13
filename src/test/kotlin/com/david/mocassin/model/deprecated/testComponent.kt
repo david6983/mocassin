@@ -1,9 +1,12 @@
 package com.david.mocassin.model.deprecated
 
 import com.david.mocassin.model.DataStructureModel
-import com.david.mocassin.model.UserModel
+import com.david.mocassin.model.user_model.UserModel
 import com.david.mocassin.model.c_components.*
 import com.david.mocassin.model.c_components.c_enum.Cenum
+import com.david.mocassin.model.c_components.c_struct.CuserStructure
+import com.david.mocassin.model.c_components.c_union.Cunion
+import com.david.mocassin.model.c_components.c_variable.Cvariable
 import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
 import java.io.File
@@ -23,22 +26,69 @@ fun main() {
     ccd.add(Cvariable("surface", CtypeEnum.FLOAT))
     // multipos structure
     val mltp = CuserStructure("MultiPos")
-    mltp.add(Cvariable("x1", CtypeEnum.INT, isComparable = true))
-    mltp.add(Cvariable("x2", CtypeEnum.INT, isComparable = true))
-    mltp.add(Cvariable("y1", CtypeEnum.INT, isComparable = true))
-    mltp.add(Cvariable("y2", CtypeEnum.INT, isComparable = true))
+    mltp.add(
+        Cvariable(
+            "x1",
+            CtypeEnum.INT,
+            isComparable = true
+        )
+    )
+    mltp.add(
+        Cvariable(
+            "x2",
+            CtypeEnum.INT,
+            isComparable = true
+        )
+    )
+    mltp.add(
+        Cvariable(
+            "y1",
+            CtypeEnum.INT,
+            isComparable = true
+        )
+    )
+    mltp.add(
+        Cvariable(
+            "y2",
+            CtypeEnum.INT,
+            isComparable = true
+        )
+    )
     // data union
     val dtu = Cunion("Data")
-    dtu.add(Cvariable("posFromCenter", CtypeEnum.INT))
+    dtu.add(
+        Cvariable(
+            "posFromCenter",
+            CtypeEnum.INT
+        )
+    )
     dtu.add(Cvariable("calculusFromUnion", ccd))
     dtu.add(Cvariable("multiplePos", mltp))
     // Rectangle structure
     val rcts = CuserStructure("Rectangle")
-    rcts.add(Cvariable("x", CtypeEnum.INT, isComparable = true))
+    rcts.add(
+        Cvariable(
+            "x",
+            CtypeEnum.INT,
+            isComparable = true
+        )
+    )
     rcts.add(Cvariable("y", CtypeEnum.INT))
-    rcts.add(Cvariable("width", CtypeEnum.FLOAT, isComparable = true))
+    rcts.add(
+        Cvariable(
+            "width",
+            CtypeEnum.FLOAT,
+            isComparable = true
+        )
+    )
     rcts.add(Cvariable("height", CtypeEnum.FLOAT))
-    rcts.add(Cvariable("data", dtu, isComparable = true))
+    rcts.add(
+        Cvariable(
+            "data",
+            dtu,
+            isComparable = true
+        )
+    )
     val model = UserModel("GEOMETRY")
     model.add(e1)
     model.add(ccd)

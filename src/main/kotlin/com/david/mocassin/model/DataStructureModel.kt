@@ -1,6 +1,7 @@
 package com.david.mocassin.model
 
 import com.david.mocassin.model.c_components.CtypeEnum
+import com.david.mocassin.model.user_model.UserModel
 import freemarker.template.Configuration
 import freemarker.template.Template
 import javafx.beans.property.SimpleListProperty
@@ -18,7 +19,7 @@ import tornadofx.*
  *
  * @property userModel 
  */
-class DataStructureModel(userModel: UserModel) {
+class DataStructureModel(userModel: UserModel): JsonModel {
     private val map = mutableMapOf<String, String>()
 
     val userVariablesProperty = SimpleListProperty<CtypeEnum>(ArrayList<CtypeEnum>().asObservable())

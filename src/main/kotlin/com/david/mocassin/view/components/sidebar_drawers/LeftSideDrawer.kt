@@ -1,4 +1,4 @@
-package com.david.mocassin.view.components
+package com.david.mocassin.view.components.sidebar_drawers
 
 import tornadofx.*
 
