@@ -2,10 +2,13 @@ package com.david.mocassin.model.c_components
 
 import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.c_components.c_enum.Cenum
+import org.apache.logging.log4j.kotlin.Logging
 import tornadofx.JsonBuilder
 import kotlin.test.*
 
 class CenumTest {
+    companion object: Logging
+
     private var enum = Cenum("")
     private val project = ProjectController()
 
@@ -16,6 +19,7 @@ class CenumTest {
 
     @Test
     fun shouldCreateEmptyCenum() {
+        logger.debug("created empty enum")
         assertNotNull(enum)
     }
 

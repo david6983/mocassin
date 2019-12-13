@@ -5,10 +5,11 @@ import com.david.mocassin.model.c_components.CtypeEnum
 import com.david.mocassin.view.styles.MainStyle
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
+import org.apache.logging.log4j.kotlin.Logging
 
 import tornadofx.*
 
-class MainView: View("Mocassin linked list generator for C programming") {
+class MainView: View("Mocassin Generalized Data structure generator for C") {
     //TODO add a controller for MainView that inject projectController inside
     private val projectController: ProjectController by inject()
 
@@ -35,6 +36,15 @@ class MainView: View("Mocassin linked list generator for C programming") {
                         println(projectController.getListOfAllNamesUsed().toString())
                         //println(projectController.userModel.to)
                     }
+                }
+                button("Test") {
+                    addClass("btn-success", "btn-lg")
+                }
+                button("Save") {
+                    addClass("btn-info", "btn-lg")
+                }
+                button("Open") {
+                    addClass("btn-warning", "btn-lg")
                 }
                 style {
                     alignment = Pos.CENTER

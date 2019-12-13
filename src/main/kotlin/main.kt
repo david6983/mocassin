@@ -1,4 +1,3 @@
-import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.view.components.MainView
 import com.david.mocassin.view.styles.MainStyle
 import javafx.scene.image.Image

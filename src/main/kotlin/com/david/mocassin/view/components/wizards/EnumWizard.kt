@@ -131,7 +131,7 @@ class EnumWizardStep2 : View("Enumeration values") {
                 }
             }
 
-                columnResizePolicy = SmartResize.POLICY
+            columnResizePolicy = SmartResize.POLICY
         }
     }
 
@@ -197,7 +197,6 @@ class EnumWizard : Wizard("Create a Enum", "Provide Enum information") {
 
     override fun onCancel() {
         confirm("Confirm cancel", "Do you really want to loose your progress?") {
-            //this.root.
             cancel()
         }
     }

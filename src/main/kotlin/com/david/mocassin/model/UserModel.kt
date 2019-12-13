@@ -181,6 +181,10 @@ class UserModel(packageName: String) {
         return out
     }
 
+    fun isEmpty(): Boolean {
+        return (userEnumList.isEmpty() && userUnionList.isEmpty() && userStructureList.isEmpty())
+    }
+
     fun generate(config: Configuration, folderPath: String = packageName) {
         val map = mutableMapOf<String, ObservableList<CuserType>>()
 

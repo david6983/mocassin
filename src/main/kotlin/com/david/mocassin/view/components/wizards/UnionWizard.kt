@@ -5,14 +5,15 @@ import com.david.mocassin.model.c_components.*
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.utils.isNameReservedWords
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
+import com.david.mocassin.view.components.wizards.editors.CunionAttributeNameEditor
+import com.david.mocassin.view.components.wizards.editors.CunionAttributeTypeEditor
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleObjectProperty
 import javafx.beans.property.SimpleStringProperty
+import javafx.scene.Parent
 import javafx.scene.control.*
 
 import tornadofx.*
-
-//TODO verification champ attributes
-//TODO verifier que le nom de l'union n'existe pas dans l'userModel
 
 class UnionWizardStep1 : View("Union name") {
     private val projectController: ProjectController by inject()
@@ -43,11 +44,11 @@ class UnionWizardStep1 : View("Union name") {
 }
 
 class UnionWizardStep2 : View("Union attributes") {
-    private val projectController: ProjectController by inject()
+    val projectController: ProjectController by inject()
 
     private val attributeModel = CvariableModel()
 
-    private val unionModel: CunionModel by inject()
+    val unionModel: CunionModel by inject()
 
     var variableNameField : TextField by singleAssign()
     private var variableSimpleField : ComboBox<String> by singleAssign()
@@ -60,7 +61,15 @@ class UnionWizardStep2 : View("Union attributes") {
     var selectedSimpleType = SimpleStringProperty()
 
     var typeCategory = SimpleBooleanProperty(true)
+    var isProjectEmpty = SimpleBooleanProperty(false)
+
+    var hasNotEnumInProject = SimpleBooleanProperty(false)
+    var hasNotUnionInProject = SimpleBooleanProperty(false)
+    var hasNotStructInProject = SimpleBooleanProperty(false)
+
     var selectedProjectType = SimpleStringProperty("enum")
+
+    var selectedType: Cvariable? = null
 
     init {
         attributeModel.isPointer.value = false
@@ -96,7 +105,9 @@ class UnionWizardStep2 : View("Union attributes") {
                     vbox {
                         togglegroup {
                             radiobutton("simple", this, value= true)
-                            radiobutton("from project", this, value= false)
+                            radiobutton("from project", this, value= false) {
+                                removeWhen(isProjectEmpty)
+                            }
                             bind(typeCategory)
                         }
                     }
@@ -112,15 +123,21 @@ class UnionWizardStep2 : View("Union attributes") {
                     vbox {
                         removeWhen(typeCategory)
                         togglegroup {
-                            radiobutton("enum", this, value = "enum").action {
+                            radiobutton("enum", this, value = "enum"){
+                                removeWhen(hasNotEnumInProject)
+                            }.action {
                                 variableFromProjectField.items = projectController.getListOfAllNamesUsed(ProjectController.ENUM).asObservable()
                                 variableFromProjectField.selectionModel.selectFirst()
                             }
-                            radiobutton("union", this, value = "union").action {
+                            radiobutton("union", this, value = "union"){
+                                removeWhen(hasNotUnionInProject)
+                            }.action {
                                 variableFromProjectField.items = projectController.getListOfAllNamesUsed(ProjectController.UNION).asObservable()
                                 variableFromProjectField.selectionModel.selectFirst()
                             }
-                            radiobutton("struct", this, value = "struct").action {
+                            radiobutton("struct", this, value = "struct"){
+                                removeWhen(hasNotStructInProject)
+                            }.action {
                                 variableFromProjectField.items = projectController.getListOfAllNamesUsed(ProjectController.STRUCT).asObservable()
                                 variableFromProjectField.selectionModel.selectFirst()
                             }
@@ -187,19 +204,60 @@ class UnionWizardStep2 : View("Union attributes") {
         tableview(unionModel.attributes) {
             attributesTable = this
             isEditable = true
-            column("Name", Cvariable::name).makeEditable()
+
+            column("Name", Cvariable::name).cellFragment(CunionAttributeNameEditor::class)
             column("Type", Cvariable::getTypeAsString)
-            column("Pointer", Cvariable::isPointer).makeEditable()
+            column("Pointer", Cvariable::isPointer).cellFormat {
+                text = this.rowItem.isPointer.toString()
+
+                onDoubleClick {
+                    if (text == "true") {
+                        text = "false"
+                        this.rowItem.isPointer = false
+                    } else {
+                        text = "true"
+                        this.rowItem.isPointer = true
+                    }
+                    attributesTable.refresh()
+                }
+            }
             column("Comparable", Cvariable::isComparable).makeEditable()
+
+            // remove attribute from model
+            contextMenu = ContextMenu().apply{
+                item("Delete").action {
+                    selectedItem?.apply{
+                        unionModel.attributes.value.removeIf { it.name == this.name }
+                    }
+                }
+            }
+
+            onDoubleClick {
+                if (selectedCell?.column == 1) {
+                    selectedType = selectedCell?.row?.let { it -> selectedCell?.tableView?.items?.get(it) }
+                    find<CunionAttributeTypeEditor>().openModal()
+                }
+            }
 
             columnResizePolicy = SmartResize.POLICY
         }
     }
 
     override fun onDock() {
+        // init the fields
+        variableNameField.text = ""
+        variablePointerField.isSelected = false
+        variableComparableField.isSelected = false
+
         // fill type combobox with enums
         variableFromProjectField.items = projectController.getListOfAllNamesUsed(ProjectController.ENUM).asObservable()
         variableFromProjectField.selectionModel.selectFirst()
+        isProjectEmpty.value = projectController.userModel.isEmpty()
+        //TODO to simplify and add unit test
+        hasNotEnumInProject.value = projectController.userModel.userEnumList.isEmpty()
+        hasNotUnionInProject.value = projectController.userModel.userUnionList.isEmpty()
+        hasNotStructInProject.value = projectController.userModel.userStructureList.isEmpty()
+
         super.onDock()
     }
 }
@@ -260,8 +318,6 @@ class UnionWizard : Wizard("Create a Union", "Provide Union information") {
 
     override fun onCancel() {
         confirm("Confirm cancel", "Do you really want to loose your progress?") {
-            //unionModel.item = Cunion("")
-            //TODO reinit les champs
             cancel()
         }
     }

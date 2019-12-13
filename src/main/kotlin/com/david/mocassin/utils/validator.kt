@@ -15,7 +15,7 @@ package com.david.mocassin.utils
  *     $ : end of string
  */
 const val C_VARIABLE_SYNTAX_REGEX = "^[a-zA-Z0-9_]*\$"
-
+//TODO add c++ reserved words
 val RESERVED_C_WORDS = listOf(
     "auto",
     "break",

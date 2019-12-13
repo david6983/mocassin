@@ -209,10 +209,12 @@ class Cenum(name: String) : CuserType, JsonModel {
      */
     override fun toString(): String {
         val out = StringBuilder()
-        for (attr in attributes) {
-            out.append(attr.name + "|")
+        if (attributes.isNotEmpty()) {
+            for (attr in attributes) {
+                out.append(attr.name + "|")
+            }
+            out.deleteCharAt(out.length - 1)
         }
-        out.deleteCharAt(out.length - 1)
         return "$name;${out}"
     }
 

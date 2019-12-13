@@ -22,26 +22,30 @@ class MainMenuBar : View() {
                 find<NewProjectModal>().openModal(stageStyle = StageStyle.UTILITY)
             }
             separator()
-            item("Open").action {
+            item("Open from computer").action {
                 val ef = arrayOf(FileChooser.ExtensionFilter("Mocassin file (*.moc)", "*.moc"))
                 val file = chooseFile("Select a .moc file to open", ef, FileChooserMode.Single)
                 println(file)
             }
-            item("Import from Web application")
-            separator()
-            item("Save to Web application")
             item("Save project locally")
+            separator()
+            item("Save to Web application").isDisable = true
+            item("Import from Web application").isDisable = true
             separator()
             item("Export")
             item("Generate")
         }
         menu("Add") {
             item("SList (Single-chained Linked List)")
-            item("DList (Double-chained Linked List)")
+            item("DList (Double-chained Linked List)").isDisable = true
             separator()
-            item("BTree (Binary Tree)")
-            item("BSTree (Binary Search Tree)")
-            item("Tree (Multi-node Tree)")
+            item("BTree (Binary Tree)").isDisable = true
+            item("BSTree (Binary Search Tree)").isDisable = true
+            item("Tree (Multi-node Tree)").isDisable = true
+            separator()
+            item("Graph").isDisable = true
+            separator()
+            item("Hash table").isDisable = true
         }
         menu("New") {
             item("Enum", keyCombination = "Shortcut+E", graphic = enumIcon).action {
@@ -77,6 +81,8 @@ class MainMenuBar : View() {
                 }
             }
             item("Struct")
+            separator()
+            item("Pseudo-object")
         }
         menu("Preferences") {
 
