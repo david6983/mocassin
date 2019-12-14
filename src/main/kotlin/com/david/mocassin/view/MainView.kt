@@ -7,12 +7,14 @@ import com.david.mocassin.view.components.MainMenuBar
 import com.david.mocassin.view.styles.MainStyle
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
+import javafx.scene.control.TreeItem
 
 import tornadofx.*
 
 class MainView: View("Mocassin Generalized Data structure generator for C") {
     //TODO add a controller for MainView that inject projectController inside
     private val projectController: ProjectController by inject()
+    private val leftSideDrawer: LeftSideDrawer by inject()
 
     init {
         title += " [${projectController.name}]"
@@ -21,22 +23,11 @@ class MainView: View("Mocassin Generalized Data structure generator for C") {
     override val root = borderpane {
         left<LeftSideDrawer>()
         top<MainMenuBar>()
-        right {
-            /*
-            drawer {
-                item("") {
-
-                }
-            }*/
-        }
+        right {}
         bottom {
             toolbar {
                 button("Generate") {
                     addClass("btn-primary", "btn-lg")
-                    action {
-                        println(projectController.getListOfAllNamesUsed().toString())
-                        //println(projectController.userModel.to)
-                    }
                 }
                 button("Test") {
                     addClass("btn-success", "btn-lg")

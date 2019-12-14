@@ -4,6 +4,7 @@ import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_union.Cunion
 import com.david.mocassin.view.components.fragments.NewProjectModal
+import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import com.david.mocassin.view.components.wizards.user_structures_wizards.enum_wizard.EnumWizard
 import com.david.mocassin.view.components.wizards.user_structures_wizards.struct_wizard.StructWizard
 import com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard.UnionWizard
@@ -13,6 +14,7 @@ import tornadofx.*
 
 class MainMenuBarController : Controller() {
     val projectController: ProjectController by inject()
+    private val leftSideDrawer: LeftSideDrawer by inject()
 
     val enumIcon = resources.imageview("/icons/enum32.png")
     val unionIcon = resources.imageview("/icons/union32.png")
@@ -52,9 +54,10 @@ class MainMenuBarController : Controller() {
         enumWizard.openModal()
         // when the user click on "finish"
         enumWizard.onComplete {
-            println(enumWizard.enumModel.item.toJSON())
             // save the enumeration
             projectController.userModel.add(enumWizard.enumModel.item)
+            // update tree view of user's structures
+            leftSideDrawer.controller.addEnumNode(leftSideDrawer.enumRoot)
 
             information(
                 "Enumeration successfully added !",
@@ -73,6 +76,8 @@ class MainMenuBarController : Controller() {
         unionWizard.openModal()
         unionWizard.onComplete {
             projectController.userModel.add(unionWizard.unionModel.item)
+            // update tree view of user's structures
+            leftSideDrawer.controller.addUnionNode(leftSideDrawer.unionRoot)
 
             information(
                 "Union successfully added !",
@@ -91,6 +96,8 @@ class MainMenuBarController : Controller() {
         structWizard.openModal()
         structWizard.onComplete {
             projectController.userModel.add(structWizard.structModel.item)
+            // update tree view of user's structures
+            leftSideDrawer.controller.addStructNode(leftSideDrawer.structRoot)
 
             information(
                 "Struct successfully added !",

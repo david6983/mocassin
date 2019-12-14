@@ -1,6 +1,7 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.controller.MainMenuBarController
+import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import javafx.scene.paint.Color
 import tornadofx.*
 

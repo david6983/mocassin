@@ -2,6 +2,7 @@ package com.david.mocassin.view.components.wizards.user_structures_wizards.enum_
 
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_enum.CenumModel
+import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import javafx.scene.control.ButtonBar
 
 import tornadofx.*

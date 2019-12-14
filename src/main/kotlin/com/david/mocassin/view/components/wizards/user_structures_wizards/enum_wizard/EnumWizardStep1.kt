@@ -19,18 +19,12 @@ class EnumWizardStep1 : View("Enum name") {
             field("Name") {
                 textfield(enumModel.name){
                     validator {
-                        if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(
-                                it
-                            )
-                        )
+                        if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(it))
                             error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
                         else if(!it.isNullOrBlank() && !projectController.isNameUnique(it)) {
                             error("The name already exist")
                         }
-                        else if(!it.isNullOrBlank() && isNameReservedWords(
-                                it
-                            )
-                        ) {
+                        else if(!it.isNullOrBlank() && isNameReservedWords(it)) {
                             error("The name is reserved for the C language")
                         }
                         else null
