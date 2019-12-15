@@ -4,12 +4,14 @@ import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_union.Cunion
-import javafx.scene.control.TreeItem
-import javafx.scene.control.TreeView
+import com.david.mocassin.view.MainView
+import javafx.beans.property.SimpleBooleanProperty
+import javafx.scene.control.*
 import tornadofx.*
 
 class LeftSideDrawerController : Controller() {
     val projectController: ProjectController by inject()
+    val editTabPane: MainView by inject()
 
     fun addEnumNode(root: TreeItem<String>) {
         if (!projectController.userModel.userEnumList.isEmpty()) {
@@ -46,6 +48,38 @@ class LeftSideDrawerController : Controller() {
             }
         }
     }
+
+    fun isSelectedValueValid(value: String?): Boolean {
+        return when(value) {
+            ENUM -> false
+            UNION-> false
+            STRUCT -> false
+            projectController.userModel.packageName -> false
+            null -> false
+            else -> true
+        }
+    }
+
+    fun isValidParent(parent: String?): Boolean {
+        return when(parent) {
+            ENUM -> true
+            UNION -> true
+            STRUCT -> true
+            else -> false
+        }
+    }
+
+    fun isPaneNotExist(text: String?): Boolean {
+        return editTabPane.centerTabPane.tabs.find { it.text == text } == null
+    }
+
+    companion object {
+        const val ENUM: String = "Enumerations [enum]"
+        const val UNION: String = "Unions [union]"
+        const val STRUCT: String = "Structures [struct]"
+
+        const val SLIST: String = "Single Linked List [Slist]"
+    }
 }
 
 class LeftSideDrawer : View() {
@@ -55,12 +89,12 @@ class LeftSideDrawer : View() {
     var generatedStructureTree: TreeView<String> by singleAssign()
     var filesTree: TreeView<String> by singleAssign()
 
-    val enumRoot: TreeItem<String> = TreeItem("Enumerations [enum]")
-    val unionRoot: TreeItem<String> = TreeItem("Unions [union]")
-    val structRoot: TreeItem<String> = TreeItem("Structures [struct]")
+    val enumRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.ENUM)
+    val unionRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.UNION)
+    val structRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.STRUCT)
 
     override val root = drawer(multiselect = true) {
-        item("User structures") {
+        item("User structures", expanded = true) {
             treeview<String> {
                 userStructureTree = this
 
@@ -74,6 +108,50 @@ class LeftSideDrawer : View() {
                 root.children.add(structRoot)
 
                 cellFormat { text = it }
+
+                onDoubleClick {
+                    if (controller.isSelectedValueValid(selectedValue)
+                        && controller.isValidParent(selectionModel.selectedItem.parent.value)
+                        && controller.isPaneNotExist(selectedValue)
+                    ) {
+                        controller.editTabPane.centerTabPane.tab(selectedValue)
+                    }
+                }
+
+                onUserSelect {
+                    contextMenu = if (controller.isSelectedValueValid(selectedValue)
+                        && controller.isValidParent(selectionModel.selectedItem.parent.value)) {
+                        ContextMenu().apply {
+                            item("Delete") {
+                            }.action {
+                                println(selectedValue)
+                                when(selectionModel.selectedItem.parent.value) {
+                                    LeftSideDrawerController.ENUM -> {
+                                        controller.projectController.userModel.remove(
+                                            controller.projectController.userModel.findEnumByName(selectedValue)
+                                        )
+                                        enumRoot.children.remove(selectionModel.selectedItem)
+                                    }
+                                    LeftSideDrawerController.UNION-> {
+                                        controller.projectController.userModel.remove(
+                                            controller.projectController.userModel.findUnionByName(selectedValue)
+                                        )
+                                        unionRoot.children.remove(selectionModel.selectedItem)
+                                    }
+                                    LeftSideDrawerController.STRUCT -> {
+                                        controller.projectController.userModel.remove(
+                                            controller.projectController.userModel.findStructByName(selectedValue)
+                                        )
+                                        structRoot.children.remove(selectionModel.selectedItem)
+                                    }
+                                }
+                                //controller.projectController.userModel.findEnumByName()
+                            }
+                        }
+                    } else {
+                        null
+                    }
+                }
             }
         }
         item("Generated structures") {
@@ -83,7 +161,7 @@ class LeftSideDrawer : View() {
                 root = TreeItem(controller.projectController.userModel.packageName)
                 root.isExpanded = true
 
-                root.children.add(TreeItem("Single Linked List [Slist]"))
+                root.children.add(TreeItem(LeftSideDrawerController.SLIST))
 
                 cellFormat { text = it }
             }

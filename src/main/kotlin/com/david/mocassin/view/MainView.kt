@@ -7,17 +7,25 @@ import com.david.mocassin.view.components.MainMenuBar
 import com.david.mocassin.view.styles.MainStyle
 import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
+import javafx.scene.control.TabPane
 import javafx.scene.control.TreeItem
 
 import tornadofx.*
 
+class MainViewController : Controller() {
+    val projectController: ProjectController by inject()
+
+    fun addEditionTab() {
+
+    }
+}
+
 class MainView: View("Mocassin Generalized Data structure generator for C") {
-    //TODO add a controller for MainView that inject projectController inside
-    private val projectController: ProjectController by inject()
-    private val leftSideDrawer: LeftSideDrawer by inject()
+    val controller : MainViewController by inject()
+    var centerTabPane: TabPane by singleAssign()
 
     init {
-        title += " [${projectController.name}]"
+        title += " [${controller.projectController.name}]"
     }
 
     override val root = borderpane {
@@ -44,23 +52,9 @@ class MainView: View("Mocassin Generalized Data structure generator for C") {
             }
         }
         center {
-            val fileView = tabpane {}
-            fileView.tab("test") {
-                val selectedType = SimpleStringProperty()
-                hbox {
-                    combobox<String>(selectedType){
-                        for(type in CtypeEnum.values()) {
-                            items.add(type.cType)
-                        }
-                        //TODO add types from userModel
-                    }.selectionModel.selectFirst()
-                    button("click").action {
-                        println(selectedType.value)
-                    }
-                }
-                selectedType.onChange { println(CtypeEnum.find(selectedType.value)) }
+            tabpane {
+                centerTabPane = this
             }
-            fileView.tab("test 2")
         }
     }
 

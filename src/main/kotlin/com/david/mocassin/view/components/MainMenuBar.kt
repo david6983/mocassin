@@ -1,7 +1,6 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.controller.MainMenuBarController
-import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import javafx.scene.paint.Color
 import tornadofx.*
 
@@ -27,7 +26,7 @@ class MainMenuBar : View() {
             item("Save to Web application", keyCombination = "Shortcut+W").isDisable = true
             item("Import from Web application", keyCombination = "Shortcut+I").isDisable = true
             separator()
-            item("Export", keyCombination = "Shortcut+X")
+            item("Test", keyCombination = "Shortcut+X")
             item("Generate", keyCombination = "Shortcut+G")
         }
         menu("Add") {

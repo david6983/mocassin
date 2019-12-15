@@ -58,15 +58,15 @@ class UserModel(packageName: String) {
         else -> false
     }
 
-    fun findEnumByName(name: String): Cenum {
+    fun findEnumByName(name: String?): Cenum {
         return (userEnumList.find { (it as Cenum).name == name } as Cenum)
     }
 
-    fun findUnionByName(name: String): Cunion {
+    fun findUnionByName(name: String?): Cunion {
         return (userUnionList.find { (it as Cunion).name == name } as Cunion)
     }
 
-    fun findStructByName(name: String): CuserStructure {
+    fun findStructByName(name: String?): CuserStructure {
         return (userStructureList.find { (it as CuserStructure).name == name } as CuserStructure)
     }
 

@@ -121,7 +121,6 @@ fun main() {
     cfg.fallbackOnNullLoopVariable = false
     /* ------------------------------------------------------------------------ */
     /* You usually do these for MULTIPLE TIMES in the application life-cycle:   */
-    //TODO ameliorer le model car il est pas très propre
     model.generate(cfg, "out2")
     slist.generate(cfg, "out2")
 
