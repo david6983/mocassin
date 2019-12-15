@@ -42,7 +42,11 @@ class MainMenuBarController : Controller() {
     fun saveProjectLocally() {
         if (projectController.userModel.isEmpty().not()) {
             val directory = chooseDirectory("Select a directory to save project")
-            projectController.saveMocFiles(directory.toString())
+            if (directory != null) {
+                projectController.saveToMocFile(directory.toString())
+            }
+        } else {
+            warning("project is empty", "add new data structures to save project")
         }
     }
 

@@ -10,8 +10,10 @@ import javafx.scene.control.*
 import tornadofx.*
 
 class LeftSideDrawerController : Controller() {
-    val projectController: ProjectController by inject()
+    private val projectController: ProjectController by inject()
     val editTabPane: MainView by inject()
+
+    val packageName: String = projectController.userModel.packageName
 
     fun addEnumNode(root: TreeItem<String>) {
         if (!projectController.userModel.userEnumList.isEmpty()) {
@@ -73,6 +75,29 @@ class LeftSideDrawerController : Controller() {
         return editTabPane.centerTabPane.tabs.find { it.text == text } == null
     }
 
+    fun removeSelectedInModel(selectionModel: MultipleSelectionModel<TreeItem<String>>) {
+        when(selectionModel.selectedItem.parent.value) {
+            ENUM -> {
+                projectController.userModel.remove(
+                    projectController.userModel.findEnumByName(selectionModel.selectedItem.value)
+                )
+                selectionModel.selectedItem.parent.children.remove(selectionModel.selectedItem)
+            }
+            UNION-> {
+                projectController.userModel.remove(
+                    projectController.userModel.findUnionByName(selectionModel.selectedItem.value)
+                )
+                selectionModel.selectedItem.parent.children.remove(selectionModel.selectedItem)
+            }
+            STRUCT -> {
+                projectController.userModel.remove(
+                    projectController.userModel.findStructByName(selectionModel.selectedItem.value)
+                )
+                selectionModel.selectedItem.parent.children.remove(selectionModel.selectedItem)
+            }
+        }
+    }
+
     companion object {
         const val ENUM: String = "Enumerations [enum]"
         const val UNION: String = "Unions [union]"
@@ -97,8 +122,7 @@ class LeftSideDrawer : View() {
         item("User structures", expanded = true) {
             treeview<String> {
                 userStructureTree = this
-
-                root = TreeItem(controller.projectController.userModel.packageName)
+                root = TreeItem(controller.packageName)
                 root.isExpanded = true
 
                 controller.addEnumNode(enumRoot)
@@ -122,31 +146,7 @@ class LeftSideDrawer : View() {
                     contextMenu = if (controller.isSelectedValueValid(selectedValue)
                         && controller.isValidParent(selectionModel.selectedItem.parent.value)) {
                         ContextMenu().apply {
-                            item("Delete") {
-                            }.action {
-                                println(selectedValue)
-                                when(selectionModel.selectedItem.parent.value) {
-                                    LeftSideDrawerController.ENUM -> {
-                                        controller.projectController.userModel.remove(
-                                            controller.projectController.userModel.findEnumByName(selectedValue)
-                                        )
-                                        enumRoot.children.remove(selectionModel.selectedItem)
-                                    }
-                                    LeftSideDrawerController.UNION-> {
-                                        controller.projectController.userModel.remove(
-                                            controller.projectController.userModel.findUnionByName(selectedValue)
-                                        )
-                                        unionRoot.children.remove(selectionModel.selectedItem)
-                                    }
-                                    LeftSideDrawerController.STRUCT -> {
-                                        controller.projectController.userModel.remove(
-                                            controller.projectController.userModel.findStructByName(selectedValue)
-                                        )
-                                        structRoot.children.remove(selectionModel.selectedItem)
-                                    }
-                                }
-                                //controller.projectController.userModel.findEnumByName()
-                            }
+                            item("Delete").action { controller.removeSelectedInModel(selectionModel) }
                         }
                     } else {
                         null
@@ -158,7 +158,7 @@ class LeftSideDrawer : View() {
             treeview<String> {
                 generatedStructureTree = this
 
-                root = TreeItem(controller.projectController.userModel.packageName)
+                root = TreeItem(controller.packageName)
                 root.isExpanded = true
 
                 root.children.add(TreeItem(LeftSideDrawerController.SLIST))
@@ -170,7 +170,7 @@ class LeftSideDrawer : View() {
             treeview<String> {
                 filesTree = this
 
-                root = TreeItem(controller.projectController.userModel.packageName)
+                root = TreeItem(controller.packageName)
                 root.isExpanded = true
 
                 cellFormat { text = it }

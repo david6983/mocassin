@@ -25,7 +25,7 @@ import java.io.IOException
  * give the projectName
  *
  */
-class ProjectController: Controller() {
+class ProjectController: Controller(), JsonModel {
     // 1 model by project
     val userModelProperty = SimpleObjectProperty<UserModel>()
     var userModel by userModelProperty
@@ -84,9 +84,27 @@ class ProjectController: Controller() {
         return names
     }
 
-    fun saveMocFiles(pathDir: String?) {
+    override fun toJSON(json: JsonBuilder) {
+        // merge all json in one moc file
+        with(json) {
+            add("userModel", userModel.toJSON())
+        }
+    }
+
+    fun saveToMocFile(pathDir: String?) {
         if (pathDir != null) {
-            userModel.save(pathDir)
+            //userModel.save(pathDir)
+
+            val directory = File(pathDir)
+
+            // the directory doesn't exist
+            if (! directory.exists()) {
+                // create one
+                directory.mkdir()
+            }
+            // create a new file
+            File("${pathDir}/${name}.moc").writeText(toJSON().toString())
+            information("Saving success", "the project has been saved successfully in $pathDir as $name.moc")
         }
     }
 

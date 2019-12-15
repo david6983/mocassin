@@ -1,5 +1,6 @@
 package com.david.mocassin.view
 
+import com.david.mocassin.controller.MainMenuBarController
 import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.c_components.CtypeEnum
 import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
@@ -14,6 +15,7 @@ import tornadofx.*
 
 class MainViewController : Controller() {
     val projectController: ProjectController by inject()
+    val mainMenuBarController: MainMenuBarController by inject()
 
     fun addEditionTab() {
 
@@ -42,6 +44,8 @@ class MainView: View("Mocassin Generalized Data structure generator for C") {
                 }
                 button("Save") {
                     addClass("btn-info", "btn-lg")
+                }.action {
+                    controller.mainMenuBarController.saveProjectLocally()
                 }
                 button("Open") {
                     addClass("btn-warning", "btn-lg")

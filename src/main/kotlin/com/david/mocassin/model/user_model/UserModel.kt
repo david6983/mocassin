@@ -14,10 +14,11 @@ import java.io.FileWriter
 import java.lang.StringBuilder
 
 import tornadofx.*
+import javax.json.JsonObject
 
 //TODO JSON with tornadofx
 
-class UserModel(packageName: String) {
+class UserModel(packageName: String) : JsonModel {
     val packageNameProperty = SimpleStringProperty(packageName)
     var packageName by packageNameProperty
 
@@ -232,6 +233,44 @@ class UserModel(packageName: String) {
         return out.toString()
     }
 
+    private fun enumsToJSON(): JsonBuilder {
+        val out = JsonBuilder()
+
+        for(enum in userEnumList) {
+            out.add((enum as Cenum).name, enum.toJSON())
+        }
+
+        return out
+    }
+
+    private fun unionsToJSON(): JsonBuilder {
+        val out = JsonBuilder()
+
+        for(union in userUnionList) {
+            out.add((union as Cunion).name, union.toJSON())
+        }
+
+        return out
+    }
+
+    private fun structsToJSON(): JsonBuilder {
+        val out = JsonBuilder()
+
+        for(struct in userStructureList) {
+            out.add((struct as CuserStructure).name, struct.toJSON())
+        }
+
+        return out
+    }
+
+    override fun toJSON(json: JsonBuilder) {
+        with(json) {
+            add("enums", enumsToJSON())
+            add("unions", unionsToJSON())
+            add("structs", structsToJSON())
+        }
+    }
+
     fun save(pathDir: String) {
         val directory = File(pathDir)
 
@@ -241,7 +280,7 @@ class UserModel(packageName: String) {
             directory.mkdir()
         }
         // create a new file
-        File("${pathDir}/${packageName}_userModel.moc").writeText(toJson())
+        File("${pathDir}/${packageName}_userModel.moc").writeText(toJSON().toString())
     }
 
     private fun addPackageNameToMap(): ObservableList<CuserType> {
