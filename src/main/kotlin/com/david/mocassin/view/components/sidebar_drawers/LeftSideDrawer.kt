@@ -170,8 +170,8 @@ class LeftSideDrawer : View() {
             treeview<String> {
                 filesTree = this
 
-                root = TreeItem(controller.packageName)
-                root.isExpanded = true
+                root = TreeItem("nothing generated")
+                //root.isExpanded = true
 
                 cellFormat { text = it }
             }

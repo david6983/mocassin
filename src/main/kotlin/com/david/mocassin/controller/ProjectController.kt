@@ -30,7 +30,11 @@ class ProjectController: Controller(), JsonModel {
     val userModelProperty = SimpleObjectProperty<UserModel>()
     var userModel by userModelProperty
 
-    var name = "untitled"
+    var nameDefault = "untitled"
+
+    var name: String
+        get() = userModel.packageName
+        set(name) { userModel.packageName = name }
 
     val cfg = Configuration(Configuration.VERSION_2_3_29)
 
@@ -40,7 +44,7 @@ class ProjectController: Controller(), JsonModel {
     //var dataStructureModel by dataStructuresModelProperty
 
     init {
-        userModel = UserModel(name)
+        userModel = UserModel(nameDefault)
 
         initTemplateConfiguration()
     }

@@ -25,10 +25,6 @@ class MainMenuBarController : Controller() {
     val btreeIcon = resources.imageview("/icons/btree32.png")
     val treeIcon = resources.imageview("/icons/tree32.png")
 
-    fun newProject() {
-        find<NewProjectModal>().openModal(stageStyle = StageStyle.UTILITY)
-    }
-
     fun openFromComputer() {
         val ef = arrayOf(FileChooser.ExtensionFilter("Mocassin file (*.moc)", "*.moc"))
         val file = chooseFile(

@@ -1,15 +1,26 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.controller.MainMenuBarController
+import com.david.mocassin.view.components.fragments.ChangeNameModal
+import com.david.mocassin.view.components.fragments.NewProjectModal
 import javafx.scene.paint.Color
+import javafx.stage.StageStyle
 import tornadofx.*
 
 class MainMenuBar : View() {
     private val controller: MainMenuBarController by inject()
 
+    private fun newProject() {
+        find<NewProjectModal>().openModal(stageStyle = StageStyle.UTILITY)
+    }
+
+    private fun changeName() {
+        find<ChangeNameModal>().openModal(stageStyle = StageStyle.UTILITY)
+    }
+
     override val root = menubar {
         menu("File") {
-            item("New project", keyCombination = "Shortcut+N").action { controller.newProject() }
+            item("New project", keyCombination = "Shortcut+N").action { newProject() }
             separator()
             item("Open from computer", keyCombination = "Shortcut+O").action { controller.openFromComputer() }
             item("Save project locally", keyCombination = "Shortcut+S") {
@@ -60,7 +71,7 @@ class MainMenuBar : View() {
             item("Pseudo-object").isDisable = true
         }
         menu("Preferences") {
-
+            item("Change package name").action { changeName() }
         }
         menu("Help") {
             item("Documentation")

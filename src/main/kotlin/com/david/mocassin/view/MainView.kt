@@ -22,7 +22,7 @@ class MainViewController : Controller() {
     }
 }
 
-class MainView: View("Mocassin Generalized Data structure generator for C") {
+class MainView: View(this.TITLE) {
     val controller : MainViewController by inject()
     var centerTabPane: TabPane by singleAssign()
 
@@ -69,5 +69,9 @@ class MainView: View("Mocassin Generalized Data structure generator for C") {
 
             addClass(MainStyle.mainView)
         }
+    }
+
+    companion object {
+        const val TITLE = "Mocassin - generalized data structures generator for C"
     }
 }
