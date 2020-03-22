@@ -55,6 +55,7 @@ class DataStructureModel(userModel: UserModel): JsonModel {
     }
 
     private fun updateModel() {
+        //TODO generalize slist to datastructure
         map["nb_data_type"] = (userModel.getNumberOfDataTypeForSlist() + userVariables.size).toString()
         map["slist_data_type"] = userModel.getAllNamesAsEnumFormat() + getAllVariableNamesAsEnumFormat()
         map["slist_single_data"] = userModel.getAllNamesAsUnionFormat() + getAllVariableNamesAsUnionFormat()
@@ -110,6 +111,7 @@ class DataStructureModel(userModel: UserModel): JsonModel {
 
 
     private fun toCheader(config: Configuration, folderPath: String = userModel.packageName) {
+        //TODO change according to the data structure type
         val temp: Template? = config.getTemplate("SList_header.ftlh")
 
         val fileWriter = FileWriter(File("$folderPath/${userModel.packageName}_Slist.h"))

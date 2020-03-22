@@ -27,8 +27,8 @@ import java.io.IOException
  */
 class ProjectController: Controller(), JsonModel {
     // 1 model by project
-    val userModelProperty = SimpleObjectProperty<UserModel>()
-    var userModel by userModelProperty
+    private val userModelProperty = SimpleObjectProperty<UserModel>()
+    var userModel: UserModel by userModelProperty
 
     var nameDefault = "untitled"
 

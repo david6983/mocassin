@@ -1,6 +1,7 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.controller.MainMenuBarController
+import com.david.mocassin.model.DataStructureEnum
 import com.david.mocassin.view.components.fragments.ChangeNameModal
 import com.david.mocassin.view.components.fragments.NewProjectModal
 import javafx.scene.paint.Color
@@ -37,25 +38,25 @@ class MainMenuBar : View() {
             item("Save to Web application", keyCombination = "Shortcut+W").isDisable = true
             item("Import from Web application", keyCombination = "Shortcut+I").isDisable = true
             separator()
-            item("Test", keyCombination = "Shortcut+X")
+            item("Test", keyCombination = "Shortcut+X").isDisable = true
             item("Generate", keyCombination = "Shortcut+G")
         }
         menu("Add") {
-            item("SList (Single-chained Linked List)", keyCombination = "Shortcut+L", graphic = controller.slistIcon)
+            item(DataStructureEnum.SLIST.toString(), keyCombination = "Shortcut+L", graphic = controller.slistIcon)
             item(
-                "DList (Double-chained Linked List)",
+                DataStructureEnum.DLIST.toString(),
                 keyCombination = "Shortcut+D",
                 graphic = controller.dlistIcon
             ).isDisable = true
             separator()
-            item("BTree (Binary Tree)", keyCombination = "Shortcut+B", graphic = controller.btreeIcon).isDisable = true
-            item("BSTree (Binary Search Tree)", keyCombination = "Shortcut+Y").isDisable = true
-            item("Tree (Multi-node Tree)", keyCombination = "Shortcut+T", graphic = controller.treeIcon).isDisable =
+            item(DataStructureEnum.BTREE.toString(), keyCombination = "Shortcut+B", graphic = controller.btreeIcon).isDisable = true
+            item(DataStructureEnum.BSTREE.toString(), keyCombination = "Shortcut+Y").isDisable = true
+            item(DataStructureEnum.TREE.toString(), keyCombination = "Shortcut+T", graphic = controller.treeIcon).isDisable =
                 true
             separator()
-            item("Graph", keyCombination = "Shortcut+P").isDisable = true
+            item(DataStructureEnum.GRAPH.toString(), keyCombination = "Shortcut+P").isDisable = true
             separator()
-            item("Hash table", keyCombination = "Shortcut+H").isDisable = true
+            item(DataStructureEnum.HASHTABLE.toString(), keyCombination = "Shortcut+H").isDisable = true
         }
         menu("New") {
             item("Enum", keyCombination = "Shortcut+E", graphic = controller.enumIcon).action {
