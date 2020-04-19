@@ -6,6 +6,7 @@ import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_union.Cunion
 import com.david.mocassin.view.MainView
 import javafx.beans.property.SimpleBooleanProperty
+import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.*
 import tornadofx.*
 
@@ -13,7 +14,7 @@ class LeftSideDrawerController : Controller() {
     private val projectController: ProjectController by inject()
     val editTabPane: MainView by inject()
 
-    val packageName: String = projectController.userModel.packageName
+    val packageName: SimpleStringProperty = SimpleStringProperty(projectController.userModel.packageName)
 
     fun addEnumNode(root: TreeItem<String>) {
         if (!projectController.userModel.userEnumList.isEmpty()) {
@@ -114,15 +115,30 @@ class LeftSideDrawer : View() {
     var generatedStructureTree: TreeView<String> by singleAssign()
     var filesTree: TreeView<String> by singleAssign()
 
+    val userStructureRoot: TreeItem<String> = TreeItem(controller.packageName.value)
     val enumRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.ENUM)
     val unionRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.UNION)
     val structRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.STRUCT)
+
+    val slistRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.SLIST)
+
+    val fileRoot: TreeItem<String> = TreeItem("nothing generated")
+
+    fun clearAll() {
+        enumRoot.children.clear()
+        unionRoot.children.clear()
+        structRoot.children.clear()
+
+        slistRoot.children.clear()
+
+        fileRoot.children.clear()
+    }
 
     override val root = drawer(multiselect = true) {
         item("User structures", expanded = true) {
             treeview<String> {
                 userStructureTree = this
-                root = TreeItem(controller.packageName)
+                root = userStructureRoot
                 root.isExpanded = true
 
                 controller.addEnumNode(enumRoot)
@@ -158,10 +174,10 @@ class LeftSideDrawer : View() {
             treeview<String> {
                 generatedStructureTree = this
 
-                root = TreeItem(controller.packageName)
+                root = TreeItem(controller.packageName.value)
                 root.isExpanded = true
 
-                root.children.add(TreeItem(LeftSideDrawerController.SLIST))
+                root.children.add(slistRoot)
 
                 cellFormat { text = it }
             }
@@ -170,7 +186,7 @@ class LeftSideDrawer : View() {
             treeview<String> {
                 filesTree = this
 
-                root = TreeItem("nothing generated")
+                root = fileRoot
                 //root.isExpanded = true
 
                 cellFormat { text = it }

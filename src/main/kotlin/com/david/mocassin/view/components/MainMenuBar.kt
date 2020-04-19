@@ -21,9 +21,27 @@ class MainMenuBar : View() {
 
     override val root = menubar {
         menu("File") {
-            item("New project", keyCombination = "Shortcut+N").action { newProject() }
+            item("New project", keyCombination = "Shortcut+N") {
+                graphic = hbox {
+                    rectangle {
+                        fill = Color.GREEN
+                        width = 8.0
+                        height = 32.0
+                    }
+                    imageview(resources["/icons/file32.png"])
+                }
+            }.action { newProject() }
             separator()
-            item("Open from computer", keyCombination = "Shortcut+O").action { controller.openFromComputer() }
+            item("Open from computer", keyCombination = "Shortcut+O") {
+                graphic = hbox {
+                    rectangle {
+                        fill = Color.CORAL
+                        width = 8.0
+                        height = 32.0
+                    }
+                    imageview(resources["/icons/open32.png"])
+                }
+            }.action { controller.openFromComputer() }
             item("Save project locally", keyCombination = "Shortcut+S") {
                 graphic = hbox {
                     rectangle {
@@ -53,6 +71,10 @@ class MainMenuBar : View() {
             item(DataStructureEnum.BSTREE.toString(), keyCombination = "Shortcut+Y").isDisable = true
             item(DataStructureEnum.TREE.toString(), keyCombination = "Shortcut+T", graphic = controller.treeIcon).isDisable =
                 true
+            item(DataStructureEnum.QUADTREE.toString(), keyCombination = "Shortcut+Q").isDisable =
+                true
+            item(DataStructureEnum.RTREE.toString(), keyCombination = "Shortcut+R").isDisable =
+                true
             separator()
             item(DataStructureEnum.GRAPH.toString(), keyCombination = "Shortcut+P").isDisable = true
             separator()
@@ -68,8 +90,6 @@ class MainMenuBar : View() {
             item("Struct", keyCombination = "Shortcut+R", graphic = controller.structIcon).action {
                 controller.newStruct()
             }
-            separator()
-            item("Pseudo-object").isDisable = true
         }
         menu("Preferences") {
             item("Change package name").action { changeName() }

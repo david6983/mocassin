@@ -78,6 +78,12 @@ class UserModel(packageName: String) : JsonModel {
         else -> false
     }
 
+    fun removeAll() {
+        userEnumList.clear()
+        userStructureList.clear()
+        userUnionList.clear()
+    }
+
     fun getNumberOfDataTypeForSlist(): Int {
         return userStructureList?.size!! + userEnumList?.size!!
     }

@@ -30,6 +30,11 @@ class MainView: View(this.TITLE) {
         title += " [${controller.projectController.name}]"
     }
 
+    fun updatePackageNameInTitle(name: String) {
+        title = title.removeRange(title.indexOf("["), title.indexOf("]") + 1)
+        title += " [${name}]"
+    }
+
     override val root = borderpane {
         left<LeftSideDrawer>()
         top<MainMenuBar>()
