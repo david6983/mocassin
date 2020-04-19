@@ -49,6 +49,10 @@ class ProjectController: Controller(), JsonModel {
         initTemplateConfiguration()
     }
 
+    fun cleanModel() {
+        userModel.removeAll()
+    }
+
     private fun initTemplateConfiguration() {
         /* Create and adjust the configuration singleton */
         try {

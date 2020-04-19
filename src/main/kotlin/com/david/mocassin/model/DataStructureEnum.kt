@@ -6,6 +6,8 @@ enum class DataStructureEnum(val fullname: String) {
     BTREE("BTree (Binary Tree)"),
     BSTREE("BSTree (Binary Search Tree)"),
     TREE("Tree (Multi-node Tree)"),
+    QUADTREE("QuadTree"),
+    RTREE("R-Tree"),
     GRAPH("Graph"),
     HASHTABLE("Hash table");
 
