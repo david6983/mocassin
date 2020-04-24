@@ -12,8 +12,6 @@ import java.io.FileWriter
 
 import tornadofx.*
 
-//TODO utiliser l'objet json de tornadofx pour creer et recuperer du json
-
 /**
  * DataStructure represent either a Slist, Dlist, Tree, BinaryTree and so on
  *
@@ -58,7 +56,6 @@ class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
     }
 
     private fun updateModel() {
-        //TODO generalize slist to datastructure
         map["nb_data_type"] = (userModel.getNumberOfDataTypeForSlist() + userVariables.size).toString()
         map["slist_data_type"] = userModel.getAllNamesAsEnumFormat() + getAllVariableNamesAsEnumFormat()
         map["slist_single_data"] = userModel.getAllNamesAsUnionFormat() + getAllVariableNamesAsUnionFormat()
