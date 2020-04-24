@@ -3,7 +3,6 @@ package com.david.mocassin.view.components.fragments
 import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.view.MainView
 import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
-import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawerController
 import javafx.scene.control.TextField
 import tornadofx.*
 

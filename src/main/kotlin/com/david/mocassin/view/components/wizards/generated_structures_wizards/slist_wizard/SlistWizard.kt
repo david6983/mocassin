@@ -2,6 +2,7 @@ package com.david.mocassin.view.components.wizards.generated_structures_wizards.
 
 import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.DataStructure
+import com.david.mocassin.model.DataStructureEnum
 import com.david.mocassin.model.DataStructureModel
 
 import javafx.scene.control.ButtonBar
@@ -59,7 +60,7 @@ class SlistWizard : Wizard("Create a single linked list", "Provide list informat
             }
         }
 
-        slistModel.item = DataStructure(projectController.userModel)
+        slistModel.item = DataStructure(projectController.userModel, DataStructureEnum.SLIST)
     }
 
     override fun onCancel() {

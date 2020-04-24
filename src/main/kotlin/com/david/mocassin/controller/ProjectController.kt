@@ -1,9 +1,11 @@
 package com.david.mocassin.controller
 
+import com.david.mocassin.model.DataStructure
 import com.david.mocassin.model.user_model.UserModel
 import com.david.mocassin.model.c_components.CtypeEnum
 import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
+import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleObjectProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
@@ -30,6 +32,9 @@ class ProjectController: Controller(), JsonModel {
     private val userModelProperty = SimpleObjectProperty<UserModel>()
     var userModel: UserModel by userModelProperty
 
+    private val userDataStructuresProperty = SimpleListProperty<DataStructure>()
+    var userDataStructures: ObservableList<DataStructure> by userDataStructuresProperty
+
     var nameDefault = "untitled"
 
     var name: String
@@ -45,6 +50,7 @@ class ProjectController: Controller(), JsonModel {
 
     init {
         userModel = UserModel(nameDefault)
+        userDataStructures = mutableListOf<DataStructure>().toObservable()
 
         initTemplateConfiguration()
     }

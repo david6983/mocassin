@@ -75,4 +75,11 @@ class SlistWizardStep2 : View("Slist simple attributes") {
             }
         }
     }
+
+    override fun onDock() {
+        super.onDock()
+        list.items.clear()
+        simpleTypeField.items = CtypeEnum.toObservableArrayList()
+        simpleTypeField.selectionModel.selectFirst()
+    }
 }

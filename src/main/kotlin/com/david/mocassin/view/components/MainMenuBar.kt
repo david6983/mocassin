@@ -4,12 +4,15 @@ import com.david.mocassin.controller.MainMenuBarController
 import com.david.mocassin.model.DataStructureEnum
 import com.david.mocassin.view.components.fragments.ChangeNameModal
 import com.david.mocassin.view.components.fragments.NewProjectModal
+import javafx.scene.control.MenuItem
 import javafx.scene.paint.Color
 import javafx.stage.StageStyle
 import tornadofx.*
 
 class MainMenuBar : View() {
     private val controller: MainMenuBarController by inject()
+
+    var addSlistItem: MenuItem by singleAssign()
 
     private fun newProject() {
         find<NewProjectModal>().openModal(stageStyle = StageStyle.UTILITY)
@@ -60,7 +63,9 @@ class MainMenuBar : View() {
             item("Generate", keyCombination = "Shortcut+G")
         }
         menu("Add") {
-            item(DataStructureEnum.SLIST.toString(), keyCombination = "Shortcut+L", graphic = controller.slistIcon).action {
+            item(DataStructureEnum.SLIST.toString(), keyCombination = "Shortcut+L", graphic = controller.slistIcon){
+                addSlistItem = this
+            }.action {
                 controller.newSlist()
             }
             item(

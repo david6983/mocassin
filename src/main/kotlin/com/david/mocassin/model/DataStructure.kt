@@ -19,7 +19,7 @@ import tornadofx.*
  *
  * @property userModel 
  */
-class DataStructure(userModel: UserModel): JsonModel {
+class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
     private val map = mutableMapOf<String, String>()
 
     val userVariablesProperty = SimpleListProperty(ArrayList<CtypeEnum>().asObservable())
@@ -27,6 +27,9 @@ class DataStructure(userModel: UserModel): JsonModel {
 
     val userModelProperty = SimpleObjectProperty(userModel)
     var userModel by userModelProperty
+
+    val typeProperty = SimpleObjectProperty(type)
+    var type by typeProperty
 
     fun addVariable(type: CtypeEnum): Boolean {
         return if (userVariables.find {type == it} == null) {

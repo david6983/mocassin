@@ -1,21 +1,23 @@
 package com.david.mocassin.controller
 
+import com.david.mocassin.model.DataStructure
+import com.david.mocassin.model.DataStructureEnum
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_union.Cunion
-import com.david.mocassin.view.components.fragments.NewProjectModal
+import com.david.mocassin.view.components.MainMenuBar
 import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import com.david.mocassin.view.components.wizards.generated_structures_wizards.slist_wizard.SlistWizard
 import com.david.mocassin.view.components.wizards.user_structures_wizards.enum_wizard.EnumWizard
 import com.david.mocassin.view.components.wizards.user_structures_wizards.struct_wizard.StructWizard
 import com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard.UnionWizard
 import javafx.stage.FileChooser
-import javafx.stage.StageStyle
 import tornadofx.*
 
 class MainMenuBarController : Controller() {
+    private val mainMenuBar: MainMenuBar by inject()
     val projectController: ProjectController by inject()
-    private val leftSideDrawer: LeftSideDrawer by inject()
+    val leftSideDrawer: LeftSideDrawer by inject()
 
     val enumIcon = resources.imageview("/icons/enum32.png")
     val unionIcon = resources.imageview("/icons/union32.png")
@@ -116,10 +118,20 @@ class MainMenuBarController : Controller() {
         val slistWizard = SlistWizard()
         slistWizard.openModal()
         slistWizard.onComplete {
+            projectController.userDataStructures.add(slistWizard.slistModel.item)
+            // update tree vies
+            leftSideDrawer.controller.addSlistNode(leftSideDrawer.slistRoot)
+            // disable add slist
+            mainMenuBar.addSlistItem.isDisable = true
+
             information(
                 "Slist successfully created !",
                 slistWizard.slistModel.item.toJSON().toString()
             )
+
+            slistWizard.slistModel.item = DataStructure(projectController.userModel, DataStructureEnum.SLIST)
+            slistWizard.slistModel.userVariables.value.clear()
+            slistWizard.close()
         }
     }
 }
