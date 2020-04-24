@@ -60,7 +60,9 @@ class MainMenuBar : View() {
             item("Generate", keyCombination = "Shortcut+G")
         }
         menu("Add") {
-            item(DataStructureEnum.SLIST.toString(), keyCombination = "Shortcut+L", graphic = controller.slistIcon)
+            item(DataStructureEnum.SLIST.toString(), keyCombination = "Shortcut+L", graphic = controller.slistIcon).action {
+                controller.newSlist()
+            }
             item(
                 DataStructureEnum.DLIST.toString(),
                 keyCombination = "Shortcut+D",

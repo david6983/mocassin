@@ -1,6 +1,6 @@
 package com.david.mocassin.model.deprecated
 
-import com.david.mocassin.model.DataStructureModel
+import com.david.mocassin.model.DataStructure
 import com.david.mocassin.model.user_model.UserModel
 import com.david.mocassin.model.c_components.*
 import com.david.mocassin.model.c_components.c_enum.Cenum
@@ -96,7 +96,7 @@ fun main() {
     model.add(dtu)
     model.add(mltp)
     model.add(rcts)
-    val slist = DataStructureModel(model)
+    val slist = DataStructure(model)
 //    slist.addVariable(CtypeEnum.INT)
     slist.addVariable(CtypeEnum.INT)
     slist.addVariable(CtypeEnum.FLOAT)

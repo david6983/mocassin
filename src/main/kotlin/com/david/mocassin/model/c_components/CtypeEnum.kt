@@ -34,6 +34,10 @@ enum class CtypeEnum(val cType: String, val enumValue: String, val displaySymbol
     PTR_VOID("void*", "void_value_ptr", "%p"),
     PTR_STRING("char**", "string_ptr", "%p");
 
+    override fun toString(): String {
+        return cType
+    }
+
     companion object {
         /**
          * From string value (C syntax of the type), retrieve the object

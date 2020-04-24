@@ -5,6 +5,7 @@ import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_union.Cunion
 import com.david.mocassin.view.components.fragments.NewProjectModal
 import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
+import com.david.mocassin.view.components.wizards.generated_structures_wizards.slist_wizard.SlistWizard
 import com.david.mocassin.view.components.wizards.user_structures_wizards.enum_wizard.EnumWizard
 import com.david.mocassin.view.components.wizards.user_structures_wizards.struct_wizard.StructWizard
 import com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard.UnionWizard
@@ -108,6 +109,17 @@ class MainMenuBarController : Controller() {
                 CuserStructure("")
             structWizard.structModel.attributes.value.clear()
             structWizard.close()
+        }
+    }
+
+    fun newSlist() {
+        val slistWizard = SlistWizard()
+        slistWizard.openModal()
+        slistWizard.onComplete {
+            information(
+                "Slist successfully created !",
+                slistWizard.slistModel.item.toJSON().toString()
+            )
         }
     }
 }

@@ -2,5 +2,5 @@ package com.david.mocassin.model
 
 import kotlin.test.Test
 
-class DataStructureModelTest {
+class DataStructureTest {
 }

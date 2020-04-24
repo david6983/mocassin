@@ -102,7 +102,7 @@ class CuserStructure(name: String) : CuserType, JsonModel {
         }
     }
 
-    fun variablesToJSON(): JsonBuilder {
+    private fun variablesToJSON(): JsonBuilder {
         val out = JsonBuilder()
 
         for(attr in attributes) {
