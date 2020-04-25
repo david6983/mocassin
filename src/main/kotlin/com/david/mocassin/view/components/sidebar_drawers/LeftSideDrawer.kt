@@ -9,7 +9,7 @@ class LeftSideDrawer : View() {
 
     var userStructureTree: TreeView<String> by singleAssign()
     var generatedStructureTree: TreeView<String> by singleAssign()
-    var filesTree: TreeView<String> by singleAssign()
+    var filesList: ListView<String> by singleAssign()
 
     val userStructureRoot: TreeItem<String> = TreeItem(controller.packageName.value)
     val enumRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.ENUM)
@@ -90,13 +90,18 @@ class LeftSideDrawer : View() {
             }
         }
         item("Files view") {
-            treeview<String> {
-                filesTree = this
+            listview<String> {
+                filesList = this
 
-                root = fileRoot
-                //root.isExpanded = true
+                onDoubleClick {
+                    if (selectedItem != null) {
+                        controller.editTabPane.centerTabPane.tab(selectedItem)
+                    }
+                }
 
-                cellFormat { text = it }
+                onUserSelect {
+
+                }
             }
         }
     }

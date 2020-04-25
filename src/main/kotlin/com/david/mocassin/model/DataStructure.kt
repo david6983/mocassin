@@ -38,7 +38,7 @@ class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
         }
     }
 
-    fun  removeVariable(type : CtypeEnum) {
+    fun removeVariable(type : CtypeEnum) {
         userVariables.remove(type)
     }
 
@@ -112,17 +112,17 @@ class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
 
     private fun toCheader(config: Configuration, folderPath: String = userModel.packageName) {
         //TODO change according to the data structure type
-        val temp: Template? = config.getTemplate("SList_header.ftlh")
+        val temp: Template? = config.getTemplate("${type.shortname}_header.ftlh")
 
-        val fileWriter = FileWriter(File("$folderPath/${userModel.packageName}_Slist.h"))
+        val fileWriter = FileWriter(File("$folderPath/${userModel.packageName}_${type.shortname}.h"))
         temp!!.process(map, fileWriter)
         fileWriter.close()
     }
 
     private fun toCimplementation(config: Configuration, folderPath: String = userModel.packageName) {
-        val temp: Template? = config.getTemplate("SList_imp.ftlh")
+        val temp: Template? = config.getTemplate("${type.shortname}_imp.ftlh")
 
-        val fileWriter = FileWriter(File("$folderPath/${userModel.packageName}_Slist.c"))
+        val fileWriter = FileWriter(File("$folderPath/${userModel.packageName}_${type.shortname}.c"))
         temp!!.process(map, fileWriter)
         fileWriter.close()
     }

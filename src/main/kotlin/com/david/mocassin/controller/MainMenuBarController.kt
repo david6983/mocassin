@@ -56,7 +56,7 @@ class MainMenuBarController : Controller() {
                 projectController.generate(directory.toString())
             }
         } else {
-            warning("any data structures created", "add at least one data structure in the NEW menu")
+            warning("any data structures created", "add at least one data structure in the Generate menu")
         }
     }
 

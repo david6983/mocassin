@@ -3,6 +3,8 @@ package com.david.mocassin.controller
 import com.david.mocassin.model.DataStructure
 import com.david.mocassin.model.user_model.UserModel
 import com.david.mocassin.model.c_components.CtypeEnum
+import com.david.mocassin.model.c_components.c_struct.CuserStructure
+import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
 import javafx.beans.property.SimpleListProperty
@@ -34,6 +36,8 @@ class ProjectController: Controller(), JsonModel {
 
     private val userDataStructuresProperty = SimpleListProperty<DataStructure>()
     var userDataStructures: ObservableList<DataStructure> by userDataStructuresProperty
+
+    private val leftSideDrawer: LeftSideDrawer by inject()
 
     var nameDefault = "untitled"
 
@@ -125,8 +129,15 @@ class ProjectController: Controller(), JsonModel {
 
     fun generate(pathDir: String) {
         userModel.generate(cfg, pathDir)
+        leftSideDrawer.filesList.items.add("${userModel.packageName}_structures.h")
+
+        userModel.userStructureList.forEach {
+            leftSideDrawer.filesList.items.add("${userModel.packageName}_${(it as CuserStructure).name}.c")
+        }
         userDataStructures.forEach {
             it.generate(cfg, pathDir)
+            leftSideDrawer.filesList.items.add("${userModel.packageName}_${it.type.shortname}.h")
+            leftSideDrawer.filesList.items.add("${userModel.packageName}_${it.type.shortname}.c")
         }
     }
 

@@ -64,7 +64,7 @@ class MainMenuBar : View() {
                 controller.generateProject()
             }
         }
-        menu("Add") {
+        menu("Generate") {
             item(DataStructureEnum.SLIST.toString(), keyCombination = "Shortcut+L", graphic = controller.slistIcon){
                 addSlistItem = this
             }.action {
