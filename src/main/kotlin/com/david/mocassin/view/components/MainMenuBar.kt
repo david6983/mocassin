@@ -48,7 +48,7 @@ class MainMenuBar : View() {
             item("Save project locally", keyCombination = "Shortcut+S") {
                 graphic = hbox {
                     rectangle {
-                        fill = Color.BLUE
+                        fill = Color.YELLOW
                         width = 8.0
                         height = 32.0
                     }
@@ -56,13 +56,23 @@ class MainMenuBar : View() {
                 }
             }.action { controller.saveProjectLocally() }
             separator()
+            item("Generate", keyCombination = "Shortcut+G") {
+                graphic = hbox {
+                    rectangle {
+                        fill = Color.rgb(57 ,73 ,171)
+                        width = 8.0
+                        height = 32.0
+                    }
+                    imageview(resources["/icons/generate32.png"])
+                }
+            }.action {
+                controller.generateProject()
+            }
+            separator()
             item("Save to Web application", keyCombination = "Shortcut+W").isDisable = true
             item("Import from Web application", keyCombination = "Shortcut+I").isDisable = true
             separator()
             item("Test", keyCombination = "Shortcut+X").isDisable = true
-            item("Generate", keyCombination = "Shortcut+G").action {
-                controller.generateProject()
-            }
         }
         menu("Generate") {
             item(DataStructureEnum.SLIST.toString(), keyCombination = "Shortcut+L", graphic = controller.slistIcon){

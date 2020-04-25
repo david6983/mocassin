@@ -139,6 +139,7 @@ class ProjectController: Controller(), JsonModel {
             leftSideDrawer.filesList.items.add("${userModel.packageName}_${it.type.shortname}.h")
             leftSideDrawer.filesList.items.add("${userModel.packageName}_${it.type.shortname}.c")
         }
+        leftSideDrawer.fileDrawerItem.expanded = true
     }
 
     // launch Cunit Test (why not using a server image ?)

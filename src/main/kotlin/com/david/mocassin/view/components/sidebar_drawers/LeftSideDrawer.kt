@@ -20,6 +20,8 @@ class LeftSideDrawer : View() {
 
     val fileRoot: TreeItem<String> = TreeItem("nothing generated")
 
+    var fileDrawerItem: DrawerItem by singleAssign()
+
     fun clearAll() {
         enumRoot.children.clear()
         unionRoot.children.clear()
@@ -90,6 +92,7 @@ class LeftSideDrawer : View() {
             }
         }
         item("Files view") {
+            fileDrawerItem = this
             listview<String> {
                 filesList = this
 

@@ -56,6 +56,8 @@ class MainView: View(this.TITLE) {
                 }
                 button("Open") {
                     addClass("btn-warning", "btn-lg")
+                }.action {
+                    controller.mainMenuBarController.openFromComputer()
                 }
                 style {
                     alignment = Pos.CENTER
