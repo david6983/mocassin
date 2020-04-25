@@ -49,6 +49,17 @@ class MainMenuBarController : Controller() {
         }
     }
 
+    fun generateProject() {
+        if (!projectController.userDataStructures.isEmpty()) {
+            val directory = chooseDirectory("Select the output directory")
+            if (directory != null) {
+                projectController.generate(directory.toString())
+            }
+        } else {
+            warning("any data structures created", "add at least one data structure in the NEW menu")
+        }
+    }
+
     fun newEnum() {
         // we need to create a new wizard each time we add a new enumeration
         val enumWizard =

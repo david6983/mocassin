@@ -84,8 +84,8 @@ class UserModel(packageName: String) : JsonModel {
         userUnionList.clear()
     }
 
-    fun getNumberOfDataTypeForSlist(): Int {
-        return userStructureList?.size!! + userEnumList?.size!!
+    fun getNumberOfDataType(): Int {
+        return userStructureList?.size!! + userEnumList?.size!! + userUnionList?.size!!
     }
 
     fun getAllNamesAsEnumFormat(): String {
@@ -95,6 +95,9 @@ class UserModel(packageName: String) : JsonModel {
         }
         for (name in userEnumList) {
             out.append("\t" + (name as Cenum).name.decapitalize() + ",\n")
+        }
+        for (name in userUnionList) {
+            out.append("\t" + (name as Cunion).name.decapitalize() + ",\n")
         }
         return out.toString()
     }
@@ -111,6 +114,13 @@ class UserModel(packageName: String) : JsonModel {
         for (name in userEnumList) {
             out.append("\t"
                     + (name as Cenum).name
+                    + " "
+                    + name.name.decapitalize()
+                    + ";\n")
+        }
+        for (name in userUnionList) {
+            out.append("\t"
+                    + (name as Cunion).name
                     + " "
                     + name.name.decapitalize()
                     + ";\n")
@@ -201,7 +211,7 @@ class UserModel(packageName: String) : JsonModel {
         map[MAP_USER_UNION_ID] = userUnionList
         map[MAP_USER_ENUM_ID] = userEnumList
         map[MAP_USER_PROJECT_NAME] = addPackageNameToMap()
-
+        
         val directory = File(folderPath)
         // the directory doesn't exist
         if (! directory.exists()) {

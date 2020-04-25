@@ -60,7 +60,9 @@ class MainMenuBar : View() {
             item("Import from Web application", keyCombination = "Shortcut+I").isDisable = true
             separator()
             item("Test", keyCombination = "Shortcut+X").isDisable = true
-            item("Generate", keyCombination = "Shortcut+G")
+            item("Generate", keyCombination = "Shortcut+G").action {
+                controller.generateProject()
+            }
         }
         menu("Add") {
             item(DataStructureEnum.SLIST.toString(), keyCombination = "Shortcut+L", graphic = controller.slistIcon){

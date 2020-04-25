@@ -43,6 +43,8 @@ class MainView: View(this.TITLE) {
             toolbar {
                 button("Generate") {
                     addClass("btn-primary", "btn-lg")
+                }.action {
+                    controller.mainMenuBarController.generateProject()
                 }
                 button("Test") {
                     addClass("btn-success", "btn-lg")

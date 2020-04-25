@@ -102,6 +102,7 @@ class ProjectController: Controller(), JsonModel {
         // merge all json in one moc file
         with(json) {
             add("userModel", userModel.toJSON())
+            add("userVariables", userDataStructures.toJSON())
         }
     }
 
@@ -124,6 +125,9 @@ class ProjectController: Controller(), JsonModel {
 
     fun generate(pathDir: String) {
         userModel.generate(cfg, pathDir)
+        userDataStructures.forEach {
+            it.generate(cfg, pathDir)
+        }
     }
 
     // launch Cunit Test (why not using a server image ?)

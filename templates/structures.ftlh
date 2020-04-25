@@ -25,7 +25,7 @@ typedef enum ${enum.name} ${enum.name};
     <#list user_enums as enum>
         <@macros.enum
         name="${enum.name}"
-        attrs="${enum.attributesToString()}"
+        attrs="${enum.attributesToCformatString()}"
         />
     </#list>
 <#else></#if>

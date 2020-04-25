@@ -56,7 +56,7 @@ class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
     }
 
     private fun updateModel() {
-        map["nb_data_type"] = (userModel.getNumberOfDataTypeForSlist() + userVariables.size).toString()
+        map["nb_data_type"] = (userModel.getNumberOfDataType() + userVariables.size).toString()
         map["slist_data_type"] = userModel.getAllNamesAsEnumFormat() + getAllVariableNamesAsEnumFormat()
         map["slist_single_data"] = userModel.getAllNamesAsUnionFormat() + getAllVariableNamesAsUnionFormat()
         map["slist_data_names"] = userModel.getAllNamesForComparison().toString()
@@ -152,7 +152,6 @@ class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
 
     override fun toJSON(json: JsonBuilder) {
         with(json) {
-            add("model", userModel.toJSON())
             add("variables", variablesToJSON())
         }
     }
