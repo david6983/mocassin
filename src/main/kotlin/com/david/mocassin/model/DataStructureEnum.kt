@@ -14,4 +14,16 @@ enum class DataStructureEnum(val fullname: String, val shortname: String) {
     override fun toString(): String {
         return fullname
     }
+
+    companion object {
+        /**
+         * From shortname string value, retrieve the object
+         *
+         * @param shortname shortname
+         * @return
+         */
+        fun find(shortname: String): DataStructureEnum? {
+            return DataStructureEnum.values().find { it.shortname == shortname }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.david.mocassin.controller
 
 import com.david.mocassin.model.DataStructure
+import com.david.mocassin.model.DataStructureEnum
 import com.david.mocassin.model.user_model.UserModel
 import com.david.mocassin.model.c_components.CtypeEnum
 import com.david.mocassin.model.c_components.c_struct.CuserStructure
@@ -14,6 +15,7 @@ import javafx.collections.ObservableList
 import tornadofx.*
 import java.io.File
 import java.io.IOException
+import javax.json.JsonObject
 
 /**
  * A project can be considerate in two ways :
@@ -108,6 +110,23 @@ class ProjectController: Controller(), JsonModel {
             add("userModel", userModel.toJSON())
             add("userVariables", userDataStructures.toJSON())
         }
+    }
+
+    override fun updateModel(json: JsonObject) {
+        with(json) {
+            userModel.updateModel(getJsonObject("userModel"))
+
+            getJsonArray("userVariables")?.let {
+                for (dataStructure in it) {
+                    DataStructure(userModel, DataStructureEnum.SLIST).let { struct ->
+                        struct.updateModel(dataStructure.asJsonObject())
+                        userDataStructures.add(struct)
+                    }
+                }
+            }
+        }
+        println(userModel.toJSON().toString())
+        println(userDataStructures.toJSON().toString())
     }
 
     fun saveToMocFile(pathDir: String?) {

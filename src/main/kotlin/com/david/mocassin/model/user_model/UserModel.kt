@@ -2,6 +2,7 @@ package com.david.mocassin.model.user_model
 
 import com.david.mocassin.model.c_components.*
 import com.david.mocassin.model.c_components.c_enum.Cenum
+import com.david.mocassin.model.c_components.c_enum.CenumAttribute
 import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_union.Cunion
 import freemarker.template.Configuration
@@ -14,7 +15,10 @@ import java.io.FileWriter
 import java.lang.StringBuilder
 
 import tornadofx.*
+import javax.json.Json
+import javax.json.JsonArrayBuilder
 import javax.json.JsonObject
+import javax.json.JsonValue
 
 //TODO JSON with tornadofx
 
@@ -249,31 +253,31 @@ class UserModel(packageName: String) : JsonModel {
         return out.toString()
     }
 
-    private fun enumsToJSON(): JsonBuilder {
-        val out = JsonBuilder()
+    private fun enumsToJSON(): JsonArrayBuilder {
+        val out = Json.createArrayBuilder()
 
         for(enum in userEnumList) {
-            out.add((enum as Cenum).name, enum.toJSON())
+            out.add((enum as Cenum).toJSON())
         }
 
         return out
     }
 
-    private fun unionsToJSON(): JsonBuilder {
-        val out = JsonBuilder()
+    private fun unionsToJSON(): JsonArrayBuilder {
+        val out = Json.createArrayBuilder()
 
         for(union in userUnionList) {
-            out.add((union as Cunion).name, union.toJSON())
+            out.add((union as Cunion).toJSON())
         }
 
         return out
     }
 
-    private fun structsToJSON(): JsonBuilder {
-        val out = JsonBuilder()
+    private fun structsToJSON(): JsonArrayBuilder {
+        val out = Json.createArrayBuilder()
 
         for(struct in userStructureList) {
-            out.add((struct as CuserStructure).name, struct.toJSON())
+            out.add((struct as CuserStructure).toJSON())
         }
 
         return out
@@ -284,6 +288,41 @@ class UserModel(packageName: String) : JsonModel {
             add("enums", enumsToJSON())
             add("unions", unionsToJSON())
             add("structs", structsToJSON())
+        }
+    }
+
+    override fun updateModel(json: JsonObject) {
+        with(json) {
+            getJsonArray("enums")?.let {
+                for (enum in it) {
+                    with(enum.asJsonObject()) {
+                        Cenum("").let { e ->
+                            e.updateModel(this)
+                            userEnumList.add(e)
+                        }
+                    }
+                }
+            }
+            getJsonArray("unions")?.let {
+                for (union in it) {
+                    with(union.asJsonObject()) {
+                        Cunion("").let { u ->
+                            u.updateModel(this)
+                            userUnionList.add(u)
+                        }
+                    }
+                }
+            }
+            getJsonArray("structs")?.let {
+                for (struct in it) {
+                    with(struct.asJsonObject()) {
+                        CuserStructure("").let { s ->
+                            s.updateModel(this)
+                            userStructureList.add(s)
+                        }
+                    }
+                }
+            }
         }
     }
 

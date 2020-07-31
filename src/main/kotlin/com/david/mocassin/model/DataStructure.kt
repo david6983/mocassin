@@ -11,6 +11,10 @@ import java.io.File
 import java.io.FileWriter
 
 import tornadofx.*
+import javax.json.Json
+import javax.json.JsonArray
+import javax.json.JsonArrayBuilder
+import javax.json.JsonObject
 
 /**
  * DataStructure represent either a Slist, Dlist, Tree, BinaryTree and so on
@@ -140,11 +144,11 @@ class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
         return out.toString()
     }
 
-    private fun variablesToJSON(): JsonBuilder {
-        val out = JsonBuilder()
+    private fun variablesToJSON(): JsonArrayBuilder? {
+        val out = Json.createArrayBuilder()
 
-        for((attr, index) in userVariables.withIndex()) {
-            out.add(attr.toString(), index.toString())
+        for(attr in userVariables) {
+            out.add(attr.toString())
         }
 
         return out
@@ -152,7 +156,21 @@ class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
 
     override fun toJSON(json: JsonBuilder) {
         with(json) {
+            add("name", type.shortname)
             add("variables", variablesToJSON())
+        }
+    }
+
+    override fun updateModel(json: JsonObject) {
+        with(json) {
+            type = string("name")?.let { DataStructureEnum.find(it) }
+            getJsonArray("variables")?.let { variables ->
+                for (variable in variables) {
+                    CtypeEnum.find(variable.toString().removeSurrounding("\"", "\""))?.let { enum ->
+                        userVariables.add(enum)
+                    }
+                }
+            }
         }
     }
 

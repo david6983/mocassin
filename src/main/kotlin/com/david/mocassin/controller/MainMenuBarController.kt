@@ -5,6 +5,7 @@ import com.david.mocassin.model.DataStructureEnum
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_union.Cunion
+import com.david.mocassin.view.MainView
 import com.david.mocassin.view.components.MainMenuBar
 import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import com.david.mocassin.view.components.wizards.generated_structures_wizards.slist_wizard.SlistWizard
@@ -13,9 +14,13 @@ import com.david.mocassin.view.components.wizards.user_structures_wizards.struct
 import com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard.UnionWizard
 import javafx.stage.FileChooser
 import tornadofx.*
+import java.nio.file.Path
+import javax.json.JsonObject
+
 
 class MainMenuBarController : Controller() {
     private val mainMenuBar: MainMenuBar by inject()
+    private val mainView: MainView by inject()
     val projectController: ProjectController by inject()
     val leftSideDrawer: LeftSideDrawer by inject()
 
@@ -35,7 +40,12 @@ class MainMenuBarController : Controller() {
             ef,
             FileChooserMode.Single
         )
-        println(file)
+        val packageName = file.first().name.split(".").first()
+        projectController.name = packageName
+        mainView.title = MainView.TITLE + " [${packageName}]"
+
+        val inputObject: JsonObject = loadJsonObject(Path.of(file.component1().toString()))
+        projectController.updateModel(inputObject)
     }
 
     fun saveProjectLocally() {
