@@ -35,17 +35,20 @@ class MainMenuBarController : Controller() {
 
     fun openFromComputer() {
         val ef = arrayOf(FileChooser.ExtensionFilter("Mocassin file (*.moc)", "*.moc"))
-        val file = chooseFile(
+        chooseFile(
             "Select a .moc file to open",
             ef,
             FileChooserMode.Single
-        )
-        val packageName = file.first().name.split(".").first()
-        projectController.name = packageName
-        mainView.title = MainView.TITLE + " [${packageName}]"
+        ).let { file ->
+            if (file.isNotEmpty()) {
+                val packageName = file.first().name.split(".").first()
+                projectController.name = packageName
+                mainView.title = MainView.TITLE + " [${packageName}]"
 
-        val inputObject: JsonObject = loadJsonObject(Path.of(file.component1().toString()))
-        projectController.updateModel(inputObject)
+                val inputObject: JsonObject = loadJsonObject(Path.of(file.component1().toString()))
+                projectController.updateModel(inputObject)
+            }
+        }
     }
 
     fun saveProjectLocally() {
@@ -81,7 +84,7 @@ class MainMenuBarController : Controller() {
             // save the enumeration
             projectController.userModel.add(enumWizard.enumModel.item)
             // update tree view of user's structures
-            leftSideDrawer.controller.addEnumNode(leftSideDrawer.enumRoot)
+            leftSideDrawer.controller.addLastEnumNode(leftSideDrawer.enumRoot)
 
             information(
                 "Enumeration successfully added !",
@@ -101,7 +104,7 @@ class MainMenuBarController : Controller() {
         unionWizard.onComplete {
             projectController.userModel.add(unionWizard.unionModel.item)
             // update tree view of user's structures
-            leftSideDrawer.controller.addUnionNode(leftSideDrawer.unionRoot)
+            leftSideDrawer.controller.addLastUnionNode(leftSideDrawer.unionRoot)
 
             information(
                 "Union successfully added !",
@@ -121,7 +124,7 @@ class MainMenuBarController : Controller() {
         structWizard.onComplete {
             projectController.userModel.add(structWizard.structModel.item)
             // update tree view of user's structures
-            leftSideDrawer.controller.addStructNode(leftSideDrawer.structRoot)
+            leftSideDrawer.controller.addLastStructNode(leftSideDrawer.structRoot)
 
             information(
                 "Struct successfully added !",
@@ -141,7 +144,7 @@ class MainMenuBarController : Controller() {
         slistWizard.onComplete {
             projectController.userDataStructures.add(slistWizard.slistModel.item)
             // update tree vies
-            leftSideDrawer.controller.addSlistNode(leftSideDrawer.slistRoot)
+            leftSideDrawer.controller.addLastSlistNode(leftSideDrawer.slistRoot)
             // disable add slist
             mainMenuBar.addSlistItem.isDisable = true
 

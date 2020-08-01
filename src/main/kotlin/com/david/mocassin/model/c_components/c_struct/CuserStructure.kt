@@ -1,5 +1,6 @@
 package com.david.mocassin.model.c_components.c_struct
 
+import com.david.mocassin.model.c_components.CtypeEnum
 import com.david.mocassin.model.c_components.CuserType
 import com.david.mocassin.model.c_components.c_variable.Cvariable
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
@@ -13,6 +14,9 @@ import java.io.File
 import java.io.FileWriter
 
 import tornadofx.*
+import javax.json.Json
+import javax.json.JsonArrayBuilder
+import javax.json.JsonObject
 
 class CuserStructure(name: String) : CuserType, JsonModel {
     val nameProperty = SimpleStringProperty(name)
@@ -102,11 +106,11 @@ class CuserStructure(name: String) : CuserType, JsonModel {
         }
     }
 
-    private fun variablesToJSON(): JsonBuilder {
-        val out = JsonBuilder()
+    private fun variablesToJSON(): JsonArrayBuilder {
+        val out = Json.createArrayBuilder()
 
         for(attr in attributes) {
-            out.add(attr.name, attr.toJSON())
+            out.add(attr.toJSON())
         }
 
         return out
@@ -117,6 +121,18 @@ class CuserStructure(name: String) : CuserType, JsonModel {
             add("name", name)
             add("isDisplayFunctionGenerated", isDisplayFunctionGenerated)
             add("variables", variablesToJSON())
+        }
+    }
+
+    override fun updateModel(json: JsonObject) {
+        with(json) {
+            name = string("name")
+            isDisplayFunctionGenerated = boolean("isDisplayFunctionGenerated")!!
+            getJsonArray("variables")?.forEach { variable ->
+                val v = Cvariable("", CtypeEnum.INT, isPointer = false, isComparable = false)
+                v.updateModel(variable as JsonObject)
+                attributes.add(v)
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.david.mocassin.model.c_components.c_union
 
+import com.david.mocassin.model.c_components.CtypeEnum
 import com.david.mocassin.model.c_components.CuserType
 import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_variable.Cvariable
@@ -8,6 +9,9 @@ import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.ObservableList
 import tornadofx.*
+import javax.json.Json
+import javax.json.JsonArrayBuilder
+import javax.json.JsonObject
 
 //TODO JSON
 
@@ -61,11 +65,11 @@ class Cunion(name: String) : CuserType, JsonModel  {
         return stringBuilder.toString()
     }
 
-    fun variablesToJSON(): JsonBuilder {
-        val out = JsonBuilder()
+    fun variablesToJSON(): JsonArrayBuilder {
+        val out = Json.createArrayBuilder()
 
         for(attr in attributes) {
-            out.add(attr.name, attr.toJSON())
+            out.add(attr.toJSON())
         }
 
         return out
@@ -91,6 +95,17 @@ class Cunion(name: String) : CuserType, JsonModel  {
         with(json) {
             add("name", name)
             add("variables", variablesToJSON())
+        }
+    }
+
+    override fun updateModel(json: JsonObject) {
+        with(json) {
+            name = string("name")
+            getJsonArray("variables")?.forEach { variable ->
+                val v = Cvariable("", CtypeEnum.INT, isPointer = false, isComparable = false)
+                v.updateModel(variable as JsonObject)
+                attributes.add(v)
+            }
         }
     }
 }

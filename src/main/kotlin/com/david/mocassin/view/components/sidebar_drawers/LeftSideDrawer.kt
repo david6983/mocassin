@@ -62,7 +62,7 @@ class LeftSideDrawer : View() {
                 root = userStructureRoot
                 root.isExpanded = true
 
-                controller.addEnumNode(enumRoot)
+                controller.addLastEnumNode(enumRoot)
 
                 root.children.add(enumRoot)
                 root.children.add(unionRoot)

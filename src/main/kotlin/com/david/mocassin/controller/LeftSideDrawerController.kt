@@ -1,6 +1,7 @@
 package com.david.mocassin.controller
 
 import com.david.mocassin.model.DataStructureEnum
+import com.david.mocassin.model.c_components.CuserType
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_union.Cunion
@@ -19,48 +20,97 @@ class LeftSideDrawerController : Controller() {
     val packageName: SimpleStringProperty =
         SimpleStringProperty(projectController.userModel.packageName)
 
-    fun addEnumNode(root: TreeItem<String>) {
+    private fun addEnumNode(root: TreeItem<String>, enum: CuserType): Boolean {
+        val node = TreeItem<String>((enum as Cenum).name)
+
+        enum.attributes.forEach { attribute ->
+            node.children.add(TreeItem<String>("${attribute.name} [${attribute.value}]"))
+        }
+
+        return root.children.add(node)
+    }
+
+    fun addLastEnumNode(root: TreeItem<String>) {
         if (!projectController.userModel.userEnumList.isEmpty()) {
             projectController.userModel.userEnumList.last { enum ->
-                val node =
-                    TreeItem<String>((enum as Cenum).name)
-                enum.attributes.forEach { attribute ->
-                    node.children.add(TreeItem<String>("${attribute.name} [${attribute.value}]"))
-                }
-                root.children.add(node)
+                addEnumNode(root, enum)
             }
         }
     }
 
-    fun addUnionNode(root: TreeItem<String>) {
+    fun updateEnumTree(root: TreeItem<String>) {
+        if (!projectController.userModel.userEnumList.isEmpty()) {
+            projectController.userModel.userEnumList.forEach { enum ->
+                addEnumNode(root, enum)
+            }
+        }
+    }
+
+    private fun addUnionNode(root: TreeItem<String>, union: CuserType): Boolean {
+        val node = TreeItem<String>((union as Cunion).name)
+
+        union.attributes.forEach { attribute ->
+            node.children.add(TreeItem<String>("${attribute.name} [${attribute.getTypeAsString()}]"))
+        }
+
+        return root.children.add(node)
+    }
+
+    fun addLastUnionNode(root: TreeItem<String>) {
         if (!projectController.userModel.userUnionList.isEmpty()) {
             projectController.userModel.userUnionList.last { union ->
-                val node =
-                    TreeItem<String>((union as Cunion).name)
-                union.attributes.forEach { attribute ->
-                    node.children.add(TreeItem<String>("${attribute.name} [${attribute.getTypeAsString()}]"))
-                }
-                root.children.add(node)
+                addUnionNode(root, union)
             }
         }
     }
 
-    fun addStructNode(root: TreeItem<String>) {
+    fun updateUnionTree(root: TreeItem<String>) {
+        if (!projectController.userModel.userUnionList.isEmpty()) {
+            projectController.userModel.userUnionList.forEach { union ->
+                addUnionNode(root, union)
+            }
+        }
+    }
+
+    private fun addStructNode(root: TreeItem<String>, struct: CuserType): Boolean {
+        val node = TreeItem<String>((struct as CuserStructure).name)
+
+        struct.attributes.forEach { attribute ->
+            node.children.add(TreeItem<String>("${attribute.name} [${attribute.getTypeAsString()}]"))
+        }
+
+        return root.children.add(node)
+    }
+
+    fun addLastStructNode(root: TreeItem<String>) {
         if (!projectController.userModel.userStructureList.isEmpty()) {
             projectController.userModel.userStructureList.last { struct ->
-                val node =
-                    TreeItem<String>((struct as CuserStructure).name)
-                struct.attributes.forEach { attribute ->
-                    node.children.add(TreeItem<String>("${attribute.name} [${attribute.getTypeAsString()}]"))
-                }
-                root.children.add(node)
+                addStructNode(root, struct)
             }
         }
     }
 
-    fun addSlistNode(root: TreeItem<String>) {
+    fun updateStructTree(root: TreeItem<String>) {
+        if (!projectController.userModel.userStructureList.isEmpty()) {
+            projectController.userModel.userStructureList.forEach { struct ->
+                addStructNode(root, struct)
+            }
+        }
+    }
+
+    fun addLastSlistNode(root: TreeItem<String>) {
         if (!projectController.userDataStructures.isEmpty()) {
             projectController.userDataStructures.last { slist ->
+                return slist.userVariables.forEach { type ->
+                    root.children.add(TreeItem(type.toString()))
+                }
+            }
+        }
+    }
+
+    fun updateSlistTree(root: TreeItem<String>) {
+        if (!projectController.userDataStructures.isEmpty()) {
+            projectController.userDataStructures.forEach { slist ->
                 return slist.userVariables.forEach { type ->
                     root.children.add(TreeItem(type.toString()))
                 }

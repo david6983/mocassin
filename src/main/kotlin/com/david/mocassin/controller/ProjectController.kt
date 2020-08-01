@@ -116,17 +116,21 @@ class ProjectController: Controller(), JsonModel {
         with(json) {
             userModel.updateModel(getJsonObject("userModel"))
 
-            getJsonArray("userVariables")?.let {
-                for (dataStructure in it) {
-                    DataStructure(userModel, DataStructureEnum.SLIST).let { struct ->
-                        struct.updateModel(dataStructure.asJsonObject())
-                        userDataStructures.add(struct)
-                    }
+            getJsonArray("userVariables")?.forEach { dataStructure ->
+                DataStructure(userModel, DataStructureEnum.SLIST).let { struct ->
+                    struct.updateModel(dataStructure.asJsonObject())
+                    userDataStructures.add(struct)
                 }
             }
         }
         println(userModel.toJSON().toString())
         println(userDataStructures.toJSON().toString())
+
+        leftSideDrawer.controller.updateEnumTree(leftSideDrawer.enumRoot)
+        leftSideDrawer.controller.updateUnionTree(leftSideDrawer.unionRoot)
+        leftSideDrawer.controller.updateStructTree(leftSideDrawer.structRoot)
+
+        leftSideDrawer.controller.updateSlistTree(leftSideDrawer.slistRoot)
     }
 
     fun saveToMocFile(pathDir: String?) {

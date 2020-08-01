@@ -164,11 +164,9 @@ class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
     override fun updateModel(json: JsonObject) {
         with(json) {
             type = string("name")?.let { DataStructureEnum.find(it) }
-            getJsonArray("variables")?.let { variables ->
-                for (variable in variables) {
-                    CtypeEnum.find(variable.toString().removeSurrounding("\"", "\""))?.let { enum ->
-                        userVariables.add(enum)
-                    }
+            getJsonArray("variables")?.forEach { variable ->
+                CtypeEnum.find(variable.toString().removeSurrounding("\"", "\""))?.let { enum ->
+                    userVariables.add(enum)
                 }
             }
         }

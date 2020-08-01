@@ -293,33 +293,27 @@ class UserModel(packageName: String) : JsonModel {
 
     override fun updateModel(json: JsonObject) {
         with(json) {
-            getJsonArray("enums")?.let {
-                for (enum in it) {
-                    with(enum.asJsonObject()) {
-                        Cenum("").let { e ->
-                            e.updateModel(this)
-                            userEnumList.add(e)
-                        }
+            getJsonArray("enums")?.forEach { enum ->
+                with(enum.asJsonObject()) {
+                    Cenum("").let { e ->
+                        e.updateModel(this)
+                        userEnumList.add(e)
                     }
                 }
             }
-            getJsonArray("unions")?.let {
-                for (union in it) {
-                    with(union.asJsonObject()) {
-                        Cunion("").let { u ->
-                            u.updateModel(this)
-                            userUnionList.add(u)
-                        }
+            getJsonArray("unions")?.forEach { union ->
+                with(union.asJsonObject()) {
+                    Cunion("").let { u ->
+                        u.updateModel(this)
+                        userUnionList.add(u)
                     }
                 }
             }
-            getJsonArray("structs")?.let {
-                for (struct in it) {
-                    with(struct.asJsonObject()) {
-                        CuserStructure("").let { s ->
-                            s.updateModel(this)
-                            userStructureList.add(s)
-                        }
+            getJsonArray("structs")?.forEach { struct ->
+                with(struct.asJsonObject()) {
+                    CuserStructure("").let { s ->
+                        s.updateModel(this)
+                        userStructureList.add(s)
                     }
                 }
             }
