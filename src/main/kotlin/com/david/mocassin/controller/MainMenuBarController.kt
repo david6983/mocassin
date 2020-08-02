@@ -43,6 +43,7 @@ class MainMenuBarController : Controller() {
             if (file.isNotEmpty()) {
                 val packageName = file.first().name.split(".").first()
                 projectController.name = packageName
+                leftSideDrawer.controller.packageName.value = packageName
                 mainView.title = MainView.TITLE + " [${packageName}]"
 
                 val inputObject: JsonObject = loadJsonObject(Path.of(file.component1().toString()))

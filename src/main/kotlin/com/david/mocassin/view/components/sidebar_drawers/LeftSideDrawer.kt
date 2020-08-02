@@ -12,6 +12,8 @@ class LeftSideDrawer : View() {
     var filesList: ListView<String> by singleAssign()
 
     val userStructureRoot: TreeItem<String> = TreeItem(controller.packageName.value)
+    val generatedStructureRoot: TreeItem<String> = TreeItem(controller.packageName.value)
+
     val enumRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.ENUM)
     val unionRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.UNION)
     val structRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.STRUCT)
@@ -19,6 +21,13 @@ class LeftSideDrawer : View() {
     val slistRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.SLIST)
 
     var fileDrawerItem: DrawerItem by singleAssign()
+
+    init {
+        controller.packageName.onChange {
+            userStructureRoot.value = it
+            generatedStructureRoot.value = it
+        }
+    }
 
     fun clearAll() {
         enumRoot.children.clear()
@@ -36,7 +45,7 @@ class LeftSideDrawer : View() {
             treeview<String> {
                 generatedStructureTree = this
 
-                root = TreeItem(controller.packageName.value)
+                root = generatedStructureRoot
                 root.isExpanded = true
 
                 root.children.add(slistRoot)

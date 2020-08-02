@@ -11,6 +11,7 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.MultipleSelectionModel
 import javafx.scene.control.TreeItem
 import tornadofx.Controller
+import tornadofx.onChange
 
 class LeftSideDrawerController : Controller() {
     private val projectController: ProjectController by inject()
