@@ -72,27 +72,33 @@ class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
     }
 
     private fun getAllVariableNamesAsEnumFormat(): String {
-        val out = StringBuilder()
-        for (type in userVariables) {
-            out.append("\t" + type.enumValue + ",\n")
+        val out = StringBuilder("")
+        if (userVariables.isNotEmpty()) {
+            userVariables.forEach { type ->
+                out.append("\t" + type.enumValue + ",\n")
+            }
+            out.deleteCharAt(out.length - 1)
         }
-        out.deleteCharAt(out.length - 1)
         return out.toString()
     }
 
     private fun getAllVariableNamesAsUnionFormat(): String {
-        val out = StringBuilder()
-        for (type in userVariables) {
-            out.append("\t${type.cType} ${type.enumValue};\n")
+        val out = StringBuilder("")
+        if (userVariables.isNotEmpty()) {
+            userVariables.forEach { type ->
+                out.append("\t${type.cType} ${type.enumValue};\n")
+            }
+            out.deleteCharAt(out.length - 1)
         }
-        out.deleteCharAt(out.length - 1)
         return out.toString()
     }
 
     private fun getAllVariableNames(): ArrayList<String> {
         val out = ArrayList<String>()
-        for (type in userVariables) {
-            out.add(type.enumValue)
+        if (userVariables.isNotEmpty()) {
+            userVariables.forEach { type ->
+                out.add(type.enumValue)
+            }
         }
         return out
     }
@@ -107,8 +113,10 @@ class DataStructure(userModel: UserModel, type: DataStructureEnum): JsonModel {
 
     private fun getAllVariableTypes(): ArrayList<String> {
         val out = ArrayList<String>()
-        for (type in userVariables) {
-            out.add(type.cType)
+        if (userVariables.isNotEmpty()) {
+            userVariables.forEach { type ->
+                out.add(type.cType)
+            }
         }
         return out
     }

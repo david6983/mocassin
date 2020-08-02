@@ -40,8 +40,11 @@ class ProjectController: Controller(), JsonModel {
     private val userDataStructuresProperty = SimpleListProperty<DataStructure>()
     var userDataStructures: ObservableList<DataStructure> by userDataStructuresProperty
 
-    private val pathProperty = SimpleStringProperty("undefined")
-    private var pathName by pathProperty
+    private val pathProperty = SimpleStringProperty(DEFAULT_PATH)
+    var pathName by pathProperty
+
+    private val fileListProperty = SimpleListProperty<String>()
+    var fileList by fileListProperty
 
     private val leftSideDrawer: LeftSideDrawer by inject()
 
@@ -61,6 +64,8 @@ class ProjectController: Controller(), JsonModel {
     init {
         userModel = UserModel(nameDefault)
         userDataStructures = mutableListOf<DataStructure>().toObservable()
+
+        fileList = mutableListOf<String>().toObservable()
 
         initTemplateConfiguration()
     }
@@ -136,7 +141,12 @@ class ProjectController: Controller(), JsonModel {
 
         leftSideDrawer.controller.updateSlistTree(leftSideDrawer.slistRoot)
 
-        println(pathName)
+        if (pathName != DEFAULT_PATH) {
+            // it means, we have already generated files, we need to generate the file list
+            fileList.clear()
+            updateFilesList()
+            updateFilesListUiTree()
+        }
     }
 
     fun saveToMocFile(pathDir: String?) {
@@ -157,16 +167,31 @@ class ProjectController: Controller(), JsonModel {
     fun generate(pathDir: String) {
         pathName = pathDir
         userModel.generate(cfg, pathDir)
-        leftSideDrawer.filesList.items.add("${userModel.packageName}_structures.h")
 
-        userModel.userStructureList.forEach {
-            leftSideDrawer.filesList.items.add("${userModel.packageName}_${(it as CuserStructure).name}.c")
-        }
         userDataStructures.forEach {
             it.generate(cfg, pathDir)
-            leftSideDrawer.filesList.items.add("${userModel.packageName}_${it.type.shortname}.h")
-            leftSideDrawer.filesList.items.add("${userModel.packageName}_${it.type.shortname}.c")
         }
+
+        updateFilesList()
+        updateFilesListUiTree()
+    }
+
+    private fun updateFilesList() {
+        if (fileList.isEmpty()) {
+            fileList.add("${userModel.packageName}_structures.h")
+
+            userModel.userStructureList.forEach {
+                fileList.add("${userModel.packageName}_${(it as CuserStructure).name}.c")
+            }
+            userDataStructures.forEach {
+                fileList.add("${userModel.packageName}_${it.type.shortname}.h")
+                fileList.add("${userModel.packageName}_${it.type.shortname}.c")
+            }
+        }
+    }
+
+    private fun updateFilesListUiTree() {
+        leftSideDrawer.filesList.items.setAll(fileList)
         leftSideDrawer.fileDrawerItem.expanded = true
     }
 
@@ -211,5 +236,6 @@ class ProjectController: Controller(), JsonModel {
         const val ENUM = "enum"
         const val UNION = "union"
         const val STRUCT = "struct"
+        const val DEFAULT_PATH = "undefined"
     }
 }

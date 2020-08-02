@@ -23,6 +23,8 @@ class NewProjectModal: Fragment("Create a new project") {
                 // clean up the model and update the package name
                 projectController.cleanModel()
                 projectController.name = nameField.text
+                projectController.pathName = ProjectController.DEFAULT_PATH
+
 
                 // clean up the view
                 leftSideDrawer.clearAll()
