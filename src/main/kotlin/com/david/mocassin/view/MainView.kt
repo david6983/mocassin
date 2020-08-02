@@ -81,7 +81,6 @@ class MainView: View(this.TITLE) {
 
     override fun onDock() {
         currentWindow?.setOnCloseRequest { event ->
-            println("Closing")
             alert(Alert.AlertType.CONFIRMATION,
                 "Quit without saving",
                 "Are you sure you want to quit without saving ?").let {

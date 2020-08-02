@@ -10,6 +10,7 @@ import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
 import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleObjectProperty
+import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import tornadofx.*
@@ -38,6 +39,9 @@ class ProjectController: Controller(), JsonModel {
 
     private val userDataStructuresProperty = SimpleListProperty<DataStructure>()
     var userDataStructures: ObservableList<DataStructure> by userDataStructuresProperty
+
+    private val pathProperty = SimpleStringProperty("undefined")
+    private var pathName by pathProperty
 
     private val leftSideDrawer: LeftSideDrawer by inject()
 
@@ -109,12 +113,14 @@ class ProjectController: Controller(), JsonModel {
         with(json) {
             add("userModel", userModel.toJSON())
             add("userVariables", userDataStructures.toJSON())
+            add("pathGeneratedFiles", pathName)
         }
     }
 
     override fun updateModel(json: JsonObject) {
         with(json) {
             userModel.updateModel(getJsonObject("userModel"))
+            pathName = string("pathGeneratedFiles")
 
             getJsonArray("userVariables")?.forEach { dataStructure ->
                 DataStructure(userModel, DataStructureEnum.SLIST).let { struct ->
@@ -129,12 +135,12 @@ class ProjectController: Controller(), JsonModel {
         leftSideDrawer.controller.updateStructTree(leftSideDrawer.structRoot)
 
         leftSideDrawer.controller.updateSlistTree(leftSideDrawer.slistRoot)
+
+        println(pathName)
     }
 
     fun saveToMocFile(pathDir: String?) {
         if (pathDir != null) {
-            //userModel.save(pathDir)
-
             val directory = File(pathDir)
 
             // the directory doesn't exist
@@ -149,6 +155,7 @@ class ProjectController: Controller(), JsonModel {
     }
 
     fun generate(pathDir: String) {
+        pathName = pathDir
         userModel.generate(cfg, pathDir)
         leftSideDrawer.filesList.items.add("${userModel.packageName}_structures.h")
 

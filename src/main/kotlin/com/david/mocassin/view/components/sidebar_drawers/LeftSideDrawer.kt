@@ -105,14 +105,7 @@ class LeftSideDrawer : View() {
                 filesList = this
 
                 onDoubleClick {
-                    //if (selectedItem != null) {
-                        //controller.editTabPane.centerTabPane.tab(selectedItem)
-                    //}
-                    println(selectedItem)
-                }
-
-                onUserSelect {
-
+                    println(this.selectedItem)
                 }
             }
         }

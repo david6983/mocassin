@@ -27,6 +27,7 @@ class NewProjectModal: Fragment("Create a new project") {
                 // clean up the view
                 leftSideDrawer.clearAll()
                 leftSideDrawer.userStructureRoot.value = nameField.text
+                leftSideDrawer.generatedStructureRoot.value = nameField.text
                 mainView.updatePackageNameInTitle(nameField.text)
 
                 close()
