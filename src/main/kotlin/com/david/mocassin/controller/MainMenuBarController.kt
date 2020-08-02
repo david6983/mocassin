@@ -5,6 +5,7 @@ import com.david.mocassin.model.DataStructureEnum
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_union.Cunion
+import com.david.mocassin.utils.readStringFromBinaryFile
 import com.david.mocassin.view.MainView
 import com.david.mocassin.view.components.MainMenuBar
 import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
@@ -12,6 +13,7 @@ import com.david.mocassin.view.components.wizards.generated_structures_wizards.s
 import com.david.mocassin.view.components.wizards.user_structures_wizards.enum_wizard.EnumWizard
 import com.david.mocassin.view.components.wizards.user_structures_wizards.struct_wizard.StructWizard
 import com.david.mocassin.view.components.wizards.user_structures_wizards.union_wizard.UnionWizard
+import edu.upm.david.security.gamalcrypt.cryptography.Cryptorithm
 import javafx.stage.FileChooser
 import tornadofx.*
 import java.nio.file.Path
@@ -46,7 +48,9 @@ class MainMenuBarController : Controller() {
                 leftSideDrawer.controller.packageName.value = packageName
                 mainView.title = MainView.TITLE + " [${packageName}]"
 
-                val inputObject: JsonObject = loadJsonObject(Path.of(file.component1().toString()))
+                val content = Cryptorithm.decrypt(readStringFromBinaryFile(file.component1()))
+
+                val inputObject: JsonObject = loadJsonObject(content)
                 projectController.updateModel(inputObject)
             }
         }

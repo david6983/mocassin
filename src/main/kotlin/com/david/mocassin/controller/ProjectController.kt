@@ -5,7 +5,9 @@ import com.david.mocassin.model.DataStructureEnum
 import com.david.mocassin.model.user_model.UserModel
 import com.david.mocassin.model.c_components.CtypeEnum
 import com.david.mocassin.model.c_components.c_struct.CuserStructure
+import com.david.mocassin.utils.saveStringToBinaryFile
 import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
+import edu.upm.david.security.gamalcrypt.cryptography.Cryptorithm
 import freemarker.template.Configuration
 import freemarker.template.TemplateExceptionHandler
 import javafx.beans.property.SimpleListProperty
@@ -159,7 +161,8 @@ class ProjectController: Controller(), JsonModel {
                 directory.mkdir()
             }
             // create a new file
-            File("${pathDir}/${name}.moc").writeText(toJSON().toString())
+            //File("${pathDir}/${name}.moc").writeText(toJSON().toString())
+            saveStringToBinaryFile("${pathDir}/${name}.moc", Cryptorithm.encrypt(toJSON().toString()))
             information("Saving success", "the project has been saved successfully in $pathDir as $name.moc")
         }
     }
