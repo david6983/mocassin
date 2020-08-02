@@ -2,14 +2,13 @@ package com.david.mocassin.view
 
 import com.david.mocassin.controller.MainMenuBarController
 import com.david.mocassin.controller.ProjectController
-import com.david.mocassin.model.c_components.CtypeEnum
 import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import com.david.mocassin.view.components.MainMenuBar
 import com.david.mocassin.view.styles.MainStyle
-import javafx.beans.property.SimpleStringProperty
 import javafx.geometry.Pos
+import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
 import javafx.scene.control.TabPane
-import javafx.scene.control.TreeItem
 
 import tornadofx.*
 
@@ -77,6 +76,19 @@ class MainView: View(this.TITLE) {
             prefHeight = 800.0
 
             addClass(MainStyle.mainView)
+        }
+    }
+
+    override fun onDock() {
+        currentWindow?.setOnCloseRequest { event ->
+            println("Closing")
+            alert(Alert.AlertType.CONFIRMATION,
+                "Quit without saving",
+                "Are you sure you want to quit without saving ?").let {
+                when {
+                    it.result.buttonData.isCancelButton -> event.consume()
+                }
+            }
         }
     }
 

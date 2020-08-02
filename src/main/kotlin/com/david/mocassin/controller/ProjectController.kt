@@ -123,8 +123,6 @@ class ProjectController: Controller(), JsonModel {
                 }
             }
         }
-        println(userModel.toJSON().toString())
-        println(userDataStructures.toJSON().toString())
 
         leftSideDrawer.controller.updateEnumTree(leftSideDrawer.enumRoot)
         leftSideDrawer.controller.updateUnionTree(leftSideDrawer.unionRoot)

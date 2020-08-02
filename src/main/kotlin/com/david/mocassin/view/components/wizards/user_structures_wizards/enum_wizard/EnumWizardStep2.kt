@@ -113,4 +113,9 @@ class EnumWizardStep2 : View("Enumeration values") {
         attributeModel.name.value = ""
         super.onSave()
     }
+
+    override fun onDock() {
+        attributeModel.value.value = 0
+        super.onDock()
+    }
 }

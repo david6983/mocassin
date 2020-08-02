@@ -18,8 +18,6 @@ class LeftSideDrawer : View() {
 
     val slistRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.SLIST)
 
-    val fileRoot: TreeItem<String> = TreeItem("nothing generated")
-
     var fileDrawerItem: DrawerItem by singleAssign()
 
     fun clearAll() {
@@ -29,7 +27,8 @@ class LeftSideDrawer : View() {
 
         slistRoot.children.clear()
 
-        fileRoot.children.clear()
+        filesList.items.clear()
+        fileDrawerItem.expanded = false
     }
 
     override val root = drawer(multiselect = true) {
@@ -97,9 +96,10 @@ class LeftSideDrawer : View() {
                 filesList = this
 
                 onDoubleClick {
-                    if (selectedItem != null) {
-                        controller.editTabPane.centerTabPane.tab(selectedItem)
-                    }
+                    //if (selectedItem != null) {
+                        //controller.editTabPane.centerTabPane.tab(selectedItem)
+                    //}
+                    println(selectedItem)
                 }
 
                 onUserSelect {
