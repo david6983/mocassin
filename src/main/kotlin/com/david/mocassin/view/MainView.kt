@@ -92,6 +92,6 @@ class MainView: View(this.TITLE) {
     }
 
     companion object {
-        const val TITLE = "Mocassin - generalized data structures generator for C"
+        const val TITLE = "Mocassin - generate data structures in C"
     }
 }

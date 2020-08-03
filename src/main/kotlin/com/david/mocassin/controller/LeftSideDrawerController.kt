@@ -49,9 +49,13 @@ class LeftSideDrawerController : Controller() {
 
     private fun addUnionNode(root: TreeItem<String>, union: CuserType): Boolean {
         val node = TreeItem<String>((union as Cunion).name)
-
-        union.attributes.forEach { attribute ->
-            node.children.add(TreeItem<String>("${attribute.name} [${attribute.getTypeAsString()}]"))
+        //TODO fix duplicated code
+        if (union.attributes.isNotEmpty()) {
+            union.attributes.forEach { attribute ->
+                node.children.add(TreeItem<String>("${attribute.name} [${attribute.getTypeAsString()}]"))
+            }
+        } else {
+            node.children.add(TreeItem<String>("empty"))
         }
 
         return root.children.add(node)
@@ -76,8 +80,12 @@ class LeftSideDrawerController : Controller() {
     private fun addStructNode(root: TreeItem<String>, struct: CuserType): Boolean {
         val node = TreeItem<String>((struct as CuserStructure).name)
 
-        struct.attributes.forEach { attribute ->
-            node.children.add(TreeItem<String>("${attribute.name} [${attribute.getTypeAsString()}]"))
+        if (struct.attributes.isNotEmpty()) {
+            struct.attributes.forEach { attribute ->
+                node.children.add(TreeItem<String>("${attribute.name} [${attribute.getTypeAsString()}]"))
+            }
+        } else {
+            node.children.add(TreeItem<String>("empty"))
         }
 
         return root.children.add(node)
@@ -102,8 +110,12 @@ class LeftSideDrawerController : Controller() {
     fun addLastSlistNode(root: TreeItem<String>) {
         if (!projectController.userDataStructures.isEmpty()) {
             projectController.userDataStructures.last { slist ->
-                return slist.userVariables.forEach { type ->
-                    root.children.add(TreeItem(type.toString()))
+                if (slist.userVariables.isNotEmpty()) {
+                    return slist.userVariables.forEach { type ->
+                        root.children.add(TreeItem(type.toString()))
+                    }
+                } else {
+                    root.children.add(TreeItem("no simple variables added"))
                 }
             }
         }
@@ -112,8 +124,12 @@ class LeftSideDrawerController : Controller() {
     fun updateSlistTree(root: TreeItem<String>) {
         if (!projectController.userDataStructures.isEmpty()) {
             projectController.userDataStructures.forEach { slist ->
-                return slist.userVariables.forEach { type ->
-                    root.children.add(TreeItem(type.toString()))
+                if (slist.userVariables.isNotEmpty()) {
+                    return slist.userVariables.forEach { type ->
+                        root.children.add(TreeItem(type.toString()))
+                    }
+                } else {
+                    root.children.add(TreeItem("no simple variables added"))
                 }
             }
         }

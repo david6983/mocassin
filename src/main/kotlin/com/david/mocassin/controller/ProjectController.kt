@@ -45,6 +45,9 @@ class ProjectController: Controller(), JsonModel {
     private val pathProperty = SimpleStringProperty(DEFAULT_PATH)
     var pathName by pathProperty
 
+    val pathMocFileProperty = SimpleStringProperty(DEFAULT_PATH)
+    var pathMocFile by pathMocFileProperty
+
     private val fileListProperty = SimpleListProperty<String>()
     var fileList by fileListProperty
 
@@ -153,6 +156,7 @@ class ProjectController: Controller(), JsonModel {
 
     fun saveToMocFile(pathDir: String?) {
         if (pathDir != null) {
+            pathMocFile = pathDir
             val directory = File(pathDir)
 
             // the directory doesn't exist
