@@ -25,7 +25,6 @@ class NewProjectModal: Fragment("Create a new project") {
                 projectController.name = nameField.text
                 projectController.pathName = ProjectController.DEFAULT_PATH
 
-
                 // clean up the view
                 leftSideDrawer.clearAll()
                 leftSideDrawer.userStructureRoot.value = nameField.text

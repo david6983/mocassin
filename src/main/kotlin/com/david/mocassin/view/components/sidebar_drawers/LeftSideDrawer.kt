@@ -1,11 +1,17 @@
 package com.david.mocassin.view.components.sidebar_drawers
 
 import com.david.mocassin.controller.LeftSideDrawerController
+import com.david.mocassin.controller.ProjectController
+import com.david.mocassin.model.c_components.c_enum.Cenum
+import com.david.mocassin.model.c_components.c_enum.CenumAttribute
+import com.david.mocassin.view.components.fragments.cell_fragments.enum_attributes_cell_fragments.CenumAttributeNameCellFragment
+import com.david.mocassin.view.components.fragments.cell_fragments.enum_attributes_cell_fragments.CenumAttributeValueCellFragment
 import javafx.scene.control.*
 import tornadofx.*
 
 class LeftSideDrawer : View() {
     val controller: LeftSideDrawerController by inject()
+    val projectController: ProjectController by inject()
 
     var userStructureTree: TreeView<String> by singleAssign()
     var generatedStructureTree: TreeView<String> by singleAssign()
@@ -83,7 +89,39 @@ class LeftSideDrawer : View() {
                         && controller.isValidParent(selectionModel.selectedItem.parent.value)
                         && controller.isPaneNotExist(selectedValue)
                     ) {
-                        controller.editTabPane.centerTabPane.tab(selectedValue)
+                        val type = selectionModel.selectedItem.parent.value
+                            .split("[")[1].removeSuffix("]")
+                        println(type)
+                        /*
+                        val e: Cenum = projectController.userModel.findEnumByName(selectedValue)
+
+                        controller.editTabPane.centerTabPane.tab(selectedValue) {
+                            vbox {
+                                text("type: $type")
+
+                                tableview(e.attributes) {
+                                    //attributesTable = this
+                                    isEditable = true
+
+                                    column("Name", CenumAttribute::name).cellFragment(
+                                        CenumAttributeNameCellFragment::class)
+                                    column("Value", CenumAttribute::value).cellFragment(
+                                        CenumAttributeValueCellFragment::class)
+
+                                    // remove attribute from model
+                                    contextMenu = ContextMenu().apply{
+                                        item("Delete").action {
+                                            selectedItem?.apply{
+                                                e.attributes.removeIf { it.name == this.name }
+                                            }
+                                        }
+                                    }
+
+                                    columnResizePolicy = SmartResize.POLICY
+                                }
+                            }
+                        }
+                         */
                     }
                 }
 

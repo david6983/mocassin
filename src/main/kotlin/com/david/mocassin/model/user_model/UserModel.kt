@@ -20,8 +20,6 @@ import javax.json.JsonArrayBuilder
 import javax.json.JsonObject
 import javax.json.JsonValue
 
-//TODO JSON with tornadofx
-
 class UserModel(packageName: String) : JsonModel {
     val packageNameProperty = SimpleStringProperty(packageName)
     var packageName by packageNameProperty

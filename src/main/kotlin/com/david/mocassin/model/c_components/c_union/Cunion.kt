@@ -13,8 +13,6 @@ import javax.json.Json
 import javax.json.JsonArrayBuilder
 import javax.json.JsonObject
 
-//TODO JSON
-
 class Cunion(name: String) : CuserType, JsonModel  {
     val nameProperty = SimpleStringProperty(name)
     var name by nameProperty

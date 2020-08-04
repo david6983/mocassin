@@ -90,7 +90,7 @@ class CuserStructure(name: String) : CuserType, JsonModel {
         temp = config.getTemplate("object.ftlh")
         val fileWriter = FileWriter(File("$folderPath/${packageName}_$name.c"));
         val model = mutableMapOf(Pair("object", this))
-        //TODO à changer avec du polymorphisme
+        //TODO use polymorphism ?
         model.put("project_name",
             CuserStructure(packageName)
         )

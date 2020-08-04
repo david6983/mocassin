@@ -7,8 +7,6 @@ import javafx.scene.control.ButtonBar
 
 import tornadofx.*
 
-//TODO add a controller to separate functions
-
 class EnumWizard : Wizard("Create a Enum", "Provide Enum information") {
     val enumModel: CenumModel by inject()
 

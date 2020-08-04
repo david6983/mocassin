@@ -1,25 +1,14 @@
 package com.david.mocassin.view
 
-import com.david.mocassin.controller.MainMenuBarController
-import com.david.mocassin.controller.ProjectController
+import com.david.mocassin.controller.MainViewController
 import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import com.david.mocassin.view.components.MainMenuBar
 import com.david.mocassin.view.styles.MainStyle
 import javafx.geometry.Pos
 import javafx.scene.control.Alert
-import javafx.scene.control.ButtonType
 import javafx.scene.control.TabPane
 
 import tornadofx.*
-
-class MainViewController : Controller() {
-    val projectController: ProjectController by inject()
-    val mainMenuBarController: MainMenuBarController by inject()
-
-    fun addEditionTab() {
-
-    }
-}
 
 class MainView: View(this.TITLE) {
     val controller : MainViewController by inject()
