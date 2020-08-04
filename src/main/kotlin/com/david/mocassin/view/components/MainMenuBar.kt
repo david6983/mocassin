@@ -3,6 +3,7 @@ package com.david.mocassin.view.components
 import com.david.mocassin.controller.MainMenuBarController
 import com.david.mocassin.model.DataStructureEnum
 import com.david.mocassin.utils.lang.SupportedLocale
+import com.david.mocassin.view.components.fragments.ChangeLanguageModal
 import com.david.mocassin.view.components.fragments.ChangeNameModal
 import com.david.mocassin.view.components.fragments.NewProjectModal
 import javafx.scene.control.MenuItem
@@ -21,6 +22,10 @@ class MainMenuBar : View() {
 
     private fun changeName() {
         find<ChangeNameModal>().openModal(stageStyle = StageStyle.UTILITY)
+    }
+
+    private fun changeLanguage() {
+        find<ChangeLanguageModal>().openModal(stageStyle = StageStyle.UTILITY)
     }
 
     override val root = menubar {
@@ -113,17 +118,7 @@ class MainMenuBar : View() {
         }
         menu("Preferences") {
             item("Change package name").action { changeName() }
-        }
-        menu("language") {
-            item("French").action {
-                FX.locale = SupportedLocale.FRENCH.local
-            }
-            item("English").action {
-                FX.locale = SupportedLocale.ENGLISH.local
-            }
-            item("Chinese").action {
-                FX.locale = SupportedLocale.CHINESE.local
-            }
+            item("Change language").action { changeLanguage() }
         }
         menu("Help") {
             item("Documentation")
