@@ -4,6 +4,8 @@ import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_union.Cunion
 import com.david.mocassin.model.c_components.c_variable.Cvariable
 import tornadofx.JsonBuilder
+import javax.json.JsonArray
+import javax.json.JsonArrayBuilder
 import kotlin.test.*
 
 class CunionTest {
@@ -114,16 +116,13 @@ class CunionTest {
         val v1 = Cvariable("foo", CtypeEnum.INT)
         val v2 = Cvariable("BAR", e)
 
-        val expectedJson = JsonBuilder()
-        with(expectedJson) {
-            add("foo", v1.toJSON())
-            add("BAR", v2.toJSON())
-        }
+        val expectedJson = "[{\"name\":\"foo\",\"type\":\"int\",\"isPointer\":false,\"isComparable\":false}," +
+                "{\"name\":\"BAR\",\"type\":\"pos (enum)\",\"isPointer\":false,\"isComparable\":false}]"
 
         union.add(v1)
         union.add(v2)
 
-        assertEquals(expectedJson.build().toString(), union.variablesToJSON().build().toString())
+        assertEquals(expectedJson, union.variablesToJSON().build().toString())
     }
 
     @Test
@@ -140,15 +139,13 @@ class CunionTest {
             add("foo", v1.toJSON())
             add("BAR", v2.toJSON())
         }
-        val expectedJson = JsonBuilder()
-        with(expectedJson) {
-            add("name", "FOO")
-            add("variables", variables.build())
-        }
+        val expectedJson = "{\"name\":\"FOO\",\"variables\":[{\"name\":\"foo\",\"type\":\"int\"," +
+                "\"isPointer\":false,\"isComparable\":false},{\"name\":\"BAR\",\"type\":\"pos (enum)\"" +
+                ",\"isPointer\":false,\"isComparable\":false}]}"
 
         union.add(v1)
         union.add(v2)
 
-        assertEquals(expectedJson.build().toString(), union.toJSON().toString())
+        assertEquals(expectedJson, union.toJSON().toString())
     }
 }

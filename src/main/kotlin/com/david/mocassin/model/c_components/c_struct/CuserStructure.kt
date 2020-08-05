@@ -86,14 +86,11 @@ class CuserStructure(name: String) : CuserType, JsonModel {
     }
 
     fun toCimplementation(config: Configuration, folderPath: String = "out/", packageName: String) {
-        var temp: Template? = null
-        temp = config.getTemplate("object.ftlh")
+        val temp: Template? = config.getTemplate("object.ftlh")
         val fileWriter = FileWriter(File("$folderPath/${packageName}_$name.c"));
         val model = mutableMapOf(Pair("object", this))
         //TODO use polymorphism ?
-        model.put("project_name",
-            CuserStructure(packageName)
-        )
+        model["project_name"] = CuserStructure(packageName)
         temp!!.process(model, fileWriter);
         fileWriter.close();
     }

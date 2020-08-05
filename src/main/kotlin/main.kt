@@ -12,7 +12,7 @@ class MocassinApp: App(MainView::class, MainStyle::class) {
     //override val configBasePath = Paths.get("/etc/mocassin/conf")
 
     init {
-        addStageIcon(Image(resources[""]))
+        //addStageIcon(Image(resources[""]))
         reloadStylesheetsOnFocus()
         importStylesheet(resources["css/bootstrapfx.css"])
         importStylesheet(resources["css/main.css"])

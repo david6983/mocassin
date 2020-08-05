@@ -82,7 +82,7 @@ class ProjectController: Controller(), JsonModel {
     private fun initTemplateConfiguration() {
         /* Create and adjust the configuration singleton */
         try {
-            cfg.setDirectoryForTemplateLoading(File("templates/"))
+            cfg.setClassForTemplateLoading(resources::class.java, "/templates/")
         } catch (e: IOException) {
             //TODO replace by a logger
             e.printStackTrace()

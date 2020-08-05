@@ -31,7 +31,6 @@ dependencies {
     compile(group= "net.java.openjfx.backport", name= "openjfx-78-backport-compat", version= "1.8.0.1")
     compile(group= "org.freemarker", name= "freemarker", version= "2.3.29")
     compile("org.kordamp.bootstrapfx:bootstrapfx-core:0.2.4")
-
 }
 
 tasks.compileKotlin {
@@ -39,4 +38,21 @@ tasks.compileKotlin {
 }
 tasks.compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "MainKt"
+    }
+
+    into("resources") {
+        from("resources")
+    }
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+    })
 }

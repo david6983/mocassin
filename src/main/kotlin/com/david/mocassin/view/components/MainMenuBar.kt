@@ -2,7 +2,6 @@ package com.david.mocassin.view.components
 
 import com.david.mocassin.controller.MainMenuBarController
 import com.david.mocassin.model.DataStructureEnum
-import com.david.mocassin.utils.lang.SupportedLocale
 import com.david.mocassin.view.components.fragments.ChangeLanguageModal
 import com.david.mocassin.view.components.fragments.ChangeNameModal
 import com.david.mocassin.view.components.fragments.NewProjectModal
@@ -29,7 +28,7 @@ class MainMenuBar : View() {
     }
 
     override val root = menubar {
-        menu(messages["menubar_file"]) {
+        menu(messages["mb_file"]) {
             item("New project", keyCombination = "Shortcut+N") {
                 graphic = hbox {
                     rectangle {
