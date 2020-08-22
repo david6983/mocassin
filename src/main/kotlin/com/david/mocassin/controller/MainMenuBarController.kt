@@ -46,7 +46,7 @@ class MainMenuBarController : Controller() {
                 val packageName = file.first().name.split(".").first()
                 projectController.name = packageName
                 leftSideDrawer.controller.packageName.value = packageName
-                mainView.title = MainView.TITLE + " [${packageName}]"
+                mainView.title = mainView.defaultTitle + " [${packageName}]"
 
                 val content = Cryptorithm.decrypt(readStringFromBinaryFile(file.component1()))
 

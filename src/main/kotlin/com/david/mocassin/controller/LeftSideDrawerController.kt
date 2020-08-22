@@ -11,7 +11,9 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.MultipleSelectionModel
 import javafx.scene.control.TreeItem
 import tornadofx.Controller
+import tornadofx.get
 import tornadofx.onChange
+import java.util.*
 
 class LeftSideDrawerController : Controller() {
     private val projectController: ProjectController by inject()
@@ -135,30 +137,30 @@ class LeftSideDrawerController : Controller() {
         }
     }
 
-    fun isSelectedValueFromUserStructuresValid(value: String?): Boolean {
+    fun isSelectedValueFromUserStructuresValid(value: String?, messages: ResourceBundle): Boolean {
         return when(value) {
-            ENUM -> false
-            UNION-> false
-            STRUCT -> false
+            messages["ld_enum"] -> false
+            messages["ld_union"]-> false
+            messages["ld_struct"] -> false
             projectController.userModel.packageName -> false
             null -> false
             else -> true
         }
     }
 
-    fun isSelectedValueFromDataStructuresValid(value: String?): Boolean {
+    fun isSelectedValueFromDataStructuresValid(value: String?, messages: ResourceBundle): Boolean {
         return when(value) {
-            SLIST -> true
+            messages["ld_slist"] -> true
             null -> false
             else -> false
         }
     }
 
-    fun isValidParent(parent: String?): Boolean {
+    fun isValidParent(parent: String?, messages: ResourceBundle): Boolean {
         return when(parent) {
-            ENUM -> true
-            UNION -> true
-            STRUCT -> true
+            messages["ld_enum"] -> true
+            messages["ld_union"] -> true
+            messages["ld_struct"] -> true
             else -> false
         }
     }
@@ -167,21 +169,21 @@ class LeftSideDrawerController : Controller() {
         return editTabPane.centerTabPane.tabs.find { it.text == text } == null
     }
 
-    fun removeSelectedUserStructureInModel(selectionModel: MultipleSelectionModel<TreeItem<String>>) {
+    fun removeSelectedUserStructureInModel(selectionModel: MultipleSelectionModel<TreeItem<String>>, messages: ResourceBundle) {
         when(selectionModel.selectedItem.parent.value) {
-            ENUM -> {
+            messages["ld_enum"] -> {
                 projectController.userModel.remove(
                     projectController.userModel.findEnumByName(selectionModel.selectedItem.value)
                 )
                 selectionModel.selectedItem.parent.children.remove(selectionModel.selectedItem)
             }
-            UNION-> {
+            messages["ld_union"]-> {
                 projectController.userModel.remove(
                     projectController.userModel.findUnionByName(selectionModel.selectedItem.value)
                 )
                 selectionModel.selectedItem.parent.children.remove(selectionModel.selectedItem)
             }
-            STRUCT -> {
+            messages["ld_struct"] -> {
                 projectController.userModel.remove(
                     projectController.userModel.findStructByName(selectionModel.selectedItem.value)
                 )
@@ -190,21 +192,13 @@ class LeftSideDrawerController : Controller() {
         }
     }
 
-    fun removeSelectedDataStructureInModel(selectionModel: MultipleSelectionModel<TreeItem<String>>) {
+    fun removeSelectedDataStructureInModel(selectionModel: MultipleSelectionModel<TreeItem<String>>, messages: ResourceBundle) {
         when(selectionModel.selectedItem.value) {
-            SLIST -> {
+            messages["ld_slist"] -> {
                 projectController.userDataStructures.removeIf { it.type == DataStructureEnum.SLIST }
                 selectionModel.selectedItem.children.clear()
                 mainMenuBar.addSlistItem.isDisable = false
             }
         }
-    }
-
-    companion object {
-        const val ENUM: String = "Enumerations [enum]"
-        const val UNION: String = "Unions [union]"
-        const val STRUCT: String = "Structures [struct]"
-
-        const val SLIST: String = "Single Linked List [Slist]"
     }
 }

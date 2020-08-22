@@ -31,6 +31,7 @@ dependencies {
     compile(group= "net.java.openjfx.backport", name= "openjfx-78-backport-compat", version= "1.8.0.1")
     compile(group= "org.freemarker", name= "freemarker", version= "2.3.29")
     compile("org.kordamp.bootstrapfx:bootstrapfx-core:0.2.4")
+    compile("org.mini2Dx:parcl:1.6.1")
 }
 
 tasks.compileKotlin {

@@ -6,7 +6,7 @@ import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import javafx.scene.control.TextField
 import tornadofx.*
 
-class NewProjectModal: Fragment("Create a new project") {
+class NewProjectModal: Fragment("") {
     private val projectController: ProjectController by inject()
     private val leftSideDrawer: LeftSideDrawer by inject()
 
@@ -14,12 +14,16 @@ class NewProjectModal: Fragment("Create a new project") {
 
     private var nameField: TextField by singleAssign()
 
+    init {
+        title = messages["npm_title"]
+    }
+
     override val root = form {
-        fieldset("Enter a name") {
-            textfield("untitled") {
+        fieldset(messages["npm_fieldset"]) {
+            textfield(messages["untitled"]) {
                 nameField = this
             }
-            button("create").action {
+            button(messages["npm_create_btn"]).action {
                 // clean up the model and update the package name
                 projectController.cleanModel()
                 projectController.name = nameField.text

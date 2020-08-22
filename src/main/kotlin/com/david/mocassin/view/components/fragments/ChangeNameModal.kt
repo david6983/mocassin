@@ -8,7 +8,7 @@ import javafx.scene.control.Button
 import javafx.scene.control.TextField
 import tornadofx.*
 
-class ChangeNameModal: Fragment("Change package name") {
+class ChangeNameModal: Fragment("") {
     private val projectController: ProjectController by inject()
     private val leftSideDrawer: LeftSideDrawer by inject()
     private val mainView: MainView by inject()
@@ -20,26 +20,33 @@ class ChangeNameModal: Fragment("Change package name") {
 
     private val validator = context.addValidator(nameField, nameField.textProperty()) {
         if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(it))
-            error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
+            error(messages["v_not_alphanumeric_error"])
         else if (it.isNullOrBlank())
-            error("This field should not be blank")
+            error(messages["v_blank_field_error"])
         else
             null
     }
 
+    init {
+        title = messages["cnm_title"]
+    }
+
     override val root = form {
-        fieldset("Enter a new name"){
+        fieldset(messages["cnm_fieldset"]){
             fieldSet = this
         }.add(nameField)
 
-        val updateButton: Button = button("update")
+        val updateButton: Button = button(messages["cnm_update_button"])
         updateButton.action {
             if (validator.validate()) {
                 projectController.name = nameField.text
                 leftSideDrawer.userStructureTree.root.value = nameField.text
                 leftSideDrawer.generatedStructureTree.root.value = nameField.text
-                mainView.title = MainView.TITLE + " [${nameField.text}]"
-                information("Project name has been updated", "Project name \"${nameField.text}\" has been updated successfully")
+                mainView.title = mainView.defaultTitle + " [${nameField.text}]"
+                information(
+                    messages["cnm_info_header"],
+                    "${messages["cnm_info_content_1"]} ${nameField.text}"
+                )
                 close()
             }
         }

@@ -1,7 +1,6 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.controller.MainMenuBarController
-import com.david.mocassin.model.DataStructureEnum
 import com.david.mocassin.view.components.fragments.ChangeLanguageModal
 import com.david.mocassin.view.components.fragments.ChangeNameModal
 import com.david.mocassin.view.components.fragments.NewProjectModal
@@ -9,6 +8,7 @@ import javafx.scene.control.MenuItem
 import javafx.scene.paint.Color
 import javafx.stage.StageStyle
 import tornadofx.*
+import java.time.LocalDate
 
 class MainMenuBar : View() {
     private val controller: MainMenuBarController by inject()
@@ -29,7 +29,7 @@ class MainMenuBar : View() {
 
     override val root = menubar {
         menu(messages["mb_file"]) {
-            item("New project", keyCombination = "Shortcut+N") {
+            item(messages["mb_new_project"], keyCombination = "Shortcut+N") {
                 graphic = hbox {
                     rectangle {
                         fill = Color.GREEN
@@ -40,7 +40,7 @@ class MainMenuBar : View() {
                 }
             }.action { newProject() }
             separator()
-            item("Open from computer", keyCombination = "Shortcut+O") {
+            item(messages["mb_open_from"], keyCombination = "Shortcut+O") {
                 graphic = hbox {
                     rectangle {
                         fill = Color.CORAL
@@ -50,7 +50,7 @@ class MainMenuBar : View() {
                     imageview(resources["/icons/open32.png"])
                 }
             }.action { controller.openFromComputer() }
-            item("Save project locally", keyCombination = "Shortcut+S") {
+            item(messages["mb_save_project"], keyCombination = "Shortcut+S") {
                 graphic = hbox {
                     rectangle {
                         fill = Color.YELLOW
@@ -61,7 +61,7 @@ class MainMenuBar : View() {
                 }
             }.action { controller.saveProjectLocally() }
             separator()
-            item("Generate", keyCombination = "Shortcut+G") {
+            item(messages["mb_generate_c"], keyCombination = "Shortcut+G") {
                 graphic = hbox {
                     rectangle {
                         fill = Color.rgb(57 ,73 ,171)
@@ -74,37 +74,37 @@ class MainMenuBar : View() {
                 controller.generateProject()
             }
             separator()
-            item("Save to Web application", keyCombination = "Shortcut+W").isDisable = true
-            item("Import from Web application", keyCombination = "Shortcut+I").isDisable = true
+            item(messages["mb_save_web"], keyCombination = "Shortcut+W").isDisable = true
+            item(messages["mb_import_web"], keyCombination = "Shortcut+I").isDisable = true
             separator()
-            item("Test", keyCombination = "Shortcut+X").isDisable = true
+            item(messages["mb_test"], keyCombination = "Shortcut+X").isDisable = true
         }
-        menu("Generate") {
-            item(DataStructureEnum.SLIST.toString(), keyCombination = "Shortcut+L", graphic = controller.slistIcon){
+        menu(messages["mb_generate"]) {
+            item(messages["mb_slist"], keyCombination = "Shortcut+L", graphic = controller.slistIcon){
                 addSlistItem = this
             }.action {
                 controller.newSlist()
             }
             item(
-                DataStructureEnum.DLIST.toString(),
+                messages["mb_dlist"],
                 keyCombination = "Shortcut+D",
                 graphic = controller.dlistIcon
             ).isDisable = true
             separator()
-            item(DataStructureEnum.BTREE.toString(), keyCombination = "Shortcut+B", graphic = controller.btreeIcon).isDisable = true
-            item(DataStructureEnum.BSTREE.toString(), keyCombination = "Shortcut+Y").isDisable = true
-            item(DataStructureEnum.TREE.toString(), keyCombination = "Shortcut+T", graphic = controller.treeIcon).isDisable =
+            item(messages["mb_btree"], keyCombination = "Shortcut+B", graphic = controller.btreeIcon).isDisable = true
+            item(messages["mb_bstree"], keyCombination = "Shortcut+Y").isDisable = true
+            item(messages["mb_tree"], keyCombination = "Shortcut+T", graphic = controller.treeIcon).isDisable =
                 true
-            item(DataStructureEnum.QUADTREE.toString(), keyCombination = "Shortcut+Q").isDisable =
+            item(messages["mb_quadtree"], keyCombination = "Shortcut+Q").isDisable =
                 true
-            item(DataStructureEnum.RTREE.toString(), keyCombination = "Shortcut+R").isDisable =
+            item(messages["mb_rtree"], keyCombination = "Shortcut+R").isDisable =
                 true
             separator()
-            item(DataStructureEnum.GRAPH.toString(), keyCombination = "Shortcut+P").isDisable = true
+            item(messages["mb_graph"], keyCombination = "Shortcut+P").isDisable = true
             separator()
-            item(DataStructureEnum.HASHTABLE.toString(), keyCombination = "Shortcut+H").isDisable = true
+            item(messages["mb_hashtable"], keyCombination = "Shortcut+H").isDisable = true
         }
-        menu("New") {
+        menu(messages["mb_new"]) {
             item("Enum", keyCombination = "Shortcut+E", graphic = controller.enumIcon).action {
                 controller.newEnum()
             }
@@ -115,14 +115,20 @@ class MainMenuBar : View() {
                 controller.newStruct()
             }
         }
-        menu("Preferences") {
-            item("Change package name").action { changeName() }
-            item("Change language").action { changeLanguage() }
+        menu(messages["mb_pref"]) {
+            item(messages["mb_package_name"]).action { changeName() }
+            item(messages["change_language"]).action { changeLanguage() }
         }
-        menu("Help") {
-            item("Documentation")
+        menu(messages["mb_help"]) {
+            item(messages["mb_doc"])
             separator()
-            item("About")
+            item(messages["mb_about"]).action {
+                //TODO add links
+                information(
+                    messages["mb_about"],
+                    "${messages["created_by"]}.\n\nCopyright ©${LocalDate.now().year}"
+                )
+            }
         }
     }
 }

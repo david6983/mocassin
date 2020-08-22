@@ -2,10 +2,14 @@ package com.david.mocassin.view.components.wizards.generated_structures_wizards.
 
 import tornadofx.*
 
-class SlistWizardStep1: View("Information about this structure") {
+class SlistWizardStep1: View() {
+    init {
+        title = messages["gsw_slw_step1_title"]
+    }
+
     override val root = vbox {
-        text("This data structure represents a simple linked list in C:\n\n")
-        text("- The types included are based on the model you created.\n\n")
-        text("- You can add simple types in the next section.")
+        text("${messages["gsw_slw_step1_t1"]}\n\n")
+        text("- ${messages["gsw_slw_step1_t2"]}\n\n")
+        text("- ${messages["gsw_slw_step1_t3"]}")
     }
 }

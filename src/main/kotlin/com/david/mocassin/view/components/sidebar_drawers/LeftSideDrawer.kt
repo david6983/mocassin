@@ -20,11 +20,11 @@ class LeftSideDrawer : View() {
     val userStructureRoot: TreeItem<String> = TreeItem(controller.packageName.value)
     val generatedStructureRoot: TreeItem<String> = TreeItem(controller.packageName.value)
 
-    val enumRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.ENUM)
-    val unionRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.UNION)
-    val structRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.STRUCT)
+    val enumRoot: TreeItem<String> = TreeItem(messages["ld_enum"])
+    val unionRoot: TreeItem<String> = TreeItem(messages["ld_union"])
+    val structRoot: TreeItem<String> = TreeItem(messages["ld_struct"])
 
-    val slistRoot: TreeItem<String> = TreeItem(LeftSideDrawerController.SLIST)
+    val slistRoot: TreeItem<String> = TreeItem(messages["ld_slist"])
 
     var fileDrawerItem: DrawerItem by singleAssign()
 
@@ -47,7 +47,7 @@ class LeftSideDrawer : View() {
     }
 
     override val root = drawer(multiselect = true) {
-        item("Generated structures", expanded = true) {
+        item(messages["ld_generated_struct"], expanded = true) {
             treeview<String> {
                 generatedStructureTree = this
 
@@ -60,9 +60,9 @@ class LeftSideDrawer : View() {
 
                 onUserSelect {
                     println(selectedValue)
-                    contextMenu = if (controller.isSelectedValueFromDataStructuresValid(selectedValue)) {
+                    contextMenu = if (controller.isSelectedValueFromDataStructuresValid(selectedValue, messages)) {
                         ContextMenu().apply {
-                            item("Delete").action { controller.removeSelectedDataStructureInModel(selectionModel) }
+                            item(messages["delete"]).action { controller.removeSelectedDataStructureInModel(selectionModel, messages) }
                         }
                     } else {
                         null
@@ -70,7 +70,7 @@ class LeftSideDrawer : View() {
                 }
             }
         }
-        item("User structures", expanded = true) {
+        item(messages["ld_user_structures"], expanded = true) {
             treeview<String> {
                 userStructureTree = this
                 root = userStructureRoot
@@ -85,51 +85,21 @@ class LeftSideDrawer : View() {
                 cellFormat { text = it }
 
                 onDoubleClick {
-                    if (controller.isSelectedValueFromUserStructuresValid(selectedValue)
-                        && controller.isValidParent(selectionModel.selectedItem.parent.value)
+                    if (controller.isSelectedValueFromUserStructuresValid(selectedValue, messages)
+                        && controller.isValidParent(selectionModel.selectedItem.parent.value, messages)
                         && controller.isPaneNotExist(selectedValue)
                     ) {
                         val type = selectionModel.selectedItem.parent.value
                             .split("[")[1].removeSuffix("]")
-                        println(type)
-                        /*
-                        val e: Cenum = projectController.userModel.findEnumByName(selectedValue)
-
-                        controller.editTabPane.centerTabPane.tab(selectedValue) {
-                            vbox {
-                                text("type: $type")
-
-                                tableview(e.attributes) {
-                                    //attributesTable = this
-                                    isEditable = true
-
-                                    column("Name", CenumAttribute::name).cellFragment(
-                                        CenumAttributeNameCellFragment::class)
-                                    column("Value", CenumAttribute::value).cellFragment(
-                                        CenumAttributeValueCellFragment::class)
-
-                                    // remove attribute from model
-                                    contextMenu = ContextMenu().apply{
-                                        item("Delete").action {
-                                            selectedItem?.apply{
-                                                e.attributes.removeIf { it.name == this.name }
-                                            }
-                                        }
-                                    }
-
-                                    columnResizePolicy = SmartResize.POLICY
-                                }
-                            }
-                        }
-                         */
+                        //println(type)
                     }
                 }
 
                 onUserSelect {
-                    contextMenu = if (controller.isSelectedValueFromUserStructuresValid(selectedValue)
-                        && controller.isValidParent(selectionModel.selectedItem.parent.value)) {
+                    contextMenu = if (controller.isSelectedValueFromUserStructuresValid(selectedValue, messages)
+                        && controller.isValidParent(selectionModel.selectedItem.parent.value, messages)) {
                         ContextMenu().apply {
-                            item("Delete").action { controller.removeSelectedUserStructureInModel(selectionModel) }
+                            item(messages["delete"]).action { controller.removeSelectedUserStructureInModel(selectionModel, messages) }
                         }
                     } else {
                         null
@@ -137,7 +107,7 @@ class LeftSideDrawer : View() {
                 }
             }
         }
-        item("Files view") {
+        item(messages["ld_files_view"]) {
             fileDrawerItem = this
             listview<String> {
                 filesList = this

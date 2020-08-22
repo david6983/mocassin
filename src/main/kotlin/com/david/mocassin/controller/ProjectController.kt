@@ -202,24 +202,11 @@ class ProjectController: Controller(), JsonModel {
         leftSideDrawer.fileDrawerItem.expanded = true
     }
 
-    // launch Cunit Test (why not using a server image ?)
-    fun verifyGeneratedCfiles() {}
-
     fun getObservableListOfTypes(): ObservableList<String> {
         val items: ObservableList<String> = FXCollections.observableArrayList()
         items.addAll(getListOfAllNamesUsedWithTypes())
         items.addAll(CtypeEnum.toObservableArrayList())
         return items
-    }
-
-    /*
-    fun saveToWebApp() {}
-
-    fun importFromWebApp() {}
-    */
-
-    fun openFromFile() {
-
     }
 
     /**

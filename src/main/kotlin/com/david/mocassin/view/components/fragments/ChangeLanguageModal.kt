@@ -5,12 +5,16 @@ import javafx.scene.control.ComboBox
 import tornadofx.*
 import java.util.*
 
-class ChangeLanguageModal: Fragment("Change language") {
+class ChangeLanguageModal: Fragment("") {
     private var langageField : ComboBox<String> by singleAssign()
 
+    init {
+        title = messages["change_language"]
+    }
+
     override val root = form {
-        fieldset("Choose your language") {
-            field("Language") {
+        fieldset(messages["clm_choose_language"]) {
+            field(messages["clm_language"]) {
                 vbox {
                     combobox<String>() {
                         langageField = this
@@ -20,7 +24,7 @@ class ChangeLanguageModal: Fragment("Change language") {
                     }.selectionModel.selectFirst()
                 }
             }
-            button("Select").action {
+            button(messages["clm_select"]).action {
                 val tag = langageField.selectionModel.selectedItem.split("[")[1].removeSuffix("]")
                 FX.locale = Locale.forLanguageTag(tag)
                 close()

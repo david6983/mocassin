@@ -8,7 +8,7 @@ import com.david.mocassin.model.DataStructureModel
 import javafx.scene.control.ButtonBar
 import tornadofx.*
 
-class SlistWizard : Wizard("Create a single linked list", "Provide list information") {
+class SlistWizard : Wizard() {
     private val projectController: ProjectController by inject()
     val slistModel: DataStructureModel by inject()
 
@@ -16,6 +16,9 @@ class SlistWizard : Wizard("Create a single linked list", "Provide list informat
     override val canFinish = allPagesComplete
 
     init {
+        title = messages["gsw_slw_title"]
+        heading = messages["gsw_slw_heading"]
+
         graphic = resources.imageview("/icons/slist32.png")
         add(SlistWizardStep1::class)
         add(SlistWizardStep2::class)
@@ -64,7 +67,7 @@ class SlistWizard : Wizard("Create a single linked list", "Provide list informat
     }
 
     override fun onCancel() {
-        confirm("Confirm cancel", "Do you really want to loose your progress?") {
+        confirm(messages["confirm_cancel_header"], messages["confirm_cancel_content"]) {
             cancel()
         }
     }

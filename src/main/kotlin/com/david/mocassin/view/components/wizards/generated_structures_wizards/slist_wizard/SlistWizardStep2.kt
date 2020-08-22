@@ -3,30 +3,29 @@ package com.david.mocassin.view.components.wizards.generated_structures_wizards.
 import com.david.mocassin.controller.ProjectController
 import com.david.mocassin.model.DataStructureModel
 import com.david.mocassin.model.c_components.CtypeEnum
-import com.david.mocassin.model.c_components.c_variable.Cvariable
-import com.david.mocassin.model.c_components.c_variable.CvariableModel
-import javafx.beans.property.SimpleListProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.*
 import tornadofx.*
 
-class SlistWizardStep2 : View("Slist simple attributes") {
+class SlistWizardStep2 : View() {
     val projectController: ProjectController by inject()
 
     private val slistModel: DataStructureModel by inject()
 
     private var simpleTypeField : ComboBox<String> by singleAssign()
 
-    //val types = SimpleListProperty(mutableListOf<Cvariable>().asObservable())
-    //var attributesTable: TableView<CtypeEnum> by singleAssign()
-    var list: ListView<String> = ListView<String>()
+    var list: ListView<String> = ListView()
 
     var selectedSimpleType = SimpleStringProperty()
 
+    init {
+        title = messages["gsw_slw_step2_title"]
+    }
+
     override val root = hbox {
         form {
-            fieldset("Add fields inside") {
-                field("Choose a type") {
+            fieldset(messages["add_fields_inside"]) {
+                field(messages["choose_type"]) {
                     hbox {
                         combobox<String>(selectedSimpleType) {
                             simpleTypeField = this
@@ -34,7 +33,7 @@ class SlistWizardStep2 : View("Slist simple attributes") {
                                 CtypeEnum.toObservableArrayList()
                         }.selectionModel.selectFirst()
 
-                        button("Add") {
+                        button(messages["add_button"]) {
                             enableWhen(slistModel.valid)
                             action {
                                 if (simpleTypeField.value != null) {
@@ -59,7 +58,7 @@ class SlistWizardStep2 : View("Slist simple attributes") {
                     list = this
 
                     contextMenu = ContextMenu().apply{
-                        item("Delete").action {
+                        item(messages["delete"]).action {
                             selectedItem?.apply{
                                 println(this)
                                 println(slistModel.userVariables.value.size)
@@ -67,7 +66,6 @@ class SlistWizardStep2 : View("Slist simple attributes") {
                                 println(slistModel.userVariables.value.size)
                                 list.items.removeIf { it == this }
                                 simpleTypeField.items.add(0, this)
-                                //println(slistModel.userVariables.size)
                             }
                         }
                     }

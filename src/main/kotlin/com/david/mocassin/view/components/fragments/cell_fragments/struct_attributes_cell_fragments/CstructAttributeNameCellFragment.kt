@@ -20,17 +20,17 @@ class CstructAttributeNameCellFragment : TableCellFragment<Cvariable, String>() 
             removeWhen(editingProperty.not())
             validator {
                 if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(it))
-                    error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
+                    error(messages["v_not_alphanumeric_error"])
                 else if (it.isNullOrBlank())
-                    error("This field should not be blank")
+                    error(messages["v_blank_field_error"])
                 else if(!it.isNullOrBlank() && !projectController.isNameUniqueExcept(it, listOf(structModel.name.value))) {
-                    error("The name already exist in another structure in the project")
+                    error(messages["v_already_exist_error"])
                 }
                 else if(!it.isNullOrBlank() && isNameReservedWords(it)) {
-                    error("The name is reserved for the C language")
+                    error(messages["v_reserved_error"])
                 }
                 else if(!it.isNullOrBlank() && !structModel.item.isAttributeUniqueInStructure(it)) {
-                    error("The name already exist in this structure")
+                    error(messages["v_exist_in_struct_error"])
                 }
                 else
                     null

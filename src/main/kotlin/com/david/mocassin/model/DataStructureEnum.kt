@@ -1,18 +1,18 @@
 package com.david.mocassin.model
 
-enum class DataStructureEnum(val fullname: String, val shortname: String) {
-    SLIST("SList (Single-chained Linked List)", "SList"),
-    DLIST("DList (Double-chained Linked List)","DList"),
-    BTREE("BTree (Binary Tree)","BTree"),
-    BSTREE("BSTree (Binary Search Tree)","BSTree"),
-    TREE("Tree (Multi-node Tree)","Tree"),
-    QUADTREE("QuadTree","QuadTree"),
-    RTREE("R-Tree","R-tree"),
-    GRAPH("Graph", "Graph"),
-    HASHTABLE("Hash table","Hash table");
+enum class DataStructureEnum(val shortname: String) {
+    SLIST("SList"),
+    DLIST("DList"),
+    BTREE("BTree"),
+    BSTREE("BSTree"),
+    TREE("Tree"),
+    QUADTREE("QuadTree"),
+    RTREE("R-tree"),
+    GRAPH("Graph"),
+    HASHTABLE("Hash table");
 
     override fun toString(): String {
-        return fullname
+        return shortname
     }
 
     companion object {
@@ -23,7 +23,7 @@ enum class DataStructureEnum(val fullname: String, val shortname: String) {
          * @return
          */
         fun find(shortname: String): DataStructureEnum? {
-            return DataStructureEnum.values().find { it.shortname == shortname }
+            return values().find { it.shortname == shortname }
         }
     }
 }

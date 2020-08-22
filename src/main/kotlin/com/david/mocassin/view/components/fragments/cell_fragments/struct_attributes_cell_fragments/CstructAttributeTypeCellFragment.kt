@@ -10,7 +10,7 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.ComboBox
 import tornadofx.*
 
-class CstructAttributeTypeCellFragment : View("Edit selected type") {
+class CstructAttributeTypeCellFragment : View("") {
     private val structWizardStep2: StructWizardStep2 by inject()
 
     private val editorTypeCategory = SimpleBooleanProperty(true)
@@ -19,20 +19,24 @@ class CstructAttributeTypeCellFragment : View("Edit selected type") {
     private val editorSelectedProjectType = SimpleStringProperty("enum")
     private var editorVariableFromProjectField : ComboBox<String> by singleAssign()
 
+    init {
+        title = messages["edit_selected_type"]
+    }
+
     override val root = form {
-        fieldset("Choose a new type") {
-            field("Type") {
+        fieldset(messages["choose_new_type"]) {
+            field(messages["type"]) {
                 vbox {
                     togglegroup {
-                        radiobutton("simple", this, value = true)
-                        radiobutton("from project", this, value = false) {
+                        radiobutton(messages["tcf_simple"], this, value = true)
+                        radiobutton(messages["tcf_from_project"], this, value = false) {
                             removeWhen(structWizardStep2.isProjectEmpty)
                         }
                         bind(editorTypeCategory)
                     }
                 }
             }
-            field("Choose a type") {
+            field(messages["choose_type"]) {
                 vbox {
                     removeWhen(editorTypeCategory.not())
                     combobox<String>(editorSelectedSimpleType) {
@@ -74,7 +78,7 @@ class CstructAttributeTypeCellFragment : View("Edit selected type") {
                     }
                 }
             }
-            field("Choose from the list") {
+            field(messages["tcf_choose_from_list"]) {
                 removeWhen(editorTypeCategory)
                 vbox {
                     combobox<String>() {
@@ -84,7 +88,7 @@ class CstructAttributeTypeCellFragment : View("Edit selected type") {
                 }
             }
         }
-        button("Validate Changes").action {
+        button(messages["tcf_validate_changes"]).action {
             if (editorTypeCategory.value) {
                 structWizardStep2.selectedType?.type = CtypeEnum.find(editorVariableSimpleField.value) as CuserType
             }
