@@ -15,7 +15,7 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.*
 import tornadofx.*
 
-class StructWizardStep2 : View("Struct attributes") {
+class StructWizardStep2 : View() {
     val projectController: ProjectController by inject()
 
     private val attributeModel = CvariableModel()
@@ -44,6 +44,8 @@ class StructWizardStep2 : View("Struct attributes") {
     var selectedType: Cvariable? = null
 
     init {
+        title = messages["usw_sw_step2_title"]
+
         attributeModel.isPointer.value = false
         attributeModel.isComparable.value = false
     }

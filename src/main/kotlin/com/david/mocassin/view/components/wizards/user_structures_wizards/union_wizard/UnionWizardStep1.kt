@@ -26,7 +26,7 @@ class UnionWizardStep1 : View("Union name") {
                             error("The name is reserved for the C language")
                         } else null
                     }
-                }.required()
+                }.required(message = messages["required"])
             }
         }
     }

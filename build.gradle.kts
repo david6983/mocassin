@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.david"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 javafx {
     modules("javafx.controls", "javafx.base","javafx.fxml")
@@ -41,9 +41,17 @@ tasks.compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
+val bgImageName = "$name-background.png"
+val bgImageWidth = 512
+
+val jarOutputDir = "$buildDir/libs"
+val iconPngPath = "$buildDir/resources/main/icons/mocassin.png"
+
+val mainClass = "MainKt"
+
 tasks.jar {
     manifest {
-        attributes["Main-Class"] = "MainKt"
+        attributes["Main-Class"] = mainClass
     }
 
     into("resources") {
@@ -56,4 +64,85 @@ tasks.jar {
     from({
         configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
     })
+}
+
+tasks.register("jar2pkg") {
+    val iconset = "${project.name}.iconset"
+    val macosxPackage = "package/macosx"
+
+    group = "deploy"
+    description = "bundle output jar file to a mac os package using javapackager"
+    // create the jar if not exist
+    dependsOn("jar")
+
+    doLast {
+        val hasJavapackager = exec {
+            workingDir(jarOutputDir)
+            commandLine("command", "-v", "javapackager")
+        }
+        println(hasJavapackager.toString())
+
+        if (hasJavapackager.exitValue == 0) {
+            println("### started bundling jar file to a mac os package using javapackager ###")
+            exec {
+                workingDir(jarOutputDir)
+                println("[Create background icon image from main icon using sips]")
+                commandLine("sips -z $bgImageWidth $bgImageWidth $iconPngPath --out $bgImageName".split(" "))
+            }
+            exec {
+                workingDir(jarOutputDir)
+                println("[creating iconset folder]")
+                commandLine("mkdir", "-p", iconset)
+            }
+
+            exec {
+                workingDir(jarOutputDir)
+                println("[creating 128x128 icon in iconset]")
+                commandLine("sips -z 128 128 $iconPngPath --out $iconset/icon_128x128.png".split(" "))
+            }
+
+            exec {
+                workingDir(jarOutputDir)
+                println("[converting iconset to icns]")
+                commandLine("iconutil", "-c", "icns", iconset)
+            }
+
+            exec {
+                workingDir(jarOutputDir)
+                println("[creating package/macosx folder]")
+                commandLine("mkdir", "-p", macosxPackage)
+            }
+
+            println("[copying icons and images in package/macosx]")
+            copy {
+                from(jarOutputDir)
+                into("$jarOutputDir/$macosxPackage")
+                include("*.png", "*.icns")
+            }
+
+            exec {
+                workingDir(jarOutputDir)
+                environment("JAVA_HOME", properties["org.gradle.java.home"])
+                println("[creating package using javapackager]")
+                println(commandLine("javapackager",
+                    "-deploy", "-native", "pkg", "-name", project.name, "-Bappversion=$version",
+                    "-Bicon=$macosxPackage/${project.name}.icns", "-srcdir", ".", "-srcfiles",
+                    "${project.name}-$version.jar", "-appclass", mainClass, "-outdir", "deploy", "-outfile", project.name
+                ))
+            }
+
+            println("[copying generated package to current build directory]")
+            copy {
+                from("$jarOutputDir/deploy/bundles")
+                into(jarOutputDir)
+                include("*.pkg")
+                rename("${project.name}-${version}.pkg", "${project.name}-installer.pkg")
+            }
+            delete("$jarOutputDir/deploy")
+
+            println("### The application has been packaged for mac os x ;) ###")
+        } else {
+            println("error: javapackager not found, make sure JAVA_HOME point to correct jdk (jdk1.8 for exemple)")
+        }
+    }
 }

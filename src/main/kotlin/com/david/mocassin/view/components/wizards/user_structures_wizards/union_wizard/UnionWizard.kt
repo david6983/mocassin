@@ -6,13 +6,22 @@ import javafx.scene.control.*
 
 import tornadofx.*
 
-class UnionWizard : Wizard("Create a Union", "Provide Union information") {
+class UnionWizard : Wizard() {
     val unionModel: CunionModel by inject()
 
     override val canGoNext = currentPageComplete
     override val canFinish = allPagesComplete
 
     init {
+        title = "Create a Union"
+        heading = "Provide Union information"
+
+        backButtonTextProperty.value = "< " + messages["back"]
+        nextButtonTextProperty.value = messages["next"] + " >"
+        cancelButtonTextProperty.value = messages["cancel"]
+        finishButtonTextProperty.value = messages["finish"]
+        stepsTextProperty.value = messages["steps"]
+
         graphic = resources.imageview("/icons/union32.png")
         add(UnionWizardStep1::class)
         add(UnionWizardStep2::class)

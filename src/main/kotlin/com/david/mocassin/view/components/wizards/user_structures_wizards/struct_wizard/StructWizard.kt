@@ -5,13 +5,22 @@ import com.david.mocassin.model.c_components.c_struct.CuserStructureModel
 import javafx.scene.control.ButtonBar
 import tornadofx.*
 
-class StructWizard : Wizard("Create a struct", "Provide structure information") {
+class StructWizard : Wizard() {
     val structModel: CuserStructureModel by inject()
 
     override val canGoNext = currentPageComplete
     override val canFinish = allPagesComplete
 
     init {
+        title = messages["usw_sw_title"]
+        heading = messages["usw_sw_heading"]
+
+        backButtonTextProperty.value = "< " + messages["back"]
+        nextButtonTextProperty.value = messages["next"] + " >"
+        cancelButtonTextProperty.value = messages["cancel"]
+        finishButtonTextProperty.value = messages["finish"]
+        stepsTextProperty.value = messages["steps"]
+
         graphic = resources.imageview("/icons/struct32.png")
         add(StructWizardStep1::class)
         add(StructWizardStep2::class)
@@ -60,7 +69,7 @@ class StructWizard : Wizard("Create a struct", "Provide structure information") 
     }
 
     override fun onCancel() {
-        confirm("Confirm cancel", "Do you really want to loose your progress?") {
+        confirm(messages["confirm_cancel_header"], messages["confirm_cancel_content"]) {
             cancel()
         }
     }

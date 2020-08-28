@@ -2,18 +2,26 @@ package com.david.mocassin.view.components.wizards.user_structures_wizards.enum_
 
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_enum.CenumModel
-import com.david.mocassin.view.components.sidebar_drawers.LeftSideDrawer
 import javafx.scene.control.ButtonBar
 
 import tornadofx.*
 
-class EnumWizard : Wizard("Create a Enum", "Provide Enum information") {
+class EnumWizard : Wizard() {
     val enumModel: CenumModel by inject()
 
     override val canGoNext = currentPageComplete
     override val canFinish = allPagesComplete
 
     init {
+        title = messages["usw_ew_title"]
+        heading = messages["usw_ew_heading"]
+
+        backButtonTextProperty.value = "< " + messages["back"]
+        nextButtonTextProperty.value = messages["next"] + " >"
+        cancelButtonTextProperty.value = messages["cancel"]
+        finishButtonTextProperty.value = messages["finish"]
+        stepsTextProperty.value = messages["steps"]
+
         graphic = resources.imageview("/icons/enum32.png")
         add(EnumWizardStep1::class)
         add(EnumWizardStep2::class)
@@ -62,7 +70,7 @@ class EnumWizard : Wizard("Create a Enum", "Provide Enum information") {
     }
 
     override fun onCancel() {
-        confirm("Confirm cancel", "Do you really want to loose your progress?") {
+        confirm(messages["confirm_cancel_header"], messages["confirm_cancel_content"]) {
             cancel()
         }
     }

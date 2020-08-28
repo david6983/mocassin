@@ -37,7 +37,6 @@ class SplashScreen : View() {
     override fun onDock() {
         thread {
             currentStage?.scene?.fill = null
-            println(titleFont)
             Thread.sleep(2000)
             runLater {
                 close()

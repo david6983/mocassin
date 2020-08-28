@@ -6,30 +6,34 @@ import com.david.mocassin.utils.isNameReservedWords
 import com.david.mocassin.utils.isNameSyntaxFollowCstandard
 import tornadofx.*
 
-class StructWizardStep1 : View("Struct basic information") {
+class StructWizardStep1 : View() {
     private val projectController: ProjectController by inject()
 
     private val structModel: CuserStructureModel by inject()
 
     override val complete = structModel.valid(structModel.name)
 
+    init {
+        title = messages["usw_sw_step1_title "]
+    }
+
     override val root = form {
         fieldset(title) {
-            field("Name") {
+            field(messages["name"]) {
                 textfield(structModel.name) {
                     validator {
                         if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(it))
-                            error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
+                            error(messages["v_not_alphanumeric_error"])
                         else if (!it.isNullOrBlank() && !projectController.isNameUnique(it)) {
-                            error("The name already exist")
+                            error(messages["v_already_exist_error"])
                         } else if (!it.isNullOrBlank() && isNameReservedWords(it)) {
-                            error("The name is reserved for the C language")
+                            error(messages["v_reserved_error"])
                         } else null
                     }
-                }.required()
+                }.required(message = messages["required"])
             }
-            field("Display function") {
-                checkbox("is generated")
+            field(messages["usw_sw_step1_display_function"]) {
+                checkbox(messages["usw_sw_step1_is_generated"])
             }
         }
     }

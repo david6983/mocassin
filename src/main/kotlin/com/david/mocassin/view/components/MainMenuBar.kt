@@ -1,6 +1,7 @@
 package com.david.mocassin.view.components
 
 import com.david.mocassin.controller.MainMenuBarController
+import com.david.mocassin.view.components.fragments.AboutModal
 import com.david.mocassin.view.components.fragments.ChangeLanguageModal
 import com.david.mocassin.view.components.fragments.ChangeNameModal
 import com.david.mocassin.view.components.fragments.NewProjectModal
@@ -25,6 +26,10 @@ class MainMenuBar : View() {
 
     private fun changeLanguage() {
         find<ChangeLanguageModal>().openModal(stageStyle = StageStyle.UTILITY)
+    }
+
+    private fun about() {
+        find<AboutModal>().openModal(stageStyle = StageStyle.UTILITY)
     }
 
     override val root = menubar {
@@ -122,13 +127,7 @@ class MainMenuBar : View() {
         menu(messages["mb_help"]) {
             item(messages["mb_doc"])
             separator()
-            item(messages["mb_about"]).action {
-                //TODO add links
-                information(
-                    messages["mb_about"],
-                    "${messages["created_by"]}.\n\nCopyright ©${LocalDate.now().year}"
-                )
-            }
+            item(messages["mb_about"]).action { about() }
         }
     }
 }

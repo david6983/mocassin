@@ -27,12 +27,13 @@ class EnumWizardStep2 : View("Enumeration values") {
 
     init {
         attributeModel.value.value = 0
+        title = messages["usw_ew_step2_title"]
     }
 
     override val root = hbox {
         form {
-            fieldset("Add fields inside") {
-                field("name") {
+            fieldset(messages["add_fields_inside"]) {
+                field(messages["name"]) {
                     textfield(attributeModel.name) {
                         attributeNameField = this
                         validator {
@@ -40,27 +41,27 @@ class EnumWizardStep2 : View("Enumeration values") {
                                     it
                                 )
                             )
-                                error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
+                                error(messages["v_not_alphanumeric_error"])
                             else if (it.isNullOrBlank())
-                                error("This field should not be blank")
+                                error(messages["v_blank_field_error"])
                             else if(!it.isNullOrBlank() && !projectController.isNameUniqueExcept(it, listOf(enumModel.name.value))) {
-                                error("The name already exist in another structure in the project")
+                                error(messages["v_already_exist_error"])
                             }
                             else if(!it.isNullOrBlank() && isNameReservedWords(
                                     it
                                 )
                             ) {
-                                error("The name is reserved for the C language")
+                                error(messages["v_reserved_error"])
                             }
                             else if(!it.isNullOrBlank() && !enumModel.item.isAttributeUniqueInEnum(it)) {
-                                error("The name already exist in this enum")
+                                error(messages["v_exist_in_enum_error"])
                             }
                             else
                                 null
                         }
                     }
                 }
-                field("value") {
+                field(messages["value"]) {
                     hbox(spacing= 10) {
                         button("-").action {
                             attributeModel.value.value = attributeModel.value.value.toInt() - 1
@@ -71,7 +72,7 @@ class EnumWizardStep2 : View("Enumeration values") {
                         }
                     }
                 }
-                button("Add") {
+                button(messages["add_button"]) {
                     enableWhen(attributeModel.valid)
                     action {
                         val attr = CenumAttribute(
@@ -91,14 +92,14 @@ class EnumWizardStep2 : View("Enumeration values") {
             attributesTable = this
             isEditable = true
 
-            column("Name", CenumAttribute::name).cellFragment(
+            column(messages["name"], CenumAttribute::name).cellFragment(
                 CenumAttributeNameCellFragment::class)
-            column("Value", CenumAttribute::value).cellFragment(
+            column(messages["value"], CenumAttribute::value).cellFragment(
                 CenumAttributeValueCellFragment::class)
 
             // remove attribute from model
             contextMenu = ContextMenu().apply{
-                item("Delete").action {
+                item(messages["delete"]).action {
                     selectedItem?.apply{
                         enumModel.attributes.value.removeIf { it.name == this.name }
                     }
