@@ -80,7 +80,6 @@ tasks.register("jar2pkg") {
             workingDir(jarOutputDir)
             commandLine("command", "-v", "javapackager")
         }
-        println(hasJavapackager.toString())
 
         if (hasJavapackager.exitValue == 0) {
             println("### started bundling jar file to a mac os package using javapackager ###")
