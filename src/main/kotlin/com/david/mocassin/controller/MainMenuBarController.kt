@@ -35,6 +35,10 @@ class MainMenuBarController : Controller() {
     val btreeIcon = resources.imageview("/icons/btree32.png")
     val treeIcon = resources.imageview("/icons/tree32.png")
 
+    fun enableSlist() {
+        mainMenuBar.addSlistItem.isDisable = false
+    }
+
     fun openFromComputer() {
         val ef = arrayOf(FileChooser.ExtensionFilter("Mocassin file (*.moc)", "*.moc"))
         chooseFile(
