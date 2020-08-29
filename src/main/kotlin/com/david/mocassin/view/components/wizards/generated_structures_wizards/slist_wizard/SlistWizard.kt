@@ -19,6 +19,12 @@ class SlistWizard : Wizard() {
         title = messages["gsw_slw_title"]
         heading = messages["gsw_slw_heading"]
 
+        backButtonTextProperty.value = "< " + messages["back"]
+        nextButtonTextProperty.value = messages["next"] + " >"
+        cancelButtonTextProperty.value = messages["cancel"]
+        finishButtonTextProperty.value = messages["finish"]
+        stepsTextProperty.value = messages["steps"]
+
         graphic = resources.imageview("/icons/slist32.png")
         add(SlistWizardStep1::class)
         add(SlistWizardStep2::class)

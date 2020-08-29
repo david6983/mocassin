@@ -14,7 +14,7 @@ class StructWizardStep1 : View() {
     override val complete = structModel.valid(structModel.name)
 
     init {
-        title = messages["usw_sw_step1_title "]
+        title = messages["usw_sw_step1_title"]
     }
 
     override val root = form {

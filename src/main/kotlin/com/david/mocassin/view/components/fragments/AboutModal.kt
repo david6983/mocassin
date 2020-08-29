@@ -1,10 +1,8 @@
 package com.david.mocassin.view.components.fragments
 
-import javafx.geometry.Pos
 import javafx.scene.control.SelectionMode
 import javafx.scene.image.ImageView
 import tornadofx.*
-import java.awt.Color
 import java.time.LocalDate
 
 class AboutModal: Fragment("") {
@@ -29,7 +27,7 @@ class AboutModal: Fragment("") {
             tooltip("https://github.com/david6983")
         }
 
-        hyperlink("logo designed by @saiko2b") {
+        hyperlink(messages["am_logo_designed_by"]) {
             paddingBottom = 12
 
             setOnAction {
@@ -50,7 +48,7 @@ class AboutModal: Fragment("") {
             }
         }
 
-        label("Useful links: ") {
+        label(messages["am_useful_links"]) {
             paddingBottom = 12
             style {
                 fontSize = 16.0.px
@@ -60,9 +58,9 @@ class AboutModal: Fragment("") {
 
 
         listview<String> {
-            items.add("Mocassin official repository")
-            items.add("Logo designer instagram")
-            items.add("Developer github repository")
+            items.add(messages["am_link_1"])
+            items.add(messages["am_link_2"])
+            items.add(messages["am_link_3"])
 
             selectionModel.selectionMode = SelectionMode.SINGLE
 
@@ -75,7 +73,7 @@ class AboutModal: Fragment("") {
             }
         }
 
-        label("*click on the authors name to see more") {
+        label(messages["am_help_1"]) {
             textFill = c("red")
             paddingTop = 12
             style {
@@ -83,7 +81,7 @@ class AboutModal: Fragment("") {
             }
         }
 
-        label("**double click on a link in the list above") {
+        label(messages["am_help_2"]) {
             textFill = c("green")
             paddingBottom = 5
             style {
@@ -102,7 +100,7 @@ class AboutModal: Fragment("") {
             paddingRight = 12.0
         }
 
-        prefWidth = 250.0
-        prefHeight = 286.0
+        prefWidth = 260.0
+        prefHeight = 290.0
     }
 }

@@ -34,7 +34,7 @@ class MocassinApp: App(MainView::class, MainStyle::class) {
                 save()
             }
         }
-
+        isSplashScreenDisplayed.value = false
         isSplashScreenDisplayed.onChange {
             with(config) {
                 set("splashscreen" to it)

@@ -13,8 +13,8 @@ class UnionWizard : Wizard() {
     override val canFinish = allPagesComplete
 
     init {
-        title = "Create a Union"
-        heading = "Provide Union information"
+        title = messages["usw_uw_title"]
+        heading = messages["usw_uw_heading"]
 
         backButtonTextProperty.value = "< " + messages["back"]
         nextButtonTextProperty.value = messages["next"] + " >"
@@ -70,7 +70,7 @@ class UnionWizard : Wizard() {
     }
 
     override fun onCancel() {
-        confirm("Confirm cancel", "Do you really want to loose your progress?") {
+        confirm(messages["confirm_cancel_header"], messages["confirm_cancel_content"]) {
             cancel()
         }
     }

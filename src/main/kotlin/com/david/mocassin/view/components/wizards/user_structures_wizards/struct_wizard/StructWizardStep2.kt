@@ -52,41 +52,41 @@ class StructWizardStep2 : View() {
 
     override val root = hbox {
         form {
-            fieldset("Add fields inside") {
-                field("Name") {
+            fieldset(messages["add_fields_inside"]) {
+                field(messages["name"]) {
                     textfield(attributeModel.name) {
                         variableNameField = this
                         validator {
                             if (!it.isNullOrBlank() && !isNameSyntaxFollowCstandard(it))
-                                error("The name is not alphanumeric (Should contains only letters (any case), numbers and underscores)")
+                                error(messages["v_not_alphanumeric_error"])
                             else if (it.isNullOrBlank())
-                                error("This field should not be blank")
+                                error(messages["v_blank_field_error"])
                             else if(!it.isNullOrBlank() && !projectController.isNameUniqueExcept(it, listOf(structModel.name.value))) {
-                                error("The name already exist in another structure in the project")
+                                error(messages["v_already_exist_error"])
                             }
                             else if(!it.isNullOrBlank() && isNameReservedWords(it)) {
-                                error("The name is reserved for the C language")
+                                error(messages["v_reserved_error"])
                             }
                             else if(!it.isNullOrBlank() && !structModel.item.isAttributeUniqueInStructure(it)) {
-                                error("The name already exist in this union")
+                                error(messages["v_exist_in_struct_error"])
                             }
                             else
                                 null
                         }
                     }
                 }
-                field("Type") {
+                field(messages["type"]) {
                     vbox {
                         togglegroup {
-                            radiobutton("simple", this, value= true)
-                            radiobutton("from project", this, value= false) {
+                            radiobutton(messages["tcf_simple"], this, value= true)
+                            radiobutton(messages["tcf_from_project"], this, value= false) {
                                 removeWhen(isProjectEmpty)
                             }
                             bind(typeCategory)
                         }
                     }
                 }
-                field("Choose a type") {
+                field(messages["choose_type"]) {
                     vbox {
                         removeWhen(typeCategory.not())
                         combobox<String>(selectedSimpleType) {
@@ -126,7 +126,7 @@ class StructWizardStep2 : View() {
                         }
                     }
                 }
-                field("Choose from the list") {
+                field(messages["choose_from_list"]) {
                     removeWhen(typeCategory)
                     vbox {
                         combobox<String>() {
@@ -135,17 +135,17 @@ class StructWizardStep2 : View() {
                         }.selectionModel.selectFirst()
                     }
                 }
-                field("Pointer type") {
-                    checkbox("is a pointer", attributeModel.isPointer) {
+                field(messages["pointer_type"]) {
+                    checkbox(messages["is_pointer"], attributeModel.isPointer) {
                         variablePointerField = this
                     }
                 }
-                field("Comparison") {
-                    checkbox("is comparable", attributeModel.isComparable) {
+                field(messages["comparison"]) {
+                    checkbox(messages["is_comparable"], attributeModel.isComparable) {
                         variableComparableField = this
                     }
                 }
-                button("Add") {
+                button(messages["add_button"]) {
                     enableWhen(attributeModel.valid)
                     action {
                         val tmpVariable = Cvariable(
@@ -187,9 +187,9 @@ class StructWizardStep2 : View() {
             attributesTable = this
             isEditable = true
 
-            column("Name", Cvariable::name).cellFragment(CstructAttributeNameCellFragment::class)
-            column("Type", Cvariable::getTypeAsString)
-            column("Pointer", Cvariable::isPointer).cellFormat {
+            column(messages["name"], Cvariable::name).cellFragment(CstructAttributeNameCellFragment::class)
+            column(messages["type"], Cvariable::getTypeAsString)
+            column(messages["pointer"], Cvariable::isPointer).cellFormat {
                 text = this.rowItem.isPointer.toString()
 
                 onDoubleClick {
@@ -203,11 +203,11 @@ class StructWizardStep2 : View() {
                     attributesTable.refresh()
                 }
             }
-            column("Comparable", Cvariable::isComparable).makeEditable()
+            column(messages["comparable"], Cvariable::isComparable).makeEditable()
 
             // remove attribute from model
             contextMenu = ContextMenu().apply{
-                item("Delete").action {
+                item(messages["delete"]).action {
                     selectedItem?.apply{
                         structModel.attributes.value.removeIf { it.name == this.name }
                     }

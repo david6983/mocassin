@@ -38,7 +38,7 @@ class MainMenuBarController : Controller() {
     fun openFromComputer() {
         val ef = arrayOf(FileChooser.ExtensionFilter("Mocassin file (*.moc)", "*.moc"))
         chooseFile(
-            "Select a .moc file to open",
+            mainView.messages["select_file_open"],
             ef,
             FileChooserMode.Single
         ).let { file ->
@@ -58,23 +58,23 @@ class MainMenuBarController : Controller() {
 
     fun saveProjectLocally() {
         if (projectController.userModel.isEmpty().not()) {
-            val directory = chooseDirectory("Select a directory to save project")
+            val directory = chooseDirectory(mainView.messages["select_dir"])
             if (directory != null) {
                 projectController.saveToMocFile(directory.toString())
             }
         } else {
-            warning("project is empty", "add new data structures to save project")
+            warning(mainView.messages["project_empty_header"], mainView.messages["project_empty_content"])
         }
     }
 
     fun generateProject() {
         if (!projectController.userDataStructures.isEmpty()) {
-            val directory = chooseDirectory("Select the output directory")
+            val directory = chooseDirectory(mainView.messages["output_dir"])
             if (directory != null) {
                 projectController.generate(directory.toString())
             }
         } else {
-            warning("any data structures created", "add at least one data structure in the Generate menu")
+            warning(mainView.messages["no_ds_created_header"], mainView.messages["no_ds_created_content"])
         }
     }
 
@@ -92,7 +92,7 @@ class MainMenuBarController : Controller() {
             leftSideDrawer.controller.addLastEnumNode(leftSideDrawer.enumRoot)
 
             information(
-                "Enumeration successfully added !",
+                mainView.messages["enum_added"],
                 enumWizard.enumModel.item.toJSON().toString()
             )
 
@@ -112,7 +112,7 @@ class MainMenuBarController : Controller() {
             leftSideDrawer.controller.addLastUnionNode(leftSideDrawer.unionRoot)
 
             information(
-                "Union successfully added !",
+                mainView.messages["union_added"],
                 unionWizard.unionModel.item.toJSON().toString()
             )
 
@@ -132,7 +132,7 @@ class MainMenuBarController : Controller() {
             leftSideDrawer.controller.addLastStructNode(leftSideDrawer.structRoot)
 
             information(
-                "Struct successfully added !",
+                mainView.messages["struct_added"],
                 structWizard.structModel.item.toJSON().toString()
             )
 
@@ -154,7 +154,7 @@ class MainMenuBarController : Controller() {
             mainMenuBar.addSlistItem.isDisable = true
 
             information(
-                "Slist successfully created !",
+                mainView.messages["slist_added"],
                 slistWizard.slistModel.item.toJSON().toString()
             )
 

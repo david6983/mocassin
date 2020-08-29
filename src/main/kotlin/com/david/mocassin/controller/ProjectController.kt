@@ -77,6 +77,8 @@ class ProjectController: Controller(), JsonModel {
 
     fun cleanModel() {
         userModel.removeAll()
+        userDataStructures.clear()
+        fileList.removeAll()
     }
 
     private fun initTemplateConfiguration() {
@@ -167,7 +169,10 @@ class ProjectController: Controller(), JsonModel {
             // create a new file
             //File("${pathDir}/${name}.moc").writeText(toJSON().toString())
             saveStringToBinaryFile("${pathDir}/${name}.moc", Cryptorithm.encrypt(toJSON().toString()))
-            information("Saving success", "the project has been saved successfully in $pathDir as $name.moc")
+            information(
+                messages["saving_success_header"],
+        "${messages["saving_success_content_1"]} $pathDir ${messages["saving_success_content_2"]} $name.moc"
+            )
         }
     }
 
