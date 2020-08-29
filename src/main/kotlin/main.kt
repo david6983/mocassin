@@ -6,10 +6,13 @@ import javafx.beans.property.SimpleBooleanProperty
 import javafx.scene.image.Image
 import javafx.stage.Stage
 import javafx.stage.StageStyle
+import org.apache.logging.log4j.kotlin.Logging
 import tornadofx.*
 import java.util.*
 
 class MocassinApp: App(MainView::class, MainStyle::class) {
+    companion object : Logging
+
     //override val configBasePath = Paths.get("/etc/mocassin/conf")
     val isSplashScreenDisplayed = SimpleBooleanProperty(true)
 
@@ -19,7 +22,7 @@ class MocassinApp: App(MainView::class, MainStyle::class) {
         importStylesheet(resources["css/bootstrapfx.css"])
         importStylesheet(resources["css/main.css"])
 
-        loadConfig()
+        val config = loadConfig()
         SupportedLocale.isSupportedLocal(Locale.forLanguageTag(config["locale"].toString()))?.let { loc ->
             FX.locale = loc.local
         }
@@ -28,13 +31,17 @@ class MocassinApp: App(MainView::class, MainStyle::class) {
             isSplashScreenDisplayed.value = it as Boolean?
         }
 
+        logger.debug("configuration succesfully loaded")
+        logger.debug("local: ${FX.locale}")
+        logger.debug("splashscreen: ${isSplashScreenDisplayed.value}")
+
         FX.localeProperty().onChange {
             with(config) {
                 set("locale" to it)
                 save()
             }
         }
-        isSplashScreenDisplayed.value = false
+
         isSplashScreenDisplayed.onChange {
             with(config) {
                 set("splashscreen" to it)
