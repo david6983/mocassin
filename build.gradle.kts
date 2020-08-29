@@ -121,7 +121,7 @@ tasks.register("jar2pkg") {
 
             exec {
                 workingDir(jarOutputDir)
-                environment("JAVA_HOME", properties["org.gradle.java.home"])
+                environment("JAVA_HOME", properties["osx.java.home"])
                 println("[creating package using javapackager]")
                 println(commandLine("javapackager",
                     "-deploy", "-native", "pkg", "-name", project.name, "-Bappversion=$version",
