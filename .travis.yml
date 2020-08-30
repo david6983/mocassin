@@ -1,0 +1,15 @@
+language: java
+install: skip
+
+os: macosx
+jdk:
+  - oraclejdk11
+
+before_script:
+  - chmod +x gradlew
+
+script:
+  - ./gradlew build
+  - ./gradlew jar
+  - jdk_switcher use oraclejdk8
+  - ./gradlew jar2pkg

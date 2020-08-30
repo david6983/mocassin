@@ -36,7 +36,7 @@ as internationalization, wizards, packaging, modals, drawer and so on.
 
 ### using jar package
 
-The software can be run on any platform using java 11 by running
+The software can be run on any platform using java 11 or above by running
 ```
 java -jar mocassin-VERSION.jar
 ```
