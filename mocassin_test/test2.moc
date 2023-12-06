@@ -1,0 +1,86 @@
+{
+    "userModel": {
+        "enums": {
+            "position": {
+                "name": "position",
+                "attributes": [
+                    {
+                        "name": "north",
+                        "value": 0
+                    },
+                    {
+                        "name": "east",
+                        "value": 1
+                    }
+                ]
+            }
+        },
+        "unions": {
+            "data": {
+                "name": "data",
+                "variables": {
+                    "pos": {
+                        "name": "pos",
+                        "type": "position",
+                        "isPointer": false,
+                        "isComparable": false
+                    },
+                    "nb": {
+                        "name": "nb",
+                        "type": "short int",
+                        "isPointer": false,
+                        "isComparable": false
+                    }
+                }
+            }
+        },
+        "structs": {}
+    },
+    "userVariables": [
+        {
+            "model": {
+                "enums": {
+                    "position": {
+                        "name": "position",
+                        "attributes": [
+                            {
+                                "name": "north",
+                                "value": 0
+                            },
+                            {
+                                "name": "east",
+                                "value": 1
+                            }
+                        ]
+                    }
+                },
+                "unions": {
+                    "data": {
+                        "name": "data",
+                        "variables": {
+                            "pos": {
+                                "name": "pos",
+                                "type": "position",
+                                "isPointer": false,
+                                "isComparable": false
+                            },
+                            "nb": {
+                                "name": "nb",
+                                "type": "short int",
+                                "isPointer": false,
+                                "isComparable": false
+                            }
+                        }
+                    }
+                },
+                "structs": {}
+            },
+            "variables": {
+                "0": "int",
+                "1": "unsigned int",
+                "2": "short int",
+                "3": "long int"
+            }
+        }
+    ]
+}

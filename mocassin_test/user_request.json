@@ -1,0 +1,76 @@
+{
+    "userModel":{
+       "enums":[
+          {
+             "name":"position",
+             "attributes":[
+                {
+                   "name":"geographique",
+                   "value":0
+                },
+                {
+                   "name":"longitudinale",
+                   "value":1
+                }
+             ]
+          }
+       ],
+       "unions":[
+          {
+             "name":"request",
+             "variables":[
+                {
+                   "name":"pos",
+                   "type":"position* (enum)",
+                   "isPointer":true,
+                   "isComparable":true
+                },
+                {
+                   "name":"ip",
+                   "type":"unsigned int",
+                   "isPointer":false,
+                   "isComparable":false
+                }
+             ]
+          }
+       ],
+       "structs":[
+          {
+             "name":"user",
+             "isDisplayFunctionGenerated":false,
+             "variables":[
+                {
+                   "name":"req",
+                   "type":"request* (union)",
+                   "isPointer":true,
+                   "isComparable":true
+                },
+                {
+                   "name":"pos",
+                   "type":"position (enum)",
+                   "isPointer":false,
+                   "isComparable":false
+                },
+                {
+                   "name":"name",
+                   "type":"char*",
+                   "isPointer":false,
+                   "isComparable":false
+                }
+             ]
+          }
+       ]
+    },
+    "userVariables":[
+       {
+          "name":"SList",
+          "variables":[
+             "int",
+             "unsigned int",
+             "short int",
+             "long int"
+          ]
+       }
+    ],
+    "pathGeneratedFiles":"undefined"
+ }

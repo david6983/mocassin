@@ -1,0 +1,1 @@
+{"userModel":{"enums":{"pos":{"name":"pos","attributes":[{"name":"north","value":0},{"name":"east","value":1}]}},"unions":{},"structs":{"Pattern":{"name":"Pattern","isDisplayFunctionGenerated":false,"variables":{"tab":{"name":"tab","type":"double**","isPointer":true,"isComparable":false}}}}}}

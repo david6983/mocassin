@@ -1,0 +1,1 @@
+{"userModel":{"enums":[{"name":"position","attributes":[{"name":"left","value":0},{"name":"right","value":1}]}]},"userVariables":[{"name":"SList","variables":["int"]}],"pathGeneratedFiles":"/Users/davidhaioum/Development/kotlin/mocassin_test/t2"}

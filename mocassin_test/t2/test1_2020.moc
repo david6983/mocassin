@@ -1,0 +1,4 @@
+{
+    "userModel":{"enums":{"position":{"name":"position","attributes":[{"name":"left","value":0},{"name":"right","value":1}]}},"unions":{},"structs":{}},
+    "userVariables":[{"variables":{"0":"int","1":"unsigned int"}}]
+}

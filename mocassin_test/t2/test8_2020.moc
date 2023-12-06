@@ -1,0 +1,11 @@
+{
+"userModel":{
+"enums":[
+{"name":"direction","attributes":[{"name":"north","value":0},{"name":"east","value":1}]}
+],
+"unions":[
+    {"name":"position","variables":[{"name":"cartesian","type":"direction* (enum)","isPointer":true,"isComparable":true},{"name":"normal","type":"int","isPointer":false,"isComparable":false}]}
+],
+"structs":[{"name":"system","isDisplayFunctionGenerated":false,"variables":[{"name":"positionDirection","type":"direction* (enum)","isPointer":true,"isComparable":true},{"name":"power","type":"unsigned int","isPointer":false,"isComparable":false}]}]},
+
+"userVariables":[{"name":"SList","variables":["int","unsigned int","short int"]}]}

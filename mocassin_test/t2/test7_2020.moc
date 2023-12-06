@@ -1,0 +1,10 @@
+{
+    "userModel":{
+        "enums":[{"name":"position","attributes":[{"name":"left","value":0},{"name":"right","value":1}]}],
+        "unions":[{"name":"direction","variables":{"north":{"name":"north","type":"int","isPointer":false,"isComparable":false},"north2":{"name":"north2","type":"unsigned int","isPointer":false,"isComparable":false}}}]
+    },
+    "userVariables":[
+        {"name":"SList","variables":["int","unsigned int"]},
+        {"name":"SList","variables":["int","unsigned int","short int"]}
+    ]
+}
