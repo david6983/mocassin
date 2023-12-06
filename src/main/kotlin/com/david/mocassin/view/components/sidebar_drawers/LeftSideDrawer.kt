@@ -2,6 +2,7 @@ package com.david.mocassin.view.components.sidebar_drawers
 
 import com.david.mocassin.controller.LeftSideDrawerController
 import com.david.mocassin.controller.ProjectController
+import com.david.mocassin.model.c_components.CuserType
 import com.david.mocassin.model.c_components.c_enum.Cenum
 import com.david.mocassin.model.c_components.c_enum.CenumAttribute
 import com.david.mocassin.view.components.fragments.cell_fragments.enum_attributes_cell_fragments.CenumAttributeNameCellFragment
@@ -87,11 +88,21 @@ class LeftSideDrawer : View() {
                 onDoubleClick {
                     if (controller.isSelectedValueFromUserStructuresValid(selectedValue, messages)
                         && controller.isValidParent(selectionModel.selectedItem.parent.value, messages)
-                        && controller.isPaneNotExist(selectedValue)
                     ) {
                         val type = selectionModel.selectedItem.parent.value
                             .split("[")[1].removeSuffix("]")
-                        //println(type)
+                        when(type) {
+                            "enum" -> {
+                                val e: CuserType? = projectController.userModel.userEnumList.last {
+                                    (it as Cenum).name == selectedValue
+                                }
+                                if (e != null) {
+                                    println((e as Cenum).name)
+                                }
+                                controller.editEnum((e as Cenum))
+                            }
+                        }
+
                     }
                 }
 

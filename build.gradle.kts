@@ -1,6 +1,9 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.3.50"
     id("org.openjfx.javafxplugin") version "0.0.8"
+    kotlin("jvm") version "1.6.0-M1"
 }
 
 group = "com.david"
@@ -144,4 +147,12 @@ tasks.register("jar2pkg") {
             println("error: javapackager not found, make sure JAVA_HOME point to correct jdk (jdk1.8 for exemple)")
         }
     }
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
 }

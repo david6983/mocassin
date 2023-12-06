@@ -7,6 +7,7 @@ import com.david.mocassin.model.c_components.c_struct.CuserStructure
 import com.david.mocassin.model.c_components.c_union.Cunion
 import com.david.mocassin.view.MainView
 import com.david.mocassin.view.components.MainMenuBar
+import com.david.mocassin.view.components.wizards.user_structures_wizards.enum_wizard.EnumWizard
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.MultipleSelectionModel
 import javafx.scene.control.TreeItem
@@ -200,5 +201,11 @@ class LeftSideDrawerController : Controller() {
                 mainMenuBar.addSlistItem.isDisable = false
             }
         }
+    }
+
+    fun editEnum(enum: Cenum) {
+        val enumWizard = EnumWizard()
+        enumWizard.enumModel.item = enum
+        enumWizard.openModal()
     }
 }

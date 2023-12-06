@@ -167,6 +167,7 @@ class ProjectController: Controller(), JsonModel {
                 directory.mkdir()
             }
             // create a new file
+            println(toJSON().toString())
             //File("${pathDir}/${name}.moc").writeText(toJSON().toString())
             saveStringToBinaryFile("${pathDir}/${name}.moc", Cryptorithm.encrypt(toJSON().toString()))
             information(

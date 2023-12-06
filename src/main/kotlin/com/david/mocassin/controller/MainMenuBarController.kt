@@ -53,7 +53,6 @@ class MainMenuBarController : Controller() {
                 mainView.title = mainView.defaultTitle + " [${packageName}]"
 
                 val content = Cryptorithm.decrypt(readStringFromBinaryFile(file.component1()))
-
                 val inputObject: JsonObject = loadJsonObject(content)
                 projectController.updateModel(inputObject)
             }
